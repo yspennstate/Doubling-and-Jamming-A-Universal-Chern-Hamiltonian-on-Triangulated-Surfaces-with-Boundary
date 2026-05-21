@@ -1367,6 +1367,37 @@ model for any future local theorem in the present lattice setting.
 The table records the orientation conventions used in the periodic triangular crossing and in the
 Toeplitz edge map. It is a ledger for the proof of Theorem~\ref{M-thm:periodic_triangular_chern}, not
 a separate numerical input.
+
+\paragraph{Explicit sign chain.}
+The sign convention used in the headline corollary \(\operatorname{wind}=\mp\det[t\ n]\) for the
+periodic triangular case is fully determined by composing the following four signed steps; a
+referee can verify each step by referring to the row of the table below and the cited
+proposition.
+(i) \emph{Bloch torus orientation.} The Bloch torus carries the orientation
+\(dk_1\wedge dk_2\); the Chern integer
+\(\Ch(P)=\frac{1}{2\pi i}\int_{\mathbb T^2}\tr(P\,dP\wedge dP)\) uses this orientation, giving
+\(\Ch(E_-(H_+^\triangle))=-1\) and \(\Ch(E_-(H_-^\triangle))=+1\) by
+Theorem~\ref{M-thm:periodic_triangular_chern}.
+(ii) \emph{Boundary map sign.} The Higson--Roe \(K\)-theory connecting map \(\partial_Y\) is
+fixed by Convention~\ref{M-conv:pathb_sign} of the main paper: for any self-adjoint lift
+\(\tilde P\) of a quotient projection \(\pi(P)\),
+\(\partial[\pi(P)]=[\exp(2\pi i\,\tilde P)]\), with no sign flip.
+(iii) \emph{Toeplitz extension sign.} The half-space Toeplitz extension in the positive-normal
+direction \(n\) is fixed by Theorem~\ref{M-thm:periodic_toeplitz_pairing}: the winding-number
+pairing satisfies \(\operatorname{wind}(\partial_{\mathrm T,t,n}([P]))=\varepsilon(t,n)\,\Ch(P)\)
+where \(\varepsilon(t,n)=\det[t\ n]\in\{\pm 1\}\) records the change-of-basis Jacobian from the
+canonical \((k_1,k_2)\) frame to the tangential/positive-normal frame \((\kappa,\eta)\).
+(iv) \emph{Composite winding sign.} Composing (ii) and (iii) gives
+\(\operatorname{wind}=\varepsilon(t,n)\,\Ch(E_-(H_\pm^\triangle))=\mp\,\varepsilon(t,n)
+=\mp\det[t\ n]\), in agreement with both
+\Cref{M-cor:toeplitz_winding} and \Cref{M-cor:periodic_straight_edge_winding}.
+
+If any one of the four sign choices above were flipped, the displayed winding would be the
+opposite integer; for instance, replacing the Bloch orientation by \(dk_2\wedge dk_1\) would
+swap the Chern signs of step (i) (and hence flip the right-hand side in step (iv)), while
+replacing \(n\) by \(-n\) in step (iii) would flip \(\varepsilon(t,n)\). Because all four
+choices are fixed once for all in Convention~\ref{M-conv:pathb_sign} and in the table below,
+the cited final integer is uniquely determined.
 \begin{center}
 \small
 \begin{tabular}{>{\raggedright\arraybackslash}p{0.25\linewidth}
