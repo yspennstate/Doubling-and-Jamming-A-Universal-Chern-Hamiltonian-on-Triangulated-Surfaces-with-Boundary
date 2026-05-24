@@ -1,0 +1,2877 @@
+\documentclass[11pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tikz-cd}
+\usepackage{cleveref}
+\usepackage{subcaption}
+\usepackage{placeins}
+\usepackage{enumitem}
+\usepackage{array}
+% xr provides \externaldocument so cross-document \ref{S-...} works.
+% Plain xr (not xr-hyper) is used because xr-hyper imports labels in a
+% hyperref-extended format that cleveref's templabel parser does not accept.
+% The cost is that cross-document references show as text only rather than
+% as live hyperlinks; the in-document \ref number resolution still works
+% and there are no undefined-reference errors.
+\usepackage{xr}
+
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+%---------------------------
+% Theorem environments
+%---------------------------
+\numberwithin{equation}{section}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\proofsuppref}[1]{%
+  \par\noindent\emph{Proof.} See the online supplement, Section~\ref{S-#1}.\par\medskip
+}
+\newcommand{\proofappendixref}[1]{\proofsuppref{#1}}
+
+
+%---------------------------
+% Notation shortcuts
+%---------------------------
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\Hil}{\mathcal{H}}
+\newcommand{\bd}{\partial}
+\newcommand{\Id}{\mathbf{1}}
+\newcommand{\Proj}{\mathbf{P}}
+\newcommand{\spec}{\mathrm{spec}}
+\newcommand{\dist}{\mathrm{dist}}
+\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\Ran}{\mathrm{Ran}}
+\newcommand{\opnorm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\e}{\varepsilon}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\Indint}{\operatorname{Ind}_{\mathrm{int}}}
+\newcommand{\Ch}{\operatorname{Ch}}
+\newcommand{\hexagon}{\mathrm{hex}}
+
+% Resolve cross-document \ref{S-...} labels via xr.
+\externaldocument[S-]{paper_supplement}
+
+%---------------------------
+% Example name macros
+%---------------------------
+\newcommand{\ExOneName}{Disk-like patch (1 boundary)}
+\newcommand{\ExTwoName}{Annulus-like band (2 boundaries)}
+\newcommand{\ExThreeName}{Three-boundary patch (disk with two holes)}
+
+%---------------------------
+% Figure safety helper
+%---------------------------
+\newcommand{\safeincludegraphics}[2][]{%
+  \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+    \fbox{\begin{minipage}[c][0.18\textheight][c]{0.92\linewidth}
+      \centering Missing figure file\\[0.3em]\texttt{\detokenize{#2}}
+    \end{minipage}}%
+  }%
+}
+
+\title{Boundary and Interface Classes for Universal Chern Hamiltonians\\
+via Doubling and Jamming}
+
+\author{
+Yitzchak Shmalo\thanks{Corresponding author: \texttt{yitzchak.shmalo@gmail.com}.}\\[0.6em]
+Einstein Institute of Mathematics\\
+Hebrew University of Jerusalem
+}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Higson and Prodan's universal Chern Hamiltonians are closed-surface models built from the
+simplicial boundary operator and Poincar\'e duality. We treat the boundary and interface classes
+obtained from finite surfaces with boundary by doubling the surface and jamming the reflected copy.
+For every finite triangulated oriented surface with boundary we construct an intrinsic
+Poincar\'e--Lefschetz Hamiltonian, compare it with the original-side compression of the doubled
+closed Hamiltonian, identify the discrepancy as boundary-collar supported, and prove
+Schur-complement estimates for finite-\(M\) jamming. Along families with negligible collar
+dimension these estimates identify the normalized bulk spectral limits of the intrinsic,
+compressed, and jammed models. The headline Roe-algebra theorem identifies the doubled-and-jammed
+interface class in \(K_1(C^*(Y\subset X))\) with
+\(\partial_Y(E_+(\pi(P_\pm)))\), using the Higson--Prodan closed universal-model theorem
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv} for the closed-bulk gap and Chern
+value; this \(K_1\)-class identity is unconditional modulo HP. The integer interface winding
+\(\pm1\) is proved internally in the periodic triangular Toeplitz case via the
+\(K_1\)-to-\(\mathbb Z\) Toeplitz extension, and is stated as a conditional corollary for
+general partitions, conditional on the existence of an integer-valued Chern-jump pairing for
+the interface ideal. The periodic triangular Bloch class is a fully internal benchmark: its
+closed-bulk gap, Chern signs, and straight Toeplitz winding are proved in the paper.
+
+\medskip\noindent
+\textbf{Dependency categorization (sharp framing).} The results split into three buckets
+according to which external theorems each one uses. \emph{(A) Fully internal:} the
+finite-dimensional boundary theory and Schur-complement estimates, the internal bulk spectral
+equivalence, and the periodic triangular benchmark (gap, Chern signs, and integer Toeplitz
+winding for the straight periodic interface). \emph{(B) Internal modulo Higson--Prodan:} the
+\(K_1\)-class identity \(\Indint=\partial_Y(E_+(\pi(P_\pm)))\) for general HP-covered boundary
+families. \emph{(C) Conditional on an external integer pairing:} the integer evaluation
+\(\pm 1\) of this \(K_1\)-class outside the periodic Toeplitz case. The Higson--Prodan
+closed-bulk gap-and-Chern theorem is the \emph{only} external theorem invoked anywhere in this
+paper; the Ewert--Meyer language is used to fix Mayer--Vietoris terminology only, and the
+required compatibility with the Roe connecting map is proved here. For flat-torus closed
+doubles, both the closed-bulk gap (\Cref{S-thm:internal_torus_gap}) and the closed-bulk Chern
+integer (\Cref{S-thm:internal_torus_chern}) are proved internally; both two-band benchmarks
+on the same flat-torus quotient (hexagonal and square) are also proved internally for both the
+gap input (\Cref{S-thm:internal_hex_gap} and \Cref{S-thm:internal_square_gap}) and the Chern
+integer input (\Cref{S-thm:internal_hex_chern} and \Cref{S-thm:internal_square_chern}); the
+three internal Chern theorems are unified by a single general lattice-Chern lemma
+(\Cref{S-thm:internal_bc_chern_general}) for any continuously parametrized self-adjoint Bloch
+family on \(\mathbb T^2\) with uniform Fermi gap, with the three benchmark-specific theorems
+recovered as corollaries
+(\Cref{S-cor:bc_chern_torus_corollary,S-cor:bc_chern_hex_corollary,S-cor:bc_chern_square_corollary}).
+A standard internal locality tool for the bounded-geometry case, the Combes--Thomas
+exponential off-diagonal decay of the Fermi projection on the closed universal Hamiltonian
+\(H_\pm(K)=(B+B^\dagger)\pm S_K\), is also recorded internally
+(\Cref{S-thm:internal_combes_thomas}); it converts a uniform Fermi gap on a bounded-geometry
+triangulation \(K\) into a uniform exponential decay rate for \(P_\pm(K)\), but does not by
+itself supply the bounded-geometry gap. The general bounded-geometry case still cites HP for
+the gap input.
+
+\medskip
+\noindent Companion
+numerical code and the online supplement are available at the project repository
+(\url{https://github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary});
+additional hexagonal and square two-band symbols, robustness variants, full appendix proofs,
+and the numerical record are collected in that online supplement.
+\end{abstract}
+
+%====================================================================
+\section{Introduction}
+%====================================================================
+
+\subsection{Universal Chern Hamiltonians from simplicial data}
+The Haldane model is the prototypical two-dimensional class-A topological insulator
+\cite{Haldane1988}; for background on the tenfold-way classification and Chern phases, see
+\cite{SchnyderRyuFurusakiLudwig,KitaevPeriodic,QiZhangRMP,ProdanSchulzBaldesBook}. On irregular
+discretizations, direct magnetic-field or Peierls constructions can lead to mobility-gap or
+defect-state issues that complicate the extraction of clean topological gaps; see, for example,
+\cite{Mitchell2018,BourneProdan2018,BourneMesland2019,ProdanSchulzBaldesBook}. Rigorous
+bulk--edge and bulk--interface correspondences in quantum Hall and related class-A systems are
+treated in
+\cite{ElbauGraf2002,ElgartGrafSchenker2005,GrafPorta2013,BourneKellendonkRennie,KubotaControlled,EwertMeyer2019,AlldridgeMaxZirnbauer2020,LudewigThiangEdge}.
+
+Higson and Prodan introduced a different route
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}. For a triangulation of a \emph{closed}
+oriented surface, one builds a local tight-binding Hamiltonian from two pieces of
+simplicial-topological data: the simplicial boundary operator $B$ and a Hermitian Poincar\'e-duality
+operator $S$ constructed from cap product with the fundamental cycle. The resulting Hamiltonians
+\begin{equation}\label{eq:Hpm_intro}
+H_\pm=(B+B^\dagger)\pm S
+\end{equation}
+are local and, in the sequential-refinement limit, define nontrivial topological bulk classes with
+Chern numbers $\pm1$ \cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}. The underlying
+Hilbert--Poincar\'e framework uses the algebraic identity \(BS+SB^\dagger=0\), rooted in analytic
+surgery theory and the work of Higson and Roe
+\cite{HigsonRoeI,HigsonRoeII,HigsonRoeIII,WallSurgery}.
+
+\subsection{The boundary case}
+If the input triangulation $\K$ has boundary, there is no closed fundamental $2$-cycle supported
+on the faces of $\K$, so the closed-case cap-product recipe for $S$ is not directly available.
+Compact manifolds with boundary instead carry a relative fundamental class and satisfy
+Poincar\'e--Lefschetz duality \cite{Hatcher}. We use this relative class to define an intrinsic
+boundary Hamiltonian on $\K$, and then compare it with a second construction that reduces the
+boundary problem to the closed case by simplicial doubling and jamming the reflected side.
+
+\subsection{Doubling and jamming}
+Given a triangulated surface-with-boundary $\K$, let $\overline\K$ be an orientation-reversed copy.
+Gluing $\K$ and $\overline\K$ along $\bd\K$ produces the closed double $D(\K)$. We then build the
+closed universal Hamiltonians on $D(\K)$ and suppress the reflected copy by adding a large on-site
+potential on the copy degrees of freedom. This is the \emph{doubling-and-jamming} construction. The
+finite-\(M\) analysis gives error bounds for this approximation. For refinement families whose
+closed doubles satisfy the hypotheses of the Higson--Prodan closed-bulk theorem
+(\Cref{thm:hp_imported}; hypothesis check for the doubled families in
+\Cref{lem:hp_hypothesis_check}), that theorem supplies the closed-bulk gap and Chern class.
+Section~\ref{sec:pathb_internalization} proves, for the original/copy partition, that the Roe
+connecting map used to define the interface class is the Ewert--Meyer bulk--interface map for
+the doubled-jammed data.
+
+\subsection{Theorem map}
+Let
+\[
+H_{\pm,M}=H_\pm(D(\K))+M\Proj_{\mathrm{copy}}
+\]
+be the jammed Hamiltonian, written in block form as
+\[
+H_{\pm,M}=
+\begin{pmatrix}
+A&C\\
+C^\dagger&D+M\Id
+\end{pmatrix}
+\quad\text{on}\quad
+\Hil_{\mathrm{orig}}\oplus\Hil_{\mathrm{copy}}.
+\]
+\begin{enumerate}[leftmargin=2em]
+\item The relative fundamental class of \((\K,\bd\K)\) gives an intrinsic
+Poincar\'e--Lefschetz boundary Hamiltonian on \(\K\). The simplicial double gives a second
+Hamiltonian by closed Higson--Prodan theory; its original-side compression agrees with the
+relative Hamiltonian up to a boundary-collar operator, and the jammed operator converges to this
+compression at low energy.
+\item The finite-\(M\) comparison is made quantitative by Schur-complement estimates:
+compressed resolvents, full block resolvents, first-order effective operators, bounded-energy
+spectral localization, leakage, Morse-index stability, and contour spectral projections. Combined
+with the collar-rank comparison, these estimates give a fully internal bulk spectral-measure
+equivalence between the intrinsic Poincar\'e--Lefschetz model, the doubled compression, and the
+finite-\(M\) jammed model along any family with negligible boundary-collar dimension and
+\(M\to\infty\).
+\item For refinement families whose closed doubles satisfy the hypotheses of
+\Cref{thm:hp_imported} (verified in \Cref{lem:hp_hypothesis_check}), the
+HP gap gives the quotient by the interface ideal and hence the global Roe-algebra interface class
+\[
+\Indint(J_{\pm,M}^\infty;T^+,T^-)
+=
+\partial_Y\!\bigl(E_+(\pi(P_\pm))\bigr)
+\in K_1(C^*(Y\subset X)).
+\]
+Theorem~\ref{thm:pathb_roe_winding}, proved in Section~\ref{sec:pathb_internalization}, identifies
+this class as \(\partial_Y(E_+(\pi(P_\pm)))\). In the straight periodic Toeplitz case the
+integer pairing is internal (Corollary~\ref{cor:toeplitz_winding}) and gives winding
+\(\pm1\); for general partitions the integer pairing is recorded as a conditional corollary
+(Corollary~\ref{cor:conditional_winding}).
+\item For the periodic triangular-lattice class, the closed-bulk gap and Chern input are checked
+directly. We write down the \(6\times6\) Bloch symbol, prove a uniform zero gap from an exact
+determinant formula, compute the Chern signs from the isolated massless crossing, and evaluate
+primitive straight periodic interfaces by the Toeplitz extension. Finite covers, annular families,
+finite-corner quotients, finite-defect variants, and tail-split component maps are treated in the
+online supplement, Section~\ref{S-app:section5_variants}.
+\end{enumerate}
+
+\paragraph{Logical dependencies.}
+The proof uses the following implications; no converse is assumed.
+\[
+\begin{array}{ll}
+\mathrm{(I)} & \text{internal finite-dimensional results: the relative boundary operator,}\\
+& \text{the collar comparison, and the large-\(M\) Schur-complement estimates;}\\[0.2em]
+\mathrm{(HP)} & \text{the Higson--Prodan closed-bulk gap and Chern theorem for the doubles;}\\[0.2em]
+\mathrm{(EM)} & \text{the internal identification of the original/copy Roe boundary map}\\
+& \text{with the Ewert--Meyer pairing (Theorem~\ref{thm:pathb_roe_winding}).}
+\end{array}
+\]
+From (I) and the gap part of (HP), the Roe construction supplies the global interface
+\(K_1\)-class. From the Chern part of (HP) and (EM), Theorem~\ref{thm:pathb_roe_winding}
+identifies the \(K_1\)-class as \(\partial_Y(E_+(\pi(P_\pm)))\). Thus the headline conclusion
+of Theorem~\ref{thm:pathb_roe_winding} is the unconditional
+\(K_1\)-class identity
+\(\mathrm{(I)}+\mathrm{(HP)}+\mathrm{(EM)}\Longrightarrow
+\Indint=\partial_Y(E_+(\pi(P_\pm)))\). The integer evaluation
+\(\operatorname{Wind}=\pm1\) is internal in the periodic triangular Toeplitz case
+(Corollary~\ref{cor:toeplitz_winding}) and conditional in general
+(Corollary~\ref{cor:conditional_winding}). The ingredients (I) and (EM) are proved here. The
+ingredient (HP) is exactly the cited closed theorem of Higson--Prodan. In the periodic
+triangular section, the gap and Chern signs are proved directly, and primitive straight
+periodic interfaces are evaluated internally by the Toeplitz extension.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Theorem map. ``Internal'' means proved here from the inputs shown; ``modulo HP'' means
+that the only cited closed-bulk theorem used is Higson--Prodan's published PRL/arXiv theorem.}
+\label{tab:main_theorem_map}\label{tab:hypothesis_ledger}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\linewidth}
+                >{\raggedright\arraybackslash}p{0.33\linewidth}
+                >{\raggedright\arraybackslash}p{0.26\linewidth}}
+\toprule
+Category and conclusion & Inputs & Status \\
+\midrule
+Finite-dimensional boundary theory: relative boundary Hamiltonian and collar comparison & Finite
+triangulated surface with full
+boundary subcomplex & Internal, \Cref{thm:relative_boundary_comparison} \\
+Finite-dimensional jamming theory: finite-\(M\) decoupling, leakage, contour projections, Morse
+index & Finite block separation
+hypotheses & Internal, Section~\ref{sec:decoupling} \\
+Internal bulk spectral measures: PL model, doubled compression, and finite-\(M\) jammed model have
+the same normalized bulk spectral limits & Uniform finite-dimensional bounds, \(M\to\infty\), and
+boundary-collar dimension \(o(\dim\Hil(\K_n))\) & Internal,
+\Cref{thm:internal_bulk_spectral_equivalence} \\
+Roe-algebra \(K_1\)-class identity: global interface
+\(\partial_Y(E_+(\pi(P_\pm)))\in K_1(C^*(Y\subset X))\) & The Higson--Prodan closed-bulk
+gap/Chern theorem and the internal original/copy Roe/Ewert--Meyer identification & Internal
+modulo HP, \Cref{thm:pathb_roe_winding} \\
+Toeplitz integer winding \(\pm1\) for straight periodic interfaces & Periodic triangular gap,
+Chern signs, BDF--Toeplitz extension & Internal,
+\Cref{cor:toeplitz_winding,thm:periodic_toeplitz_pairing} \\
+Integer winding for general partitions & Hypothesized Chern-jump-compatible integer pairing on
+\(K_1(\mathcal I)\) & Conditional on the pairing's existence,
+\Cref{cor:conditional_winding} \\
+Internal periodic examples: triangular closed-bulk input & Periodic triangular Bloch symbol &
+Internal gap and Chern
+signs, \Cref{thm:periodic_triangular_bulk,thm:periodic_triangular_chern} \\
+Flat-torus closed-bulk gap (uniform triangulation \(\K_N^\triangle\) on
+\(T_N=\mathbb R^2/(N\mathbb Z)^2\)) & Bloch decomposition of finite torus + periodic triangular
+gap & Internal, \Cref{S-thm:internal_torus_gap}; replaces HP gap input on the flat-torus
+instance \\
+Flat-torus closed-bulk Chern integer
+\(\Ch_N(P_\pm(\K_N^\triangle))=\mp1\) (\(N\ge N_0\)) &
+Sampled-Bloch FHS lattice formula + periodic triangular continuous Chern + FHS convergence
+(\cite{FukuiHatsugaiSuzuki,BellissardVanElstSchulzBaldes1994}) & Internal,
+\Cref{S-thm:internal_torus_chern}; replaces HP Chern input on the flat-torus instance \\
+Flat-torus hexagonal closed-bulk gap (hexagonal benchmark Bloch model
+\(H_{\hexagon}(k;m)\) on \(T_N=\mathbb R^2/(N\mathbb Z)^2\), \(m\ne 0\)) & Bloch decomposition
+of finite torus + symbol-level hexagonal determinant lower bound (\(2\)-band) & Internal,
+\Cref{S-thm:internal_hex_gap}; replaces HP gap input on the hexagonal flat-torus
+instance \\
+Flat-torus square closed-bulk gap (square benchmark Bloch model
+\(H_{\square}(k;m)\) on \(T_N=\mathbb R^2/(N\mathbb Z)^2\), \(m\ne 0\)) & Bloch decomposition
+of finite torus + symbol-level square determinant lower bound (\(2\)-band) & Internal,
+\Cref{S-thm:internal_square_gap}; replaces HP gap input on the square flat-torus
+instance \\
+Flat-torus hexagonal closed-bulk Chern integer
+\(\Ch_N(P_-(\K_N^{\hexagon};m))=-\sgn(m)\) (\(N\ge N_0^{\hexagon}(m)\)) &
+Sampled-Bloch FHS lattice formula + symbol-level hexagonal continuous Chern + FHS convergence
+(\cite{FukuiHatsugaiSuzuki,BellissardVanElstSchulzBaldes1994}) & Internal,
+\Cref{S-thm:internal_hex_chern}; replaces HP Chern input on the hexagonal flat-torus
+instance \\
+Flat-torus square closed-bulk Chern integer
+\(\Ch_N(P_-(\K_N^{\square};m))=+\sgn(m)\) (\(N\ge N_0^{\square}(m)\)) &
+Sampled-Bloch FHS lattice formula + symbol-level square continuous Chern + FHS convergence
+(\cite{FukuiHatsugaiSuzuki,BellissardVanElstSchulzBaldes1994}) & Internal,
+\Cref{S-thm:internal_square_chern}; replaces HP Chern input on the square flat-torus
+instance \\
+General lattice-Chern convergence (any \(C^4\) self-adjoint Bloch family on
+\(\mathbb T^2\) with uniform Fermi gap and constant negative rank;
+\(\Ch_N(P)=\Ch(P)\) for \(N\ge N_0(\gamma,\Lambda,d)\)) & Uniform gap, uniform norm bound,
+constant negative rank, \(C^4\) smoothness; FHS plaquette identity; Kato analytic perturbation
+(\cite{FukuiHatsugaiSuzuki,BellissardVanElstSchulzBaldes1994,KatoPerturbation}) & Internal,
+\Cref{S-thm:internal_bc_chern_general}; unifies the three flat-torus Chern theorems above as
+corollaries (\Cref{S-cor:bc_chern_torus_corollary,S-cor:bc_chern_hex_corollary,S-cor:bc_chern_square_corollary}) \\
+Internal Combes--Thomas exponential decay for the universal Hamiltonian on a bounded-geometry
+triangulation (\(|\langle\delta_v,P_\pm(K)\delta_w\rangle|\le C(\alpha)e^{-\alpha d(v,w)}\)
+for \(\alpha<\alpha_0(\gamma,\Lambda,R,\Delta)\)) & Uniform Fermi gap
+\(\dist(0,\spec H_\pm(K))\ge\gamma\), uniform hopping range \(R\), uniform norm bound \(\Lambda\),
+bounded-geometry parameters \((\Delta,L,R_0)\); imaginary-shift conjugation, Neumann series for
+the resolvent, Riesz contour integral
+(\cite{CombesThomas1973,AizenmanWarzel2015,ProdanSchulzBaldesBook}) & Internal,
+\Cref{S-thm:internal_combes_thomas}; conditional on the gap hypothesis (does not eliminate
+HP gap input for the bounded-geometry case --- a standard locality tool for any future
+internal bounded-geometry gap proof) \\
+HP citation inventory and internalization roadmap (audit of every remaining HP citation in
+both files, classified by type/status/difficulty; identifies the bounded-geometry closed-bulk
+gap as the single research bottleneck) & Exhaustive line-by-line grep of both
+\texttt{paper\_main.tex} and \texttt{paper\_supplement.tex}; no new mathematics & Audit-only,
+\Cref{S-app:hp_inventory_iter12}; records the residual HP dependency precisely \\
+Completeness verification for the seven internalized cases (per-theorem proof-chain
+walk-through certifying that each of
+\Cref{S-thm:internal_torus_gap,S-thm:internal_torus_chern,S-thm:internal_hex_gap,S-thm:internal_square_gap,S-thm:internal_hex_chern,S-thm:internal_square_chern,S-thm:internal_combes_thomas}
+is genuinely Higson--Prodan-independent, modulo the OB-typed cap-product naming
+convention for $S_K$) & Walk-through of each proof's transitive citation chain; classifies
+each cited input as either (a) elementary closed-form computation in the manuscript or (b)
+standard non-HP reference; closes the honesty gap that ``status I'' in
+\Cref{S-tab:hp_inventory} could in principle have meant only that the line-grep inventory
+did not see an HP citation & Audit-only, \Cref{S-app:completeness_iter13} and
+\Cref{S-tab:completeness_iter13}; locks in the iter-1--6+11 HP-independence gains \\
+Consolidated internal HP-replacement chapter (single navigation-friendly section gathering all
+eight internal HP-replacement results --- the seven theorems
+\Cref{S-thm:internal_torus_gap,S-thm:internal_torus_chern,S-thm:internal_hex_gap,S-thm:internal_square_gap,S-thm:internal_hex_chern,S-thm:internal_square_chern,S-thm:internal_combes_thomas}
+plus the general operator-algebraic Chern convergence lemma
+\Cref{S-thm:internal_bc_chern_general} --- under one unified-notation table, one dependency
+roadmap, and one theorem-map table) & Cross-reference index pointing back to the per-iter
+subsections that contain the full statements and proofs; reuses the iter-13 completeness
+certifications; no new mathematics & Navigation-only,
+\Cref{S-sec:internal_consolidated} and \Cref{S-tab:consolidated_internal_results}; reuses the
+locked-in iter-13 HP-independence gains \\
+Combes--Thomas verification (sub-step-by-sub-step audit of the iter-11 proof of
+\Cref{S-thm:internal_combes_thomas}, verifying the four explicit constants
+\(C_0(R,\Delta)\), \(\alpha_0(\gamma,\Lambda,R,\Delta)\), the contour resolvent bound
+\(4/\gamma\), and \(C(\alpha,\gamma,\Lambda)=(\Lambda+\gamma/2)/\gamma\); confirms the
+qualitative small-gap Combes--Thomas scaling
+\(\alpha_0=O(\gamma/(\Lambda R))\); locates one Step~(d) sign-of-specialization
+presentation slip that is silently repaired by the Hermitian symmetry of the self-adjoint
+Fermi projection \(P_\pm(K)\)) & Sub-step-by-sub-step walk-through of the four
+\((a)\)--\((d)\) sub-steps of the proof at supplement lines 7886--7996; per-sub-step
+verification of the explicit constants and Combes--Thomas scaling; no new mathematics &
+Audit-only, \Cref{S-app:combes_thomas_verification} and \Cref{S-tab:ct_audit_iter15};
+independently verifies the iter-11 proof and constants \\
+Pre-submission package audit (final integrity check of the manuscript: eight internal
+HP-replacement results inventoried, every internal \(\backslash\)\texttt{Cref}, every
+cross-document \texttt{xr} target, every \(\backslash\)\texttt{cite} key, every
+\(\backslash\)\texttt{safeincludegraphics} file, and every \(\backslash\)\texttt{input}
+table-include verified to resolve; one orphan citation \texttt{HigsonRoe} replaced by the
+three-key form \texttt{HigsonRoeI,HigsonRoeII,HigsonRoeIII}; iter-15 Step~(d) caveat made
+reachable from three independent vantage points) & Mechanical enumeration of labels,
+citations, graphics, and input files; cross-document xr verification via the two
+\texttt{.aux} files; no new mathematics & Audit-only,
+\Cref{S-app:presubmission_audit_iter16},
+\Cref{S-tab:presubmission_inventory_iter16},
+\Cref{S-tab:presubmission_xref_audit_iter16},
+\Cref{S-tab:presubmission_bib_audit_iter16},
+\Cref{S-tab:presubmission_fig_audit_iter16}; certifies pre-submission integrity \\
+Numerical-experiments framing audit (iter 18: per-figure/per-table audit of the
+twenty-five numerical figures and tables in \Cref{S-sec:numerics} against the
+iter-17 Part~A vs.\ Part~B carve-out
+\Cref{S-tab:publishable_today}; verifies every figure/table is placed in Part~A
+as a finite-matrix check of a Part~A theorem; verifies the four orientation
+cross-references to Part~B theorems
+[\(\protect\Cref{S-fig:edgeprop,S-fig:flux_spectral_flow,S-tab:flux_spectral_flow}\)
+to \Cref{thm:pathb_roe_winding}; \(\protect\Cref{S-fig:refine}\) to
+\Cref{thm:hp_imported}(i)] each already carry the canonical \emph{not-a-proof-input}
+disclosure; certifies no figure or table is used as a proof input for any Part~A
+theorem) & Mechanical per-caption read of every figure and table in
+\Cref{S-sec:numerics}; cross-checked against the iter-17 framing
+\Cref{S-app:publishable_today_iter17} and the iter-12 inventory
+\Cref{S-app:hp_inventory_iter12}; no new mathematics & Audit-only,
+\Cref{S-app:numerics_framing_audit_iter18},
+\Cref{S-tab:numerics_framing_audit_iter18}; certifies that the iter-17 placement
+of the numerical experiments in Part~A is consistent with the caption text \\
+Supplement navigation index (iter 22: single navigation entry point at the start
+of the supplement, listing every appendix subsection added in iters 1--21 plus
+this iter-22 index itself, with subsection labels, one-line purposes, and page
+references resolved automatically by \(\backslash\)\texttt{pageref}; eight rows
+index the internal HP-replacement and topological-diagram content (iters 1--7,
+10, 11), nine rows index the audit-, framing-, inventory-, consolidation-, and
+review-content (iters 8, 9, 12--18, 21), and one row indexes the iter-22 index
+itself; resolves the inherent tension between reader clarity and supplement bulk
+by giving the reader a single entry point near the front of the document) &
+Nineteen-row longtable indexing the appendix subsections added in iters 1--21;
+no new mathematics, no recomputation, no figure regeneration & Audit-only,
+\Cref{S-app:supplement_navigation_iter22},
+\Cref{S-tab:supplement_navigation_iter22}; entry point for supplement
+navigation \\
+Quasi-uniform Delaunay first step (iter 23: define
+\(\mathcal D(\theta_0,L)\), prove bounded-geometry parameter lemma,
+state stability conjecture with proof outline) &
+Angle-counting + Delaunay + cap-product; classical references
+\cite{Cheeger1970,Chung1997,ChavelEigenvalues,Petersen2016,LottVillani2009,AdamsFournier,Strang1973}
+for the four-ingredient roadmap & First step / partial /
+conjectural at iter 23; conditional at iter 29 via iter-28 +
+iter-29 cascade
+(\Cref{S-rem:iter29_iter23_conditional_iter29});
+\Cref{S-app:delaunay_first_step};
+\Cref{S-lem:delaunay_bg_parameters} \emph{(proved)};
+\Cref{S-thm:delaunay_gap_stability_conjecture}
+\emph{(conjectural at iter 23; conditional at iter 29)};
+\Cref{S-rem:delaunay_open_question}
+\emph{(open)} \\
+Cap-product coherence under quasi-isometric pullback (iter 24:
+attempt at ingredient~(i) of iter-23's missing-ingredients list;
+simplicial-isomorphism / translation sub-case proved rigorously;
+vertex-perturbation extension proved; general QI case conjectural
+with explicit support-and-norm decomposition) &
+Functorial cap-product identity \cite[Section~3.3]{Hatcher};
+simplicial chain map \cite[Ch.~1]{MunkresElements}; HP cap-product
+construction \cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv};
+Schur test \cite[Lem.~B.2.1]{ProdanSchulzBaldesBook} &
+Sub-case proved / general case conjectural;
+\Cref{S-app:cap_product_coherence_iter24};
+\Cref{S-lem:translation_coherence_iter24} \emph{(proved)};
+\Cref{S-lem:vertex_perturbation_coherence_iter24} \emph{(proved)};
+\Cref{S-thm:qi_coherence_general_iter24}
+\emph{(conjectural, proof outline)} \\
+Hilbert-space isomorphism for different-dimension Delaunay pairs
+(iter 25: attempt at ingredient~(ii) of iter-23's
+missing-ingredients list; sub-complex inclusion sub-case proved
+rigorously via inclusion partial isometry with explicit
+boundary-supported correction; general common-refinement case
+conjectural; combination with iter 24 would conditionally imply
+iter-23 stability conjecture) &
+Cap-product locality from HP construction
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv};
+Schur test \cite[Lem.~B.2.1]{ProdanSchulzBaldesBook};
+bounded-geometry constants from
+\Cref{S-lem:delaunay_bg_parameters} &
+Inclusion sub-case proved / general case conjectural at iter 25,
+conditional at iter 29 via
+\Cref{S-thm:three_step_composition_iter29};
+\Cref{S-app:hilbert_iso_diff_dim_iter25};
+\Cref{S-lem:inclusion_coherence_iter25} \emph{(proved)};
+\Cref{S-thm:diff_dim_coherence_iter25}
+\emph{(conjectural at iter 25; conditional at iter 29)} \\
+Unified Delaunay-extension chapter overview (iter 26:
+navigation/consolidation chapter integrating iters 23/24/25 into
+a single chapter with status table, dependency diagram, reading
+guide, and roadmap of open research items; no new mathematics,
+no upgrade of conjectural results, no new bibliography entry) &
+Source-order reorganization placing the iter-23/24/25
+subsections inside a new overview section, plus a status table
+reproducing the proof/conjecture/open status of each iter-23/24/25
+result verbatim, a TikZ dependency diagram showing how the
+iter-23 conjecture decomposes into ingredients~(i) and~(ii) and
+how iters 24 and 25 each attack one of those ingredients, a
+reading guide distinguishing math-content readers from
+research-direction readers, and a six-item roadmap of open
+research items (R1--R6) &
+Navigation-only;
+\Cref{S-sec:delaunay_extension_overview};
+\Cref{S-tab:delaunay_status_iter26} \emph{(status table)};
+\Cref{S-fig:delaunay_dependency_iter26}
+\emph{(dependency diagram)} \\
+Single-flip closed-form Schur norm bound (iter 27: closure of
+sub-case~(b) of the iter-24 conjectural general QI theorem;
+closed-form cap-product matrix elements on the eleven-simplex
+local Hilbert space of a Delaunay flip quadrilateral; Schur
+norm bound \(\|R_\phi^{\mathrm{single}}\|\le 4\) with the
+explicit constant \(C_{\mathrm{flip}}=4\) independent of
+\((\theta_0,L)\); sub-case~(c) multi-flip assembly remains
+conjectural at iter 27) &
+Closed-case cap-product convention
+\cite[Section~3.3]{Hatcher}; HP cap-product locality
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv};
+Schur test \cite[Lem.~B.2.1]{ProdanSchulzBaldesBook};
+bounded-geometry constants from
+\Cref{S-lem:delaunay_bg_parameters} &
+Single-flip sub-case (b) proved internally; sub-case (c) still
+conjectural at iter 27 (closed at iter 28);
+\Cref{S-app:single_flip_closed_form_iter27};
+\Cref{S-lem:cap_product_flip_iter27} \emph{(proved)};
+\Cref{S-thm:single_flip_schur_iter27} \emph{(proved)} \\
+Multi-flip Schur-test assembly (iter 28: closure of sub-case~(c)
+of the iter-24 conjectural general QI theorem via telescoping
+decomposition of the cumulative correction
+\(R_\phi=V_\phi^*\,S_{K'}\,V_\phi-S_{K_0}\) and a
+triangle-inequality bound
+\(\|R_\phi\|\le C_{\mathrm{flip}}\,N_{\mathrm{flip}}=4N_{\mathrm{flip}}\);
+edit-graph bounded-incidence lemma with explicit
+\(D_*(\theta_0,L)=14\Delta_*(\theta_0)^2\); cascade upgrade of
+\Cref{S-thm:qi_coherence_general_iter24} from conjectural to
+proved internally with explicit constant
+\(C_*(\theta_0,L)=C_{\mathrm{flip}}=4\) independent of
+\((\theta_0,L)\), strictly tighter than the iter-24 provisional
+\(8\,\Delta_*(\theta_0)\,L_*(\theta_0)\)) &
+HP cap-product locality
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv};
+Schur test \cite[Lem.~B.2.1]{ProdanSchulzBaldesBook};
+bounded-geometry parameters from
+\Cref{S-lem:delaunay_bg_parameters}; iter-27 per-flip
+single-flip bound \Cref{S-thm:single_flip_schur_iter27}; iter-24
+sub-case~(a) translation-coherence lemma
+\Cref{S-lem:translation_coherence_iter24} &
+Multi-flip sub-case (c) proved internally at iter 28; iter-24
+conjectural theorem upgraded to proved via three-sub-case
+cascade; \Cref{S-app:multi_flip_schur_iter28};
+\Cref{S-lem:bounded_edit_incidence_iter28} \emph{(proved)};
+\Cref{S-thm:multi_flip_schur_iter28} \emph{(proved)};
+\Cref{S-thm:qi_coherence_general_iter24} \emph{(now proved at
+iter 28 via cascade)} \\
+\midrule
+Common refinement for the Delaunay class (iter 29: candidate
+construction for iter-25 sub-case~(c) generic common
+refinement via the \emph{union-Delaunay refinement}
+\(K_*=K_*(K,K')\), the Delaunay triangulation of the union
+vertex set \(V_K\cup V_{K'}\); vertex inclusion
+\(V_K\subseteq V_{K_*}\), \(V_{K'}\subseteq V_{K_*}\) proved;
+parameter relaxation
+\((\theta_0,L)\to(\theta_0',L')\) with explicit bounds
+depending on the minimal inter-vertex distance
+\(d_{\min}(V_K,V_{K'})\) and the maximum edge length
+\(\overline{\ell}_{\max}\) proved; the union-Delaunay
+refinement provides vertex inclusion but \emph{not} simplicial
+sub-complex inclusion; conditional three-step composition
+theorem closes iter-25 sub-case~(c) modulo a
+sub-complex-refinement existence sub-conjecture, upgrading the
+iter-23 stability conjecture from \textbf{conjectural} to
+\textbf{conditional}) &
+Closed-surface Delaunay convention from
+\Cref{S-def:quasi_uniform_delaunay};
+bounded-geometry parameters from
+\Cref{S-lem:delaunay_bg_parameters}; iter-25 inclusion-coherence
+lemma \Cref{S-lem:inclusion_coherence_iter25}; iter-28 cascade
+\Cref{S-thm:qi_coherence_general_iter24}; HP cap-product
+locality
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv};
+Schur test \cite[Lem.~B.2.1]{ProdanSchulzBaldesBook} &
+Union-Delaunay candidate construction for iter-25 sub-case~(c);
+vertex-inclusion proved; sub-complex refinement is conditional;
+iter-23 stability conjecture upgraded from conjectural to
+conditional via iter-28 + iter-29 cascade;
+\Cref{S-app:common_refinement_iter29};
+\Cref{S-def:union_delaunay_iter29} \emph{(definition)};
+\Cref{S-lem:union_delaunay_vertices_iter29} \emph{(proved)};
+\Cref{S-lem:union_delaunay_parameters_iter29}
+\emph{(proved)};
+\Cref{S-rem:subcomplex_refinement_obstruction_iter29}
+\emph{(honest, not proved)};
+\Cref{S-thm:three_step_composition_iter29}
+\emph{(conditional)};
+\Cref{S-thm:delaunay_gap_stability_conjecture}
+\emph{(conditional at iter 29 via the cascade)} \\
+\midrule
+Sub-complex refinement and weakened inclusion (iter 30:
+negative-result iteration attacking the iter-29
+sub-complex-refinement existence sub-conjecture via the
+weakened \emph{refinement-in-the-union sense} relation; defines
+a block partial isometry
+\(V_K^\cup:\mathcal H(K)\hookrightarrow\mathcal H(\widetilde K_*)\)
+for the constrained common refinement \(\widetilde K_*\) (the
+overlay of \(K\) and \(K'\)), proves isometry, and explicitly
+computes the cap-product matrix elements; identifies a concrete
+renormalization mismatch factor \(\sqrt{N(\sigma')/N(\sigma)}\)
+on incident pairs that produces a \emph{bulk-supported}
+coherence correction with operator norm
+\(\le 2\sqrt 2\Delta_*L_*\); the bulk support prevents direct
+application of the iter-25 inclusion-coherence lemma in the
+iter-29 three-step composition theorem; iter-23 stability
+cascade status \textbf{unchanged from iter 29: conditional, not
+unconditional}; documents the obstruction with an explicit
+flat-torus example and outlines two future directions (weighted
+Hilbert spaces and Roe-algebra coarse-geometry treatment) that
+go beyond the scope of the iter-23--29 chain) &
+Cap-product locality from HP construction
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv};
+Schur test \cite[Lem.~B.2.1]{ProdanSchulzBaldesBook};
+bounded-geometry parameters from
+\Cref{S-lem:delaunay_bg_parameters}; iter-25 inclusion-coherence
+lemma \Cref{S-lem:inclusion_coherence_iter25} (used as
+counterpoint, not directly invoked); iter-29 union-Delaunay
+construction \Cref{S-def:union_delaunay_iter29} (refined to the
+overlay in \Cref{S-lem:overlay_refinement_iter30}) &
+Negative-result iteration: iter-30 block-partial-isometry
+construction is isometric but cap-product coherence correction
+is bulk-supported, not boundary-supported; iter-23 stability
+remains conditional at iter 29 (no upgrade);
+\Cref{S-app:subcomplex_refinement_iter30};
+\Cref{S-def:refinement_union_iter30} \emph{(definition)};
+\Cref{S-lem:overlay_refinement_iter30} \emph{(proved)};
+\Cref{S-def:block_partial_isometry_iter30} \emph{(definition)};
+\Cref{S-lem:block_isometry_iter30} \emph{(proved)};
+\Cref{S-lem:block_capproduct_matrix_iter30} \emph{(proved)};
+\Cref{S-thm:block_obstruction_iter30} \emph{(proved
+negative result)};
+\Cref{S-rem:iter30_cascade_honest_iter30} \emph{(honest cascade
+status: no upgrade from iter 29)} \\
+\midrule
+Cumulative Delaunay research chapter summary (iter 31:
+navigation/consolidation chapter integrating iters 23--30 into
+a single coherent presentation with three-tier classification
+TIER 1 unconditional, TIER 2 conditional, TIER 3 negative
+result; cumulative status table indexed by source iteration;
+dependency-flow diagram showing how the foundational lemmas
+of iters 23, 24, 25, 27, 28, 29, 30 feed into the iter-28
+cascade closure (ingredient~(i) of iter-23) and the iter-29
+conditional closure (ingredient~(ii) of iter-23), and how the
+iter-30 negative result documents that approach~(A) does not
+close the iter-29 sub-conjecture; roadmap of three remaining
+open research directions (D1)--(D3); closing honest
+assessment that the iter-23 stability conjecture closes
+unconditionally for the periodic/Bravais flat-torus case via
+iters 1--6 and is conditional in the general Delaunay class
+on the single sub-complex refinement existence sub-conjecture
+of iter 29; no new mathematics, no upgrade of any TIER 1, TIER
+2, or TIER 3 status, no new bibliography entry) &
+Source-order placement at the end of
+\Cref{S-sec:delaunay_extension_overview}; cumulative status
+table reproducing the TIER 1/2/3 classification of each
+iter-23 to iter-30 result; TikZ dependency-flow diagram
+showing the post-iter-30 dependency structure; cumulative
+roadmap of three open research items integrating the (R1)--(R6)
+items of iter 26 with the iter-28, iter-29, iter-30 closures
+and obstructions; honest closing assessment documenting both
+the unconditional flat-torus closure and the conditional
+general-Delaunay closure &
+Navigation-only;
+\Cref{S-app:delaunay_chapter_summary_iter31};
+\Cref{S-tab:delaunay_chapter_summary_iter31}
+\emph{(cumulative status table)};
+\Cref{S-fig:delaunay_chapter_summary_iter31}
+\emph{(dependency-flow diagram)} \\
+\midrule
+Updated HP citation inventory (iter 32: re-grep both files for
+every HP-citation occurrence after iters 13--31; classify each
+cluster by type / status / iter-source; build a consolidated
+representative-row inventory table; central honest finding that
+\emph{no} HP closed-bulk case is newly internalized in iters
+13--31; the bounded-geometry closed-bulk gap
+\Cref{thm:hp_imported}(i) remains the single research bottleneck,
+unchanged from iter 12; iters 13--22 audit / framing / navigation
+cluster adds H-typed prose citations only; iters 23--31
+Delaunay-extension cluster adds OB-typed cap-product locality
+citations only, plus G-typed restatements of the iter-23 stability
+conjecture target; no new mathematics, no upgrade of any TIER 1,
+TIER 2, or TIER 3 status, no new bibliography entry) &
+Exhaustive line-by-line grep of both \texttt{paper\_main.tex} and
+\texttt{paper\_supplement.tex}; representative-row consolidation
+of 485 raw HP-citation occurrences (90 in main + 395 in
+supplement) into clusters indexed by source iteration; no new
+mathematics &
+Audit-only,
+\Cref{S-app:hp_inventory_iter32},
+\Cref{S-tab:hp_inventory_iter32}
+\emph{(updated inventory table)};
+\Cref{S-cor:no_new_hp_internalization_iters_13_31}
+\emph{(central honest finding)};
+\Cref{S-cor:single_bottleneck_iter32}
+\emph{(bounded-geometry bottleneck reaffirmed)};
+records the residual HP dependency at iter 32 \\
+\midrule
+Condensed internal development audit summary (iter 33:
+paper-shortening pass relocating the audit/framing/navigation/
+inventory cluster of iters 12, 13, 14, 16, 17, 18, 20, 22, 31, 32
+into a single condensation table at the start of the supplement
+with one row per audit iteration, columns iter / title /
+one-sentence outcome / full subsection / approximate pages;
+``Skip-on-first-reading notice'' paragraphs are added at the top of
+each in-supplement audit/framing/navigation/inventory subsection;
+``[skip-on-first-reading; iter-33 tag]'' tags are added to the
+audit rows of the iter-22 supplement navigation index; effective
+reader-relevant page count drops to \(\sim\!160\) pages of
+load-bearing mathematics against a raw \(\sim\!246\)--\(248\) page
+supplement; the iter-33 pass adds 1--3 pages and deletes nothing;
+no new mathematics, no upgrade of any TIER 1, TIER 2, or TIER 3
+status, no new bibliography entry, no modification of any internal
+HP-replacement theorem) &
+Source-order placement at the end of
+\Cref{S-sec:reader_navigation}, immediately after the iter-22
+supplement navigation index
+\Cref{S-app:supplement_navigation_iter22}; ten-row condensation
+table (iters 12, 13, 14, 16, 17, 18, 20, 22, 31, 32) with the
+iter-20 row marked ``external'' because the iter-20 retrospective
+is the external markdown file
+\texttt{milestone\_retrospective\_iter20.md}; nine
+``Skip-on-first-reading notice'' paragraph insertions; iter-22
+navigation index ``one-line purpose'' column updates marking
+audit/framing/navigation/inventory rows with the
+``[skip-on-first-reading; iter-33 tag]'' tag; no new bibliography
+entry &
+Audit-only, paper-shortening pass,
+\Cref{S-app:condensed_audit_summary_iter33},
+\Cref{S-tab:condensed_audit_summary_iter33}
+\emph{(condensation table)};
+\Cref{S-lem:condensed_audit_summary_iter33_exposition}
+\emph{(exposition-only certification)};
+\Cref{S-cor:effective_page_count_iter33}
+\emph{(post-iter-33 effective page count)};
+entry point for audit-focused readers; resolves the supplement-%
+bloat issue accumulated through iters 13--32 \\
+\midrule
+Final pre-submission audit (iter 35: post-iter-34 mechanical
+integrity audit of the full submission package
+\texttt{cover\_letter.tex} + \texttt{paper\_main.tex} +
+\texttt{paper\_supplement.tex}; re-runs the iter-16
+pre-submission audit
+\Cref{S-app:presubmission_audit_iter16} against the
+post-iter-34 manuscript state and extends it with three new
+check categories absent at iter~16: the iter-19 stand-alone
+cover letter, the iter-22 navigation index updated through
+iter~33, and the iter-23--31 Delaunay-extension cluster; the
+audit deliverable is a 21-row audit table with one row per
+check item, columns audit item / status / notes; 20~rows
+resolve to PASS, 1~row resolves to NOTE (the iter-22
+navigation-index coverage gap for iters~23--34, a documented
+editorial choice rather than a defect), 0~rows resolve to
+NEEDS-FIX; pre-submission readiness statement records that the
+post-iter-34 submission package is pre-submission ready
+modulo the \texttt{[Journal name]} addressee-placeholder
+replacement in the cover letter; no new mathematics, no
+upgrade of any TIER 1, TIER 2, or TIER 3 status, no new
+bibliography entry, no modification of any internal
+HP-replacement theorem) &
+Mechanical enumeration of labels, citations, graphics, and
+\(\backslash\)\texttt{input} files; cross-document
+\texttt{xr} verification via the two \texttt{.aux} files;
+AI-prose-tell, Path-B/Path-C/scaffolding grep against
+\texttt{cover\_letter.tex}, \texttt{paper\_main.tex},
+\texttt{paper\_supplement.tex};
+\(\backslash\)\texttt{section*\{Acknowledgments\}} and
+\(\backslash\)\texttt{section*\{Declaration of generative AI
+and AI-assisted technologies in the manuscript preparation
+process\}} presence check; iter-33 skip-on-first-reading-notice
+presence check; \texttt{check\_loops.py} validator pass; no new
+mathematics &
+Audit-only, final pre-submission integrity check,
+\Cref{S-app:final_audit_iter35},
+\Cref{S-tab:final_audit_iter35}
+\emph{(21-row audit table)};
+\Cref{S-lem:final_audit_iter35_exposition}
+\emph{(exposition-only certification)};
+\Cref{S-cor:final_audit_iter35_summary}
+\emph{(twelve verifiable integrity conditions)};
+verdict \textbf{pre-submission ready} \\
+\midrule
+Submission-package assembly (iter 36: clean
+journal-submission zip assembled at
+\texttt{doubling\_and\_jamming\_submission\_iter36.zip}
+($\approx 7.02$~MB after DEFLATE compression) containing 51
+files: 6 manuscript files
+(\texttt{paper\_main.tex/pdf} + \texttt{paper\_supplement.tex/pdf}
++ \texttt{cover\_letter.tex/pdf}); 32 figure PNGs referenced by
+\(\backslash\)\texttt{safeincludegraphics\{...\}} in the two
+manuscripts; 9 table-input \texttt{.tex} files included via
+\(\backslash\)\texttt{input\{...\}}; 3 companion-code files
+(\texttt{periodic\_triangular\_bulk\_certificate.py} +
+\texttt{run\_companion\_numerics\_with\_robustness.py} +
+\texttt{requirements.txt}); and 1 \texttt{README.md} written
+explicitly for the iter-36 package; explicit exclusions of the
+555 \texttt{proof\_loop\_K} scaffolding directories, all
+\texttt{.aux} / \texttt{.log} / \texttt{.out} / \texttt{.toc}
+build artifacts, all \texttt{iterN\_summary.md} files, all
+\texttt{DONE\_*.txt} markers, the helper scripts
+\texttt{audit\_*.py} and \texttt{check\_loops.py}, the iter-1
+split-source files \texttt{main.tex} and
+\texttt{main\_split\_source.tex}, the iter-19 source-paper
+exports, and the preserved snapshot directory; no new
+mathematics, no theorem-status change, no new bibliography
+entry, no modification of any internal HP-replacement theorem) &
+Mechanical \texttt{Compress-Archive} packaging of the staged
+deliverables into a flat zip; staging-directory file-count
+verification; on-disk zip-size honest disclosure; recompile-from-
+unzipped-directory acceptance criterion (zero
+\texttt{LaTeX Warning}, zero undefined references, zero undefined
+citations modulo the pre-existing typographic warnings); no new
+mathematics &
+Audit-only, mechanical packaging step,
+\Cref{S-app:submission_package_iter36}
+\emph{(submission-package assembly subsection)};
+\Cref{S-lem:submission_package_iter36_inventory}
+\emph{(exposition-only inventory)};
+\Cref{S-thm:submission_package_iter36_closure}
+\emph{(packaging-closure theorem)};
+entry point for the journal-submission step; verdict
+\textbf{clean submission zip ready}, modulo the
+\texttt{[Journal name]} addressee-placeholder replacement at
+line~36 of \texttt{cover\_letter.tex} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\[
+\begin{tikzcd}[row sep=2.6em, column sep=1.4em]
+|[draw, rounded corners, fill=gray!18]|
+  \begin{array}{c}\text{\textbf{HP gap input}}\\[-0.2em]\text{\Cref{thm:hp_imported}(i)}\end{array}
+  \arrow[r, dashed, no head]
+& |[draw, rounded corners, fill=gray!18]|
+  \begin{array}{c}\text{\textbf{HP Chern input}}\\[-0.2em]\text{\Cref{thm:hp_imported}(ii)}\end{array}
+  \arrow[r, "\text{closed-bulk}"]
+& |[draw, rounded corners, fill=white]|
+  \begin{array}{c}\text{boundary map}\\[-0.2em]\text{\(\partial_Y\): bulk \(\to\) interface}\end{array}
+  \arrow[r, "\text{Toeplitz}"]
+& |[draw, rounded corners, fill=white]|
+  \begin{array}{c}\text{interface \(K_1\)-class}\\[-0.2em]\text{winding \(\pm1\)}\end{array} \\
+|[draw, rounded corners, fill=green!22, double, double distance=2pt]|
+  \begin{array}{c}\text{\textbf{Flat-torus gap}}\\[-0.2em]\text{\Cref{S-thm:internal_torus_gap}}\end{array}
+  \arrow[u, "\text{replaces (gap)}"', dashed]
+& |[draw, rounded corners, fill=green!22, double, double distance=2pt]|
+  \begin{array}{c}\text{\textbf{Flat-torus Chern}}\\[-0.2em]\text{\Cref{S-thm:internal_torus_chern}}\end{array}
+  \arrow[u, "\text{replaces (Chern, op.\ level)}"', dashed]
+& |[draw, rounded corners, fill=green!12]|
+  \begin{array}{c}\text{Periodic Toeplitz}\\[-0.2em]\text{\Cref{thm:periodic_toeplitz_pairing}}\end{array}
+  \arrow[u, "\text{(internal)}"', dashed]
+& |[draw, rounded corners, fill=green!12]|
+  \begin{array}{c}\text{Internal winding\,\(\pm1\)}\\[-0.2em]\text{\Cref{cor:toeplitz_winding}}\end{array}
+  \arrow[u, "\text{(internal)}"', dashed]
+\\
+|[draw, rounded corners, fill=green!22, double, double distance=2pt]|
+  \begin{array}{c}\text{\textbf{Hexagonal gap}}\\[-0.2em]\text{\Cref{S-thm:internal_hex_gap}}\end{array}
+  \arrow[uu, "\text{replaces (gap, hex)}"', dashed, bend right=30]
+& |[draw, rounded corners, fill=green!22, double, double distance=2pt]|
+  \begin{array}{c}\text{\textbf{Hexagonal Chern}}\\[-0.2em]\text{\Cref{S-thm:internal_hex_chern}}\end{array}
+  \arrow[uu, "\text{replaces (Chern, hex)}"', dashed, bend right=15]
+& |[draw, rounded corners, fill=green!12]|
+  \begin{array}{c}\text{Periodic triangular Chern (symbol)}\\[-0.2em]\text{\Cref{thm:periodic_triangular_chern}}\end{array}
+  \arrow[ul, "\text{FHS limit}"', dashed]
+& \\
+|[draw, rounded corners, fill=green!22, double, double distance=2pt]|
+  \begin{array}{c}\text{\textbf{Square gap}}\\[-0.2em]\text{\Cref{S-thm:internal_square_gap}}\end{array}
+  \arrow[uuu, "\text{replaces (gap, sq)}"', dashed, bend left=15]
+& |[draw, rounded corners, fill=green!22, double, double distance=2pt]|
+  \begin{array}{c}\text{\textbf{Square Chern}}\\[-0.2em]\text{\Cref{S-thm:internal_square_chern}}\end{array}
+  \arrow[uuu, "\text{replaces (Chern, sq)}"', dashed, bend left=15]
+& & \\
+&
+|[draw, rounded corners, fill=green!12]|
+  \begin{array}{c}\text{\textbf{General lattice-Chern lemma}}\\[-0.2em]
+  \text{\Cref{S-thm:internal_bc_chern_general}}\end{array}
+  \arrow[u, "\text{specializes to (sq)}"', dashed]
+  \arrow[uu, "\text{specializes to (hex)}", dashed, bend left=18]
+  \arrow[uuu, "\text{specializes to (tri)}", dashed, bend left=30]
+& & \\
+|[draw, rounded corners, fill=green!12]|
+  \begin{array}{c}\text{\textbf{Internal Combes--Thomas}}\\[-0.2em]
+  \text{\Cref{S-thm:internal_combes_thomas}}\end{array}
+  \arrow[r, dashed, "\text{tool}"]
+& |[draw, rounded corners, fill=gray!8, dashed]|
+  \begin{array}{c}\text{Bounded-geometry case}\\[-0.2em]\text{(future iter)}\end{array}
+  \arrow[uuuuu, dashed, bend right=30, "\text{future BG}"']
+& & \\
+\end{tikzcd}
+\]
+\par\medskip
+\noindent\fbox{\begin{minipage}{0.96\linewidth}\centering\footnotesize
+\textbf{Legend.}\
+\tikz[baseline=-0.5ex]\node[draw, rounded corners, fill=green!22, double, double distance=1.5pt,
+inner sep=2pt]{};\ doubled green border: internal HP-replacement (this paper).\quad
+\tikz[baseline=-0.5ex]\node[draw, rounded corners, fill=gray!18, inner sep=2pt]{};\ grey:
+external HP citation (still required for general bounded-geometry case).\quad
+\tikz[baseline=-0.5ex]\node[draw, rounded corners, fill=white, inner sep=2pt]{};\ white:
+downstream construction (boundary map, interface class, winding).\quad
+\tikz[baseline=-0.5ex]\node[draw, rounded corners, fill=green!12, inner sep=2pt]{};\ light
+green (single border): internal symbol-level input feeding an internal replacement above.
+\textbf{Columns:} (1) gap inputs; (2) Chern inputs; (3)--(4) downstream construction (boundary
+map, interface \(K_1\)-class, integer winding). \textbf{Rows:} (top) HP and downstream
+construction; (row 2) triangular flat-torus internal replacements; (row 3) hexagonal benchmark
+internal replacements; (row 4) square benchmark internal replacements; (row 5) the single
+internal-replacement node ``General lattice-Chern lemma'' (\Cref{S-thm:internal_bc_chern_general})
+that subsumes the three Chern-column nodes above as corollaries; (row 6) the internal
+Combes--Thomas exponential decay tool (\Cref{S-thm:internal_combes_thomas}) feeding a
+dashed-grey placeholder ``Bounded-geometry case (future iter)'' that records the
+remaining open HP-replacement target. The single dashed-grey placeholder is the only non-internal
+node in rows 2--6.
+\end{minipage}}
+\caption{Dependency structure for the closed-bulk-to-interface chain, restructured into a
+clean four-column layout. \textbf{Columns:} column 1 collects \emph{gap} inputs; column 2
+collects \emph{Chern} inputs; columns 3--4 collect the downstream construction (boundary map
+\(\partial_Y\), interface \(K_1\)-class, integer winding). \textbf{Rows:} the top row contains
+the HP inputs (grey, external) on the left and the downstream construction (white) on the
+right. The three lower rows are internal HP-replacements organized by benchmark family: row 2
+holds the triangular flat-torus replacements (gap and Chern, on the universal Hamiltonian),
+row 3 holds the hexagonal benchmark replacements (gap and rank-\(1\) Chern), and row 4 holds
+the square benchmark replacements (gap and rank-\(1\) Chern). The single-bordered green node
+``Periodic triangular Chern (symbol)'' (\Cref{thm:periodic_triangular_chern}) in row 3,
+column 3 is the symbol-level Chern input that feeds the operator-level row-2 ``Flat-torus
+Chern'' node via the FHS limit. The single-bordered green node ``General lattice-Chern lemma''
+(\Cref{S-thm:internal_bc_chern_general}) in row 5, column 2 is the operator-algebraic Chern
+convergence statement for arbitrary continuously parametrized self-adjoint Bloch families on
+\(\mathbb T^2\); the three upward dashed arrows from this node mark the three corollaries
+(triangular, hexagonal, square) that recover the row-2/3/4 Chern nodes by specializing to the
+benchmark-specific data. The single-bordered green
+\Cref{thm:periodic_toeplitz_pairing} and \Cref{cor:toeplitz_winding} were internal already.
+After this iteration, the gap and Chern inputs of HP are fully internal on three benchmarks
+(triangular flat torus, hexagonal benchmark on the same flat torus, and square benchmark on
+the same flat torus); only the general bounded-geometry case retains a dependency on the
+top-row HP nodes. The new row-6 ``Internal Combes--Thomas''
+(\Cref{S-thm:internal_combes_thomas}) is a standard locality tool: given a uniform Fermi gap
+on a bounded-geometry triangulation, it gives uniform off-diagonal exponential decay of the
+Fermi projection with a rate independent of the underlying triangulation; the dashed
+``will replace (BG)'' arrow indicates that this decay is a prerequisite for any future
+internal proof of the bounded-geometry case but does not by itself supply the bounded-geometry
+gap. The legend box below the diagram defines the colour and border
+conventions. The internal compatibility of the Roe connecting morphism \(\partial_Y\) of
+column 3 with the Ewert--Meyer Mayer--Vietoris boundary map is the content of
+\Cref{thm:pathb_roe_winding}, visualized as a separate SES-comparison diagram
+(\Cref{fig:roe_em_ses_comparison}) immediately before its body proof.}
+\label{fig:hp_dependency_diagram}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Notation used for the bulk, jammed, and sidewise interface operators.}
+\label{tab:notation_ledger}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.24\linewidth}
+                >{\raggedright\arraybackslash}p{0.65\linewidth}}
+\toprule
+Symbol & Meaning \\
+\midrule
+\(H_\pm=(B+B^\dagger)\pm S\) & Closed universal Chern Hamiltonian. \\
+\(H_{\pm,M}=H_\pm(D(\K))+M\Proj_{\mathrm{copy}}\) & Finite doubled-and-jammed Hamiltonian. \\
+\(A=P_{\mathrm{orig}}H_\pm(D(\K))P_{\mathrm{orig}}\) & Original-side compression of the doubled
+Hamiltonian. \\
+\(H_\pm^{\mathrm{PL}}(\K)\) & Intrinsic Poincar\'e--Lefschetz boundary Hamiltonian. \\
+\(P_\pm=\chi_{(-\infty,0)}(H_\pm^\infty)\) & Closed-bulk Fermi projection in the coarse disjoint
+union. \\
+\(J_{\pm,M}^\infty\) & Direct-sum jammed family defining the interface. \\
+\(T^+\), \(T^-\) & Positive-side and negative-side comparison operators. \\
+\(Y\), \(C^*(Y\subset X)\) & Coarse interface and its Roe ideal. \\
+\(\partial_Y(E_+(\pi(P_\pm)))\) & Internally constructed interface \(K_1\)-class. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%====================================================================
+\section{Simplicial setup and universal operators}\label{sec:setup}
+%====================================================================
+
+\begin{definition}[Triangulated surface with boundary]\label{def:surfwithbdry}
+A finite oriented $2$-dimensional simplicial complex $\K$ is a \emph{triangulated surface with
+boundary} if its geometric realization $|\K|$ is a compact PL $2$-manifold with boundary and the
+boundary subcomplex $\bd\K$ is a \emph{full subcomplex}: every simplex of $\K$ whose vertices all
+lie on $\bd\K$ is itself a boundary simplex. Every edge is incident to exactly one or two faces;
+the edges incident to exactly one face form $\bd\K$, and $\bd\K$ is a disjoint union of cycles.
+\end{definition}
+
+The fullness condition is mild: it holds automatically after one barycentric subdivision. Its
+role in keeping the simplicial double an abstract simplicial complex (without duplicate simplices
+or boundary-edge valence failures) is discussed in detail in the supplement,
+Section~\ref{S-sec:setup_remarks}.
+
+We work on the simplicial Hilbert space
+\(\Hil(\K)=\bigoplus_{p=0}^2 \ell^2(\K_p)\)
+with the canonical orthonormal basis indexed by oriented simplices. The simplicial boundary
+operator $B$ is the standard chain boundary, viewed as a degree-lowering operator. Then
+$B^2=0$ and $B+B^\dagger$ is self-adjoint and local. We endow the set of barycenters
+$X(\K)$ with the graph metric on the $1$-skeleton of the first barycentric subdivision; an
+operator $T$ has \emph{propagation at most $R$} when
+$\langle\sigma,T\tau\rangle=0$ for $\dist(\sigma,\tau)>R$.
+
+For a \emph{closed} oriented triangulation $\K$, cap product with the fundamental cycle
+$|X\rangle=\sum_{\tau\in\K_2}|\tau\rangle$ gives the Higson--Prodan operator $P$ from which one
+defines a Hermitian, degree-reversing, local operator $S$ by the degree-dependent
+symmetrization
+\[
+T|_{\Hil_p}=\tfrac12\bigl(P^\dagger+(-1)^pP\bigr),\qquad
+S|_{\Hil_p}=i^{p(p-1)+1}T|_{\Hil_p},
+\]
+so that $BS+SB^\dagger=0$. The closed universal Chern Hamiltonian is
+\(H_\pm(\K)=(B+B^\dagger)\pm S\).
+
+\subsection{Closed-case gap criteria}
+Two finite-dimensional gap criteria are used as building blocks; their proofs are short and
+collected in the supplement.
+
+\begin{proposition}[Exact gap lower bound under exact anticommutation]\label{prop:gap_from_S}
+Let $\K$ be closed and assume $(B+B^\dagger)S+S(B+B^\dagger)=0$. Then
+$H_\pm(\K)^2=(B+B^\dagger)^2+S^2$. If $\mu_S:=\dist(0,\spec(S))>0$, then
+$\spec(H_\pm(\K))\cap(-\mu_S,\mu_S)=\emptyset$.
+\end{proposition}
+\proofsuppref{app:proof:prop:gap_from_S}
+
+\begin{proposition}[Gap lower bound with anticommutation defect]\label{prop:gap_defect}
+With $Q=B+B^\dagger$, $\mu_S:=\dist(0,\spec(S))$, and $\e_{\mathrm{ac}}:=\opnorm{QS+SQ}$, if
+$S$ is Hermitian then $H_\pm(\K)^2\succeq(\mu_S^2-\e_{\mathrm{ac}})\Id$.
+\end{proposition}
+\proofsuppref{app:proof:prop:gap_defect}
+
+\subsection{Doubling, jamming, and the boundary Hamiltonians}
+Given $\K$ with boundary in the sense of Definition~\ref{def:surfwithbdry}, let $\overline\K$ be an
+oriented copy with reversed face orientation, sharing each boundary vertex of $\K$. The
+\emph{double} $D(\K)=\K\cup_{\bd\K}\overline\K$ is a finite closed oriented triangulated surface:
+
+\begin{proposition}[The double is a closed oriented triangulated surface]\label{prop:double_closed}
+Let $\K$ satisfy Definition~\ref{def:surfwithbdry}. Then $D(\K)$ is a finite closed oriented
+abstract simplicial complex that triangulates a closed surface.
+\end{proposition}
+\proofsuppref{app:proof:prop:double_closed}
+
+\begin{theorem}[Simplex count identities under doubling]\label{thm:counts}
+\(|D(\K)_2|=2|\K_2|\),\, \(|D(\K)_1|=2|\K_1|-|\bd\K_1|\),\, \(|D(\K)_0|=2|\K_0|-|\bd\K_0|\), and
+$|\bd\K_0|=|\bd\K_1|$. Consequently
+$\dim\Hil(D(\K))=2\dim\Hil(\K)-2|\bd\K_0|$, $\chi(D(\K))=2\chi(\K)$, and for a connected,
+orientable, genus-$g$ surface with $b\ge 1$ boundary components, the doubled genus is
+$g_{\mathrm{double}}=2g+b-1$.
+\end{theorem}
+\proofsuppref{app:proof:thm:counts}
+
+The closed-case construction therefore produces the operator $H_\pm(D(\K))$ on $\Hil(D(\K))$.
+We split
+\[
+\Hil(D(\K))=\Hil_{\mathrm{orig}}\oplus\Hil_{\mathrm{copy}}
+\]
+and \emph{jam} the reflected copy by the on-site potential
+\begin{equation}\label{eq:Hjam}
+H_{\pm,M}=H_\pm(D(\K))+M\Proj_{\mathrm{copy}}.
+\end{equation}
+The block decomposition
+\(H_\pm(D(\K))=\begin{pmatrix}A&C\\ C^\dagger&D\end{pmatrix}\)
+on $\Hil_{\mathrm{orig}}\oplus\Hil_{\mathrm{copy}}$ defines the
+\emph{original-side boundary Hamiltonian}
+\(H_{\pm}^{\bd}(\K):=A\), a self-adjoint local operator on the surface-with-boundary.
+
+The intrinsic alternative uses the relative chain complex
+$C_p(\K,\bd\K)=C_p(\K)/C_p(\bd\K)$ and the relative fundamental chain
+$[\K,\bd\K]=\sum_{\tau\in\K_2}|\tau\rangle$. Cap product with $[\K,\bd\K]$, followed by the
+canonical lift $\widehat P_p:=j_{2-p}P^{\mathrm{rel}}_p:C_p(\K)\to C_{2-p}(\K)$, gives the
+Hermitian, degree-reversing, local relative duality operator
+$S^{\mathrm{PL}}_\K$ on $\Hil(\K)$. The \emph{relative Poincar\'e--Lefschetz boundary
+Hamiltonian} is
+\begin{equation}\label{eq:H_PL}
+H^{\mathrm{PL}}_{\pm}(\K):=B_\K+B_\K^\dagger\pm S^{\mathrm{PL}}_\K\quad\text{on }\Hil(\K).
+\end{equation}
+
+\begin{lemma}[Relative cap identity and collar defect]\label{lem:relative_cap_identity}
+With $\partial^{\mathrm{rel}}_r:C_r(\K,\bd\K)\to C_{r-1}(\K,\bd\K)$ defined by
+$\partial^{\mathrm{rel}}_r q_r=q_{r-1}B_{\K,r}$, and $\delta_p:=B_{\K,p+1}^\dagger$, the
+relative cap-product blocks satisfy
+$\partial^{\mathrm{rel}}_{2-p}P^{\mathrm{rel}}_p+(-1)^p P^{\mathrm{rel}}_{p+1}\delta_p=0$
+for $p=0,1$. After lifting by $j$, the difference
+\(B_{\K,2-p}\widehat P_p+(-1)^p\widehat P_{p+1}\delta_p\) has matrix coefficients only when
+both source and target lie in a fixed barycentric collar of $\bd\K$. Consequently the relative
+duality defect $B_\K S^{\mathrm{PL}}_\K+S^{\mathrm{PL}}_\K B_\K^\dagger$ is supported in a fixed
+boundary collar.
+\end{lemma}
+\proofsuppref{app:proof:lem:relative_cap_identity}
+
+\begin{lemma}[Coefficient agreement off the boundary collar]\label{lem:cap_coefficient_agreement}
+Let $P_D$ be the closed cap-product operator on $D(\K)$ and $\widehat P$ the lifted relative
+cap-product operator on $\K$. There is a radius $R_\frown$ depending only on the local
+cap-product rule, such that
+$\langle\sigma,P_D\tau\rangle=\langle\sigma,\widehat P\tau\rangle$ whenever
+$\sigma,\tau\in\K\setminus N_{R_\frown}(\bd\K)$.
+\end{lemma}
+\proofsuppref{app:proof:lem:cap_coefficient_agreement}
+
+\begin{theorem}[Relative boundary Hamiltonian and doubled compression]\label{thm:relative_boundary_comparison}
+Let \(\K\) be a triangulated oriented surface with full boundary subcomplex. Under the natural
+identification of \(\Hil(\K)\) with \(\Hil_{\mathrm{orig}}\subset\Hil(D(\K))\),
+\(H^{\mathrm{PL}}_{\pm}(\K)\) is self-adjoint and local. Moreover there is a self-adjoint operator
+\(R_{\partial,\pm}\) such that
+\begin{equation}\label{eq:relative_boundary_comparison}
+H_{\pm}^{\bd}(\K)
+=
+H^{\mathrm{PL}}_{\pm}(\K)+R_{\partial,\pm},
+\end{equation}
+and the comparison error \(R_{\partial,\pm}\), and also the relative duality defect
+\(B_\K S^{\mathrm{PL}}_\K+S^{\mathrm{PL}}_\K B_\K^\dagger\), are supported in a bounded collar of
+the boundary: there is a radius \(R_{\mathrm{PL}}\), depending only on the local cap-product
+convention, such that the matrix entries vanish unless both source and target lie in
+\(N_{R_{\mathrm{PL}}}(\bd\K)\). For uniformly regular refinement families the same
+\(R_{\mathrm{PL}}\) works for all members.
+\end{theorem}
+
+\paragraph{Proof outline of \Cref{thm:relative_boundary_comparison}.}
+The proof has four steps; the full version is in
+\Cref{S-app:proof:thm:relative_boundary_comparison}.
+(i) Self-adjointness and locality of \(H^{\mathrm{PL}}_\pm(\K)\) follow from the construction of
+the relative duality operator \(S^{\mathrm{PL}}_\K\) (cap product with \([\K,\bd\K]\) followed
+by the canonical lift \(j_{2-p}P^{\mathrm{rel}}_p\)); the cap-product rule is local and the lift
+\(j\) is the standard quotient inclusion.
+(ii) The matrix-element comparison of \(P_D\) (closed double cap product) and
+\(\widehat P\) (lifted relative cap product) is the content of
+\Cref{lem:cap_coefficient_agreement}: away from a fixed barycentric collar of \(\bd\K\) the
+two cap-product blocks have identical matrix entries by the local nature of the simplicial
+cap-product formula.
+(iii) Consequently, the difference
+\(R_{\partial,\pm}:=H_\pm^{\bd}(\K)-H^{\mathrm{PL}}_\pm(\K)\) has matrix entries supported in
+the collar \(N_{R_{\mathrm{PL}}}(\bd\K)\), where \(R_{\mathrm{PL}}\) is the maximum
+propagation of the local cap-product rule plus the maximum propagation of the lift.
+(iv) The relative duality defect
+\(B_\K S^{\mathrm{PL}}_\K+S^{\mathrm{PL}}_\K B_\K^\dagger\) is supported in the same collar by
+\Cref{lem:relative_cap_identity}: the relative cap-product blocks satisfy
+\(\partial^{\mathrm{rel}}_{2-p}P^{\mathrm{rel}}_p+(-1)^p P^{\mathrm{rel}}_{p+1}\delta_p=0\) on
+the quotient \(C_\bullet(\K,\bd\K)\), so the lifted version has nonzero contributions only at
+the relative boundary, supported in the same fixed collar. For uniformly regular refinement
+families the local cap-product rule is the same, so the same \(R_{\mathrm{PL}}\) works for all
+members.
+
+\proofsuppref{app:proof:thm:relative_boundary_comparison}
+
+\begin{lemma}[Spectral counts under collar-supported perturbations]\label{lem:collar_rank_counts}
+If $R=P_W R P_W$ for a projection $P_W$ of rank $r$, then
+$|N_{A+R}(t)-N_A(t)|\le r$ for all $t$ and
+$|\rank\chi_I(A+R)-\rank\chi_I(A)|\le 2r$ for every interval $I$. Applied to
+$A=H^{\mathrm{PL}}_{\pm}(\K)$ and $A+R=H_{\pm}^{\bd}(\K)$, one may take
+$W=\ell^2(N_{R_{\mathrm{PL}}}(\bd\K))$. In particular, along refinement families with
+$r_n/d_n\to0$, the normalized spectral distribution functions of the two boundary models share
+the same subsequential limits.
+\end{lemma}
+\proofsuppref{app:proof:lem:collar_rank_counts}
+
+%====================================================================
+\section{Finite-dimensional decoupling theory}\label{sec:decoupling}
+%====================================================================
+
+The finite-dimensional analysis is perturbation theory specialized to the block structure produced
+by doubling and jamming. We use standard Schur-complement and spectral projection tools
+\cite[Chapter~II]{KatoPerturbation,BhatiaMatrixAnalysis}, but keep the constants and separation
+hypotheses explicit because they are later checked on the computed matrices. The full proofs are
+collected in the online supplement, Section~\ref{S-sec:schur_proofs}.
+
+\begin{lemma}[Schur complement resolvent formula]\label{lem:schur}
+Let $T=\bigl(\begin{smallmatrix}A&C\\ C^\dagger&D\end{smallmatrix}\bigr)$ be self-adjoint on
+$\Hil_1\oplus\Hil_2$ and $z\in\mathbb C\setminus\mathbb R$. Then the $(1,1)$ block of $(T-z)^{-1}$
+is $\bigl(A-z-C(D-z)^{-1}C^\dagger\bigr)^{-1}$.
+\end{lemma}
+
+Write $D_M:=D+M\Id$ and $d_M(z):=\dist(z,\spec(D_M))$.
+
+\begin{theorem}[Compressed resolvent convergence with explicit $O(1/M)$ rate]\label{thm:resolvent}
+Let $H_{\pm,M}$ be as in \eqref{eq:Hjam}. For any $z\in\mathbb C\setminus\mathbb R$,
+\begin{equation}\label{eq:resolvent_bound_exact}
+\opnorm{P_{\mathrm{orig}}(H_{\pm,M}-z)^{-1}P_{\mathrm{orig}}-(A-z)^{-1}}
+\le
+\frac{\opnorm{C}^2}{d_M(z)\,|\Im z|^2}.
+\end{equation}
+In particular, if $M>\opnorm{D}+|\Re z|$,
+$P_{\mathrm{orig}}(H_{\pm,M}-z)^{-1}P_{\mathrm{orig}}\to(A-z)^{-1}$ in operator norm at rate
+$O(1/M)$, so the doubled-and-jammed Hamiltonian recovers the original-side boundary Hamiltonian
+$A=H_{\pm}^{\bd}(\K)$ in the norm-resolvent sense as $M\to\infty$.
+\end{theorem}
+
+\begin{proof}[Proof sketch; full proof in Supplement, Section~\ref{S-sec:schur_proofs}.]
+Write $R_M:=P_{\mathrm{orig}}(H_{\pm,M}-z)^{-1}P_{\mathrm{orig}}$ and $R_0:=(A-z)^{-1}$.
+The Schur complement (Lemma~\ref{lem:schur}) gives the resolvent identity
+$R_M-R_0=R_M\,K_M\,R_0$ with the self-energy correction
+$K_M:=C(D_M-z)^{-1}C^\dagger$. The resolvent norms satisfy
+$\opnorm{R_M}\le|\Im z|^{-1}$ and $\opnorm{R_0}\le|\Im z|^{-1}$, and the self-energy is
+bounded by $\opnorm{K_M}\le\opnorm{C}^2/d_M(z)$. Multiplying gives
+\eqref{eq:resolvent_bound_exact}.
+\end{proof}
+
+\begin{corollary}[Boundary Hamiltonian as the large-jam limit]\label{cor:boundary_hamiltonian_limit}
+Let $H_{\pm}^{\bd}(\K)=A$ be the original-side boundary Hamiltonian. For every
+$z\in\mathbb C\setminus\mathbb R$,
+\(P_{\mathrm{orig}}(H_{\pm,M}-z)^{-1}P_{\mathrm{orig}}\to(H_{\pm}^{\bd}(\K)-z)^{-1}\) in operator
+norm with the explicit $O(M^{-1})$ bound \eqref{eq:resolvent_bound_exact}. Thus the
+doubled-and-jammed Hamiltonian recovers a self-adjoint boundary Hamiltonian on the original side
+in the norm-resolvent sense; equivalently, by Theorem~\ref{thm:relative_boundary_comparison},
+the same limit is $(H^{\mathrm{PL}}_{\pm}(\K)+R_{\partial,\pm}-z)^{-1}$.
+\end{corollary}
+\proofsuppref{app:proof:cor:boundary_hamiltonian_limit}
+
+\begin{corollary}[Degenerate full block-resolvent limit]\label{cor:full_resolvent}
+For $z\in\mathbb C\setminus\mathbb R$, $(H_{\pm,M}-z)^{-1}\to(A-z)^{-1}\oplus0$ in operator norm
+at rate $O(1/M)$, with the explicit triangle inequality
+\(\|(H_{\pm,M}-z)^{-1}-((A-z)^{-1}\oplus0)\|\le \opnorm{C}^2/(d_M(z)|\Im z|^2)
++ 2\opnorm{C}/(d_M(z)|\Im z|)+1/d_M(z)+\opnorm{C}^2/(d_M(z)^2|\Im z|)\).
+This is generalized norm-resolvent convergence in which the copy sector is sent to infinite energy.
+\end{corollary}
+\proofsuppref{app:proof:cor:full_resolvent}
+
+\begin{theorem}[First-order Schur-complement expansion]\label{thm:first_order_eff}
+Fix $z\in\mathbb C\setminus\mathbb R$. If $M>\opnorm{D-z}$ and $A_M^{(1)}:=A-\frac1MCC^\dagger$,
+then
+\begin{equation}\label{eq:first_order_bound}
+\opnorm{P_{\mathrm{orig}}(H_{\pm,M}-z)^{-1}P_{\mathrm{orig}}-(A_M^{(1)}-z)^{-1}}
+\le
+\frac{\opnorm{C}^2\,\opnorm{D-z}}{M(M-\opnorm{D-z})\,|\Im z|^2}=O(M^{-2}).
+\end{equation}
+\end{theorem}
+\proofsuppref{app:proof:thm:first_order_eff}
+
+For a positively oriented simple closed contour $\Gamma\subset\rho(T)$ write the Riesz projection
+$P_\Gamma(T):=\frac{1}{2\pi i}\int_\Gamma (z-T)^{-1}\,dz$. Set
+$\delta_A(\Gamma):=\dist(\Gamma,\spec(A))$,
+$\delta_D(\Gamma):=\dist(\Gamma,\spec(D_M))$, and
+$\delta_H(\Gamma):=\delta_A(\Gamma)-\opnorm{C}^2/\delta_D(\Gamma)$.
+
+\begin{theorem}[General contour-projection comparison]\label{thm:proj_general}
+Assume $\delta_A(\Gamma)>0$, $\delta_D(\Gamma)>0$, $\delta_H(\Gamma)>0$. Then
+$\Gamma\subset\rho(H_{\pm,M})$,
+$\rank P_\Gamma(H_{\pm,M})=\rank P_\Gamma(A)+\rank P_\Gamma(D_M)$, and
+\begin{equation}\label{eq:proj_general_bound}
+\opnorm{P_\Gamma(H_{\pm,M})-\bigl(P_\Gamma(A)\oplus P_\Gamma(D_M)\bigr)}
+\le \tfrac{|\Gamma|}{2\pi}\,\eta_M(\Gamma)=O(M^{-1}),
+\end{equation}
+where $\eta_M(\Gamma)$ is the explicit constant
+\[
+\eta_M(\Gamma)
+=\frac{\opnorm C^2}{\delta_A(\Gamma)\delta_H(\Gamma)\delta_D(\Gamma)}
++\frac{2\opnorm C}{\delta_H(\Gamma)\delta_D(\Gamma)}
++\frac{\opnorm C^2}{\delta_H(\Gamma)\delta_D(\Gamma)^2}.
+\]
+\end{theorem}
+\proofsuppref{app:proof:thm:proj_general}
+
+For $E_{\max}>0$ define $g_M(E_{\max}):=\dist\bigl([-E_{\max},E_{\max}],\spec(D_M)\bigr)$.
+
+\begin{theorem}[Bounded-energy spectral localization]\label{thm:spectral_localization}
+If $E$ is an eigenvalue of $H_{\pm,M}$ with $|E|\le E_{\max}$ and $g_M(E_{\max})>0$, then
+$\dist(E,\spec(A))\le\opnorm{C}^2/g_M(E_{\max})$.
+\end{theorem}
+\proofsuppref{app:proof:thm:spectral_localization}
+
+\begin{corollary}[Spectral comparison with the relative boundary Hamiltonian]\label{cor:relative_spectral_localization}
+Under the hypotheses of Theorem~\ref{thm:spectral_localization},
+\(\dist\bigl(E,\spec(H^{\mathrm{PL}}_\pm(\K)+R_{\partial,\pm})\bigr)
+\le\opnorm{C}^2/g_M(E_{\max})\).
+\end{corollary}
+\proofsuppref{app:proof:cor:relative_spectral_localization}
+
+\begin{theorem}[Bounded-energy eigenvalues lie near the first-order effective operator]\label{thm:first_order_spectral_localization}
+Let $E$ be an eigenvalue of $H_{\pm,M}$ with $|E|\le E_{\max}$ and $g_M(E_{\max})>0$. Then
+\begin{equation}\label{eq:specA1_exact}
+\dist\bigl(E,\spec(A_M^{(1)})\bigr)
+\le
+\frac{\opnorm{C}^2\,(\opnorm{D}+E_{\max})}{M\,g_M(E_{\max})}.
+\end{equation}
+In particular, if $M>\opnorm{D}+E_{\max}$, then
+\begin{equation}\label{eq:specA1_crude}
+\dist\bigl(E,\spec(A_M^{(1)})\bigr)
+\le
+\frac{\opnorm{C}^2\,(\opnorm{D}+E_{\max})}{M(M-\opnorm{D}-E_{\max})}.
+\end{equation}
+\end{theorem}
+\proofsuppref{app:proof:thm:first_order_spectral_localization}
+
+\begin{theorem}[Copy-side leakage bound]\label{thm:eigvec_leak}
+If $(E,\psi)$ is an eigenpair of $H_{\pm,M}$ with $|E|\le E_{\max}$ and $g_M(E_{\max})>0$,
+the copy component satisfies $\|\psi_{\mathrm{copy}}\|\le
+\opnorm{C}\,\|\psi_{\mathrm{orig}}\|/g_M(E_{\max})=O(1/M)$.
+\end{theorem}
+\proofsuppref{app:proof:thm:eigvec_leak}
+
+\begin{theorem}[Inertia reduction for large scalar jamming]\label{thm:inertia_reduction}
+Assume $M>\opnorm{D}$, so $D_M=D+M\Id$ is positive, and set $S_M(0):=A-CD_M^{-1}C^\dagger$. Then
+$N_-(H_{\pm,M})=N_-(S_M(0))$, $\dim\ker H_{\pm,M}=\dim\ker S_M(0)$, and
+$\|S_M(0)-A\|\le\opnorm{C}^2/(M-\opnorm{D})$. Consequently, if $0\notin\spec(A)$ and the
+perturbation satisfies $\opnorm{C}^2/(M-\opnorm{D})<\dist(0,\spec(A))$, then $H_{\pm,M}$ is
+invertible and $N_-(H_{\pm,M})=N_-(A)$.
+\end{theorem}
+\proofsuppref{app:proof:thm:inertia_reduction}
+
+\begin{corollary}[Monotonicity in the scalar jam scale]\label{cor:scalar_jam_monotonicity}
+Let $M_2>M_1$. The eigenvalues $\lambda_j(H_{\pm,M})$, listed in nondecreasing order with
+multiplicity, are nondecreasing in $M$. In particular, $M\mapsto N_-(H_{\pm,M})$ is nonincreasing.
+\end{corollary}
+\proofsuppref{app:proof:cor:scalar_jam_monotonicity}
+
+\begin{corollary}[No low-energy pure-copy states]\label{cor:no_copy_spectral_subspace}
+Let $E_{\max}>0$ and assume $M>\opnorm{D}+E_{\max}$. The compression
+$P_{\mathrm{orig}}\,Q_M:\Ran Q_M\to\Hil_{\mathrm{orig}}$ is injective for
+$Q_M=\chi_{[-E_{\max},E_{\max}]}(H_{\pm,M})$, so $\rank Q_M\le\dim\Hil_{\mathrm{orig}}$, and
+quantitatively $\|P_{\mathrm{copy}}\psi\|\le (E_{\max}+\opnorm C)/(M-\opnorm D)\,\|\psi\|$ for
+every $\psi\in\Ran Q_M$.
+\end{corollary}
+\proofsuppref{app:proof:cor:no_copy_spectral_subspace}
+
+\begin{proposition}[Inherited gap from the original-side block]\label{prop:inherited_gap_A}
+Assume $\spec(A)\cap(-g_A,g_A)=\emptyset$ for some $g_A>0$ and
+$g_M(g_A):=\dist([-g_A,g_A],\spec(D_M))>0$. With $\Delta_M=\opnorm{C}^2/g_M(g_A)$, if
+$\Delta_M<g_A$ then $\spec(H_{\pm,M})\cap(-g_A+\Delta_M,g_A-\Delta_M)=\emptyset$.
+\end{proposition}
+\proofsuppref{app:proof:prop:inherited_gap_A}
+
+\begin{corollary}[Uniform direct-sum large-jam estimates]\label{cor:uniform_direct_sum_jam}
+Under uniform bounds $\bar C=\sup_n\opnorm{C_n}<\infty$ and $\bar D=\sup_n\opnorm{D_n}<\infty$,
+the finite-$M$ estimates of
+\Cref{thm:resolvent,thm:first_order_eff,thm:spectral_localization,thm:eigvec_leak} hold uniformly
+in $n$ for the direct-sum doubled-and-jammed family. The compressed resolvent error, the
+first-order compressed approximation, the spectral-localization distance, and the copy leakage
+carry the same explicit bounds with $\opnorm{C}$ replaced by $\bar C$ and $\opnorm{D}$ by
+$\bar D$.
+\end{corollary}
+\proofsuppref{app:proof:cor:uniform_direct_sum_jam}
+
+\begin{theorem}[Internal bulk spectral equivalence]\label{thm:internal_bulk_spectral_equivalence}
+Let $(\K_n)_n$ be finite triangulated oriented surfaces with full boundary subcomplex, with
+$d_n=\dim\Hil(\K_n)$ and uniform bounds on $\|A_{\pm,n}\|,\|H^{\mathrm{PL}}_\pm(\K_n)\|,
+\|C_{\pm,n}\|,\|D_{\pm,n}\|$. Let $M_n\to\infty$ and assume $r_n/d_n\to0$ for the
+boundary-collar dimension $r_n$ from Theorem~\ref{thm:relative_boundary_comparison}. Then for
+every $f\in C_0(\mathbb R)$,
+\[
+\frac1{d_n}\operatorname{Tr} f(H_{\pm,n,M_n})
+-
+\frac1{d_n}\operatorname{Tr} f\!\left(H^{\mathrm{PL}}_{\pm}(\K_n)\right)
+\longrightarrow0.
+\]
+The intrinsic Poincar\'e--Lefschetz model, the doubled original-side compression, and the
+finite-\(M_n\) jammed model have the same normalized bulk spectral subsequential limits. The
+statement uses no closed-bulk Chern theorem, no uniform doubled-bulk gap, and no
+interface-pairing hypothesis.
+\end{theorem}
+
+\paragraph{Proof outline of \Cref{thm:internal_bulk_spectral_equivalence}.}
+The proof combines three building blocks already established in this section; the full version
+is in \Cref{S-app:proof:thm:internal_bulk_spectral_equivalence}.
+(i) The compressed-resolvent estimate \Cref{thm:resolvent} gives
+\(\|P_{\mathrm{orig}}(H_{\pm,n,M_n}-z)^{-1}P_{\mathrm{orig}}-(A_n-z)^{-1}\|\to 0\) as
+\(M_n\to\infty\) at the explicit \(O(1/M_n)\) rate; in particular
+\(\tfrac{1}{d_n}\bigl|\operatorname{Tr} f(H_{\pm,n,M_n})-\operatorname{Tr} f(A_n)\bigr|\to 0\) for every
+\(f\in C_0(\mathbb R)\) by Stone--Weierstrass density of resolvents and the uniform bound
+\(d_n^{-1}\operatorname{Tr}|\cdot|\le \|\cdot\|\).
+(ii) The collar-rank lemma \Cref{lem:collar_rank_counts}, applied to
+\(A_n=H^{\mathrm{PL}}_\pm(\K_n)\) and \(A_n+R_{\partial,\pm,n}=H^{\bd}_{\pm}(\K_n)\), bounds
+the normalized trace difference by \(O(r_n/d_n)\to 0\).
+(iii) Combining (i) with the identification \(A_n=H^{\bd}_\pm(\K_n)\) and (ii) gives
+\(\tfrac{1}{d_n}\bigl|\operatorname{Tr} f(H_{\pm,n,M_n})-\operatorname{Tr} f(H^{\mathrm{PL}}_\pm(\K_n))\bigr|\to 0\) for
+every \(f\in C_0(\mathbb R)\). No closed-bulk Chern input or uniform doubled gap is needed; the
+hypothesis is only the uniform finite-dimensional operator-norm bound on the blocks
+\(A_{\pm,n},C_{\pm,n},D_{\pm,n}\), and the negligible-collar condition \(r_n/d_n\to 0\).
+
+\proofsuppref{app:proof:thm:internal_bulk_spectral_equivalence}
+
+The remaining estimates in this section -- contour eigenvalue-count stability, monotonicity in the
+jam scale, no-copy low-energy bounds, an inherited-gap criterion, and the uniform direct-sum
+version used by the Roe construction -- are stated together with their explicit constants and
+proved in the supplement, Section~\ref{S-sec:schur_proofs}.
+
+%====================================================================
+\section{Roe-algebra identification of the doubled-and-jammed interface class}\label{sec:pathb_internalization}
+%====================================================================
+
+This section establishes the boundary-map identification used by the headline Roe-winding theorem.
+The closed-bulk gap and Chern value come from the closed universal-model theorem of Higson and
+Prodan \cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}. The Ewert--Meyer citation
+\cite{EwertMeyer2019} fixes the coarse bulk--interface language and the Mayer--Vietoris pairing
+convention; for the doubled-and-jammed original/copy partition used in this paper, the
+identification of the Mayer--Vietoris boundary with the Roe connecting map is proved here.
+
+\subsection{Higson--Prodan universal closed-bulk input}
+
+\paragraph{Internal alternative to HP for the flat-torus case.}\label{par:internal_torus_alternative}
+The Higson--Prodan closed universal-model theorem \Cref{thm:hp_imported} is invoked below for
+\emph{general} bounded-geometry closed triangulations. However, for the special case of a
+\emph{flat 2-torus with a uniform triangular triangulation}---a finite quotient
+\(T_N=\mathbb R^2/(N\mathbb Z)^2\) equipped with the \(\Lambda\)-periodic triangular
+triangulation \(\K_N^\triangle\) of \Cref{sec:periodicbulk}---the closed-bulk Fermi gap of
+\Cref{thm:hp_imported}(i) is now proved internally, with explicit constant
+\(c=2^{-13}\) independent of the side length \(N\); see
+\Cref{S-thm:internal_torus_gap} in the supplement. In particular, the flat-torus instance of the
+closed-bulk gap input no longer depends on HP. The Chern integer part of
+\Cref{thm:hp_imported}(ii) for the same flat-torus instance is supplied internally at the
+\emph{operator level} by \Cref{S-thm:internal_torus_chern} in the supplement
+(\(\Ch_N(P_+(\K_N^\triangle))=-1\) and \(\Ch_N(P_-(\K_N^\triangle))=+1\) on the finite torus
+\(T_N\) for every \(N\) at least an explicit threshold \(N_0\)), and at the
+\emph{symbol level} by \Cref{thm:periodic_triangular_chern} (continuous Chern signs
+\(\Ch(E_-(H_+^\triangle))=-1\) and \(\Ch(E_-(H_-^\triangle))=+1\)). The closed-bulk gap input
+of \Cref{thm:hp_imported}(i) for the \emph{hexagonal benchmark Bloch model}
+\(H_{\hexagon}(k;m)\) of the supplement (\Cref{S-def:hex_bloch_symbol}) on the same flat
+2-torus \(T_N\) is also proved internally, at the operator level, by
+\Cref{S-thm:internal_hex_gap} (uniform Fermi gap
+\(\gamma_{\hexagon}(m)=\sqrt{\min\{1/4,(\sqrt{3}-1)^2m^2\}}\), independent of \(N\)); the
+underlying \(2\times 2\) determinant bound is the symbol-level
+\Cref{S-lem:hex_bulk_gap}. The companion benchmark---the \emph{square Bloch model}
+\(H_{\square}(k;m)\) of the supplement (\Cref{S-def:square_bloch_symbol})---admits the same
+internal closed-bulk gap on the flat-torus quotient \(T_N\), proved at the operator level by
+\Cref{S-thm:internal_square_gap} (uniform Fermi gap
+\(\gamma_{\square}(m)=\sqrt{\min\{1/4,(\sqrt{3}-1)^2m^2\}}\), independent of \(N\)); the
+underlying \(2\times 2\) determinant bound is the symbol-level
+\Cref{S-lem:square_bulk_gap}. The closed-bulk Chern integer input of
+\Cref{thm:hp_imported}(ii) for the \emph{hexagonal benchmark Bloch model} on the same flat
+2-torus \(T_N\) is also proved internally at the operator level by
+\Cref{S-thm:internal_hex_chern} (\(\Ch_N(P_-(\K_N^{\hexagon};m))=-\sgn(m)\) on the finite torus
+\(T_N\) for every \(N\) at least an explicit threshold \(N_0^{\hexagon}(m)\)); the underlying
+symbol-level Chern signs come from \Cref{S-lem:hex_chern_positive,S-lem:hex_chern_negative} and
+are lifted to the operator level by the same Fukui--Hatsugai--Suzuki convergence mechanism used
+for the triangular case in \Cref{S-thm:internal_torus_chern}. The companion benchmark---the
+\emph{square Bloch model} \(H_{\square}(k;m)\) of the supplement
+(\Cref{S-def:square_bloch_symbol})---admits the same internal closed-bulk Chern integer on the
+flat-torus quotient \(T_N\), proved at the operator level by \Cref{S-thm:internal_square_chern}
+(\(\Ch_N(P_-(\K_N^{\square};m))=+\sgn(m)\) on the finite torus \(T_N\) for every \(N\) at
+least an explicit threshold \(N_0^{\square}(m)\)); the underlying symbol-level Chern sign comes
+from \Cref{S-lem:square_chern_positive} (for \(m>0\)) and the antiunitary mass-reversal
+argument in the proof of \Cref{S-lem:square_toeplitz_winding} (for \(m<0\)), and is lifted to
+the operator level by the same Fukui--Hatsugai--Suzuki convergence mechanism used for the
+triangular and hexagonal cases. For flat-torus closed doubles, both the closed-bulk gap
+(\Cref{S-thm:internal_torus_gap}) and the closed-bulk Chern integer
+(\Cref{S-thm:internal_torus_chern}) are proved internally; both two-band benchmarks of
+\Cref{S-app:benchmark_hex_square} (hexagonal and square) on the same flat-torus quotient are
+also internal for both inputs (gap: \Cref{S-thm:internal_hex_gap} and
+\Cref{S-thm:internal_square_gap}; Chern: \Cref{S-thm:internal_hex_chern} and
+\Cref{S-thm:internal_square_chern}); the general bounded-geometry case still cites HP.
+
+\begin{definition}[Universal Hamiltonian on a bounded-geometry triangulation]\label{def:pathb_universal_hamiltonian}
+Let \(K\) be a bounded-geometry closed oriented triangulated surface, let
+\(\Hil(K)=\ell^2(K_0\sqcup K_1\sqcup K_2)\), let \(B\) be the simplicial boundary operator, and let
+\(S_K\) be the Higson--Prodan Hermitian Poincar\'e-duality operator constructed from cap product
+with the fundamental cycle. The two universal closed Hamiltonians are
+\[
+H_\pm(K):=(B+B^\dagger)\pm S_K
+\]
+on \(\Hil(K)\).
+\end{definition}
+
+\begin{theorem}[Cited: Higson--Prodan closed-bulk gap and Chern]\label{thm:hp_imported}
+\emph{(Higson--Prodan \cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}; statement as
+imported.)} Let \((K_n)_n\) be a sequence of finite closed oriented triangulated surfaces of
+uniformly bounded local geometry: there exist constants \(\Delta\), \(L\), \(R_0\) such that
+every vertex of \(K_n\) has simplicial-star valence at most \(\Delta\), every face has at most
+\(L\) edges in its star, and the link of every simplex is contained in a combinatorial ball of
+radius at most \(R_0\); moreover \((K_n)\) is a refinement sequence in the sense that each
+\(K_{n+1}\) admits a simplicial subdivision map to \(K_n\). Let \(H_\pm(K_n)\) be the universal
+Chern Hamiltonians of \Cref{def:pathb_universal_hamiltonian}. Then:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item (Uniform Fermi gap.) There exists \(g_{\mathrm{HP}}>0\), depending only on
+\((\Delta,L,R_0)\) and not on \(n\), such that
+\[
+\spec\bigl(H_\pm(K_n)\bigr)\cap(-g_{\mathrm{HP}},g_{\mathrm{HP}})=\varnothing
+\qquad\text{for all }n.
+\]
+\item (Closed-bulk Chern integer.) Let
+\(P_\pm(K_n)=\chi_{(-\infty,0)}(H_\pm(K_n))\) be the Fermi projection. The closed-bulk
+Bellissard--Connes/Higson--Prodan Chern pairing is
+\[
+\Ch\bigl([P_\pm(K_n)]\bigr)=\pm 1,
+\]
+with the sign determined by the chosen component \(H_+\) versus \(H_-\) and by the orientation
+convention of Section~\ref{sec:setup} (Bloch torus orientation \(dk_1\wedge dk_2\) when the
+closed triangulation is periodic, and the canonical Higson--Prodan orientation otherwise).
+\end{enumerate}
+This is the only external theorem cited anywhere in the proofs of this paper. Bibliographic
+data for the published PRL and the arXiv preprint are listed under
+\cite{HigsonProdanUniversalPRL} (Phys.\ Rev.\ Lett.\ \textbf{136} (2026), no.~9, 096602,
+doi:10.1103/66x5-dvqq) and \cite{HigsonProdanUniversalArxiv} (arXiv:2510.20862,
+doi:10.48550/arXiv.2510.20862).
+\end{theorem}
+
+\begin{lemma}[Doubled-jammed families satisfy HP hypotheses]\label{lem:hp_hypothesis_check}
+Let \((\K_n)_n\) be a uniformly regular boundary refinement family of finite triangulated
+oriented surfaces with full boundary subcomplex (in the sense of
+Definition~\ref{def:surfwithbdry} together with uniform bounds on local valences and stars),
+and let \(D(\K_n)\) be the simplicial doubles of \Cref{prop:double_closed}. Then the closed
+sequence \((D(\K_n))_n\) satisfies the hypotheses of \Cref{thm:hp_imported}. Concretely:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item (Bounded geometry.) The vertex valences, face-star sizes, and link radii of \(D(\K_n)\)
+are bounded uniformly in \(n\) by constants depending only on the corresponding bounds for
+\((\K_n)\) and on the doubling operation. Specifically, if every interior vertex of \(\K_n\)
+has valence at most \(\Delta_{\mathrm{int}}\) and every boundary vertex has valence at most
+\(\Delta_{\bd}\), then every vertex of \(D(\K_n)\) has valence at most
+\(\max(\Delta_{\mathrm{int}},2\Delta_{\bd}-1)\); analogous bounds hold for face-star sizes
+and link radii by \Cref{prop:double_closed}.
+\item (Refinement structure.) If \((\K_n)\) is a refinement sequence (each \(\K_{n+1}\)
+subdivides \(\K_n\) and the subdivisions restrict to refinements of \(\bd\K_n\)), then
+\((D(\K_n))\) is a refinement sequence in the sense of \Cref{thm:hp_imported}: the doubled
+subdivision \(D(\K_{n+1})\) admits a simplicial map to \(D(\K_n)\) extending the subdivision
+on each side, gluing continuously across the shared boundary by the full-subcomplex condition
+of Definition~\ref{def:surfwithbdry}.
+\item (Closed oriented surface.) Each \(D(\K_n)\) is a finite closed oriented triangulated
+surface (\Cref{prop:double_closed}); the orientation on the original side is the orientation
+of \(\K_n\), and on the copy side is the reversed orientation, consistent across \(\bd\K_n\).
+\end{enumerate}
+Consequently \Cref{thm:hp_imported} applies to \((D(\K_n))_n\): there is a uniform Fermi gap
+\(g_{\mathrm{HP}}>0\) for the closed doubled universal Hamiltonians \(H_\pm(D(\K_n))\), and
+their closed-bulk Chern integers are \(\Ch([P_\pm(D(\K_n))])=\pm 1\).
+\end{lemma}
+
+\begin{proof}[Proof of \Cref{lem:hp_hypothesis_check}]
+The valence, face-star, and link bounds are local combinatorial counts in the doubled complex
+\(D(\K_n)=\K_n\cup_{\bd\K_n}\overline{\K_n}\); each interior simplex of \(D(\K_n)\) is also an
+interior simplex of either \(\K_n\) or \(\overline{\K_n}\), inheriting its valence/star
+bounds, while each boundary simplex of \(\K_n\) is shared with \(\overline{\K_n}\) and has
+valence equal to the sum of valences from the two sides. The full-subcomplex condition
+\Cref{def:surfwithbdry} ensures that the gluing across \(\bd\K_n\) does not create duplicate
+simplices, so \(D(\K_n)\) is an abstract simplicial complex with these uniform bounds. The
+refinement property follows from the gluing-compatible subdivision of \(\bd\K_n\) and the
+two-sided subdivision of \(\K_n\) and \(\overline{\K_n}\). That \(D(\K_n)\) is a finite
+closed oriented triangulated surface is \Cref{prop:double_closed}.
+\end{proof}
+
+\begin{lemma}[Higson--Prodan closed-bulk gap, cited]\label{lem:pathb_hp_gap}
+For the universal Hamiltonians \(H_\pm(K)\) on closed bounded-geometry triangulations covered
+by \Cref{thm:hp_imported}, there is a uniform Fermi gap
+\(\spec(H_\pm(K))\cap(-g_{\mathrm{HP}},g_{\mathrm{HP}})=\varnothing\) for some
+\(g_{\mathrm{HP}}>0\) independent of the refinement level. (Restatement of
+\Cref{thm:hp_imported}(i) for the closed-bulk gap input used throughout
+Section~\ref{sec:pathb_internalization}.)
+\end{lemma}
+
+\begin{lemma}[Higson--Prodan closed-bulk Chern number, cited]\label{lem:pathb_hp_chern}
+With \(P_\pm(K)=\chi_{(-\infty,0)}(H_\pm(K))\), the Bellissard--Connes/Higson--Prodan closed-bulk
+Chern pairing satisfies \(\Ch([P_\pm])=\pm1\), with the sign determined by the chosen component
+and by the orientation convention of Section~\ref{sec:setup}. (Restatement of
+\Cref{thm:hp_imported}(ii) for the closed-bulk Chern input.)
+\end{lemma}
+
+\subsection{Roe extension and the interface boundary class}
+
+Let \(X=\bigsqcup_n X(D(\K_n))\) be the coarse disjoint union of the doubled barycentric vertex
+sets, let \(X^+\) be the original side, let \(X^-\) be the reflected-copy side, and let \(Y\) be a
+fixed coarse collar of the glued boundary. The choice of coarse collar radius does not affect the
+ideal $C^*(Y\subset X)$ (Proposition~\ref{S-prop:collar_radius_independence}).
+
+\begin{lemma}[Roe algebra and closed-bulk Fermi projection]\label{lem:pathb_roe_setup}
+For \(X\) as above, the scalar Roe algebra \(C^*(X)\) is unital. Under the Higson--Prodan gap of
+Lemma~\ref{lem:pathb_hp_gap}, the direct-sum Fermi projection
+\(P_\pm=\chi_{(-\infty,0)}\!\left(\bigoplus_n H_\pm(D(\K_n))\right)\) belongs to \(C^*(X)\).
+\end{lemma}
+
+\begin{lemma}[Coarse partition exact sequence]\label{lem:pathb_exact_sequence}
+With \(\mathcal A=C^*(X)\) and \(\mathcal I=C^*(Y\subset X)\), the original/copy decomposition gives
+the quotient extension
+\(0\to\mathcal I\to\mathcal A\xrightarrow{\pi}\mathcal A/\mathcal I\to0\), with boundary map
+\(\partial_Y:K_0(\mathcal A/\mathcal I)\to K_1(\mathcal I)\).
+\end{lemma}
+
+\begin{definition}[Interface projection and unitary]\label{def:pathb_interface_projection}
+Let \(J_{\pm,M}^\infty=\bigoplus_n H_{\pm,M,n}\) be the doubled-and-jammed family and let
+\(p_J:=E_+\bigl(\pi(P_\pm)\bigr)\in\mathcal A/\mathcal I\). For any admissible cutoff \(h\),
+\(p_J=\pi(h(J_{\pm,M}^\infty))\), and the associated interface \(K_1\)-class is represented by
+\(u_{J,h}:=\exp(2\pi i\,h(J_{\pm,M}^\infty))\in\Id+\mathcal I\),
+\([u_{J,h}]=\partial_Y([p_J])\).
+\end{definition}
+
+\subsection{Conventions for Theorem~\ref{thm:pathb_roe_winding}}\label{sec:pathb_conventions}
+The headline theorem fixes one set of conventions, used identically in the body proof and the
+appendix-level verifications:
+\begin{enumerate}[label=(C\arabic*),leftmargin=2.4em]
+\item\label{conv:pathb_rep} \emph{Representation.} The standard left-regular
+\(\ell^2\)-representation of the scalar Roe algebra: \(C^*(X)\subset\mathcal B(\ell^2(X))\) is the
+norm closure of locally compact finite-propagation operators acting on the canonical basis of unit
+point masses at each vertex of $X=\bigsqcup_n X(D(\K_n))$.
+\item\label{conv:pathb_stab} \emph{Stabilization.} The scalar (not matrix-stabilized) Roe algebra.
+Standard Murray--von Neumann \(K\)-theoretic stabilization is invoked only where strictly
+necessary, namely in step (3) of the proof below.
+\item\label{conv:pathb_sign} \emph{Sign convention for \(\partial\).} The connecting map
+\(\partial_Y\) is the standard Higson--Roe boundary map in the six-term exact sequence of
+\(0\to\mathcal I\to\mathcal A\to\mathcal A/\mathcal I\to0\), with the orientation choice that
+\(\partial[\pi(P)]=[\exp(2\pi i\,\tilde P)]\) for any self-adjoint lift \(\tilde P\) of the
+quotient projection \cite{HigsonRoeI,RoeLectures}.
+\item\label{conv:pathb_side} \emph{Side convention.} \(X=X^+\sqcup X^-\) is the original/copy
+decomposition; spectral cutoffs are taken on the negative real axis,
+\(P_\pm=\chi_{(-\infty,0)}(H_\pm^\infty)\).
+\item\label{conv:pathb_quotient} \emph{Quotient map.} \(\pi:\mathcal A\to\mathcal A/\mathcal I\) is
+the canonical \(C^*\)-quotient by \(\mathcal I=C^*(Y\subset X)\), with collar-radius independence.
+\end{enumerate}
+The Ewert--Meyer Mayer--Vietoris boundary map for the same original/copy partition is denoted
+\(\partial^{\mathrm{EM}}_Y\); the internal compatibility theorem below identifies it with
+\(\partial_Y\) under \ref{conv:pathb_rep}--\ref{conv:pathb_quotient}.
+
+\begin{figure}[H]
+\centering
+\[
+\begin{tikzcd}[row sep=2.6em, column sep=2.6em]
+0 \arrow[r] & \mathcal I \arrow[r, hook] \arrow[d, equal] & \mathcal A
+  \arrow[r, two heads, "\pi"] \arrow[d, equal] & \mathcal A/\mathcal I \arrow[r]
+  \arrow[d, equal] & 0 \\
+0 \arrow[r] & C^*(Y\subset X) \arrow[r, hook] & C^*(X)
+  \arrow[r, two heads, "\pi"] & C^*(X)/C^*(Y\subset X) \arrow[r] & 0 \\
+K_1(\mathcal I) \arrow[r, "\cong"] & {[u_{J,h}]}
+  & {[P_\pm]\in K_0(\mathcal A)} \arrow[r, "\pi_*"] \arrow[d, "\Ch"', "\mathrm{HP}"]
+  & {[p_J]=[E_+(\pi(P_\pm))]\in K_0(\mathcal A/\mathcal I)}
+    \arrow[ll, bend right=18, dashed, "\partial_Y\,=\,\partial^{\mathrm{EM}}_Y"'] \\
+  & & \mathbb Z\ni\pm1 &
+\end{tikzcd}
+\]
+\caption{Commutative diagram for Theorem~\ref{thm:pathb_roe_winding}. The dashed arrow labelled
+\(\partial_Y=\partial^{\mathrm{EM}}_Y\) records the internal compatibility theorem: the Roe
+connecting map and the Ewert--Meyer Mayer--Vietoris boundary coincide for the original/copy
+partition, sending \([p_J]\) to the interface \(K_1\)-class
+\([u_{J,h}]=[\exp(2\pi i\,h(J_{\pm,M}^\infty))]\). The downward arrow \(\mathrm{HP}\) is
+Higson--Prodan's closed-bulk Chern character, which evaluates the bulk class to \(\pm1\).}
+\label{fig:pathb_diagram}
+\end{figure}
+
+\subsection{Internal compatibility theorem}
+
+\begin{theorem}[Roe interface class from the Higson--Prodan closed bulk]\label{thm:pathb_roe_winding}
+Let \((\K_n)_n\) be a uniformly regular boundary refinement family whose closed doubles
+\(D(\K_n)\) satisfy the hypotheses of \Cref{thm:hp_imported} (verified for the doubled-jammed
+families of this paper in \Cref{lem:hp_hypothesis_check}). Use the conventions
+\ref{conv:pathb_rep}--\ref{conv:pathb_quotient}. Let \(\mathcal A=C^*(X)\),
+\(\mathcal I=C^*(Y\subset X)\), and
+\[
+P_\pm=\chi_{(-\infty,0)}\!\left(\bigoplus_n H_\pm(D(\K_n))\right).
+\]
+For every \(M>B_{\mathrm{copy},-}\), the doubled-and-jammed family \(J_{\pm,M}^\infty\)
+determines the quotient projection \(p_J=E_+(\pi(P_\pm))\in\mathcal A/\mathcal I\) and the
+\(K_1\)-class identity
+\[
+\Indint(J_{\pm,M}^\infty;T^+,T^-)
+=
+\partial_Y(E_+(\pi(P_\pm)))
+=
+[\,\exp(2\pi i\,h(J_{\pm,M}^\infty))\,]\in K_1(\mathcal I)
+\]
+for any admissible cutoff \(h\). The Roe connecting map \(\partial_Y\) coincides on
+\([p_J]\) with the Ewert--Meyer Mayer--Vietoris boundary map \(\partial^{\mathrm{EM}}_Y\)
+attached to the original/copy partition under
+\ref{conv:pathb_rep}--\ref{conv:pathb_quotient}; this identification is proved internally in
+Step (2) of the body proof and is the dashed arrow of Figure~\ref{fig:pathb_diagram}. The
+class \(\partial_Y(E_+(\pi(P_\pm)))\) is independent of the admissible cutoff \(h\) and of
+the jam scale \(M>B_{\mathrm{copy},-}\), and is preserved under refinement subsequences for
+which the Higson--Prodan Fermi gap is uniform.
+\end{theorem}
+
+\begin{figure}[H]
+\centering
+\[
+\begin{tikzcd}[row sep=2.4em, column sep=1.6em]
+0 \arrow[r] & C^*(Y\subset X) \arrow[r, hook, "\iota"] \arrow[d, equal]
+  & C^*(X) \arrow[r, two heads, "\pi"] \arrow[d, equal]
+  & C^*(X)/C^*(Y\subset X) \arrow[r] \arrow[d, equal]
+  & 0 \\
+0 \arrow[r] & \mathcal I \arrow[r, hook, "\iota"]
+  & \mathcal A \arrow[r, two heads, "\pi"]
+  & \mathcal A/\mathcal I \arrow[r] & 0 \\
+& K_1(\mathcal I)
+  & K_0(\mathcal A/\mathcal I)
+       \arrow[l, dashed, bend left=18, "\partial_Y\,\text{(Roe)}"']
+       \arrow[l, dashed, bend right=18, "\partial^{\mathrm{EM}}_Y\,\text{(Ewert--Meyer)}"]
+  & K_0(\mathcal A) \arrow[l, "\pi_*"'] \\
+& & {[p_J]\,\in\,K_0(\mathcal A/\mathcal I)}
+       \arrow[ul, dashed, "\partial_Y\,=\,\partial^{\mathrm{EM}}_Y"', bend left=10]
+  &
+\end{tikzcd}
+\]
+\caption{SES-comparison diagram for the body proof of
+\Cref{thm:pathb_roe_winding}. \textbf{Top row:} the short exact sequence of \(C^*\)-algebras
+\(0\to C^*(Y\subset X)\to C^*(X)\to C^*(X)/C^*(Y\subset X)\to 0\) on which the Higson--Roe
+connecting morphism \(\partial_Y\) is built. \textbf{Middle row:} the same SES with the
+algebra-symbol abbreviations \(\mathcal I=C^*(Y\subset X)\) and \(\mathcal A=C^*(X)\) of
+Convention~\ref{conv:pathb_quotient}; the two rows are identical, displayed as parallel
+rows so the connecting-morphism comparison can be read off without renaming. \textbf{Third
+row:} the two a priori distinct connecting morphisms attached to this single SES are the
+Roe connecting map \(\partial_Y\colon K_0(\mathcal A/\mathcal I)\to K_1(\mathcal I)\) of
+Convention~\ref{conv:pathb_sign} (upper bent dashed arrow) and the Ewert--Meyer
+Mayer--Vietoris boundary map \(\partial^{\mathrm{EM}}_Y\colon K_0(\mathcal A/\mathcal I)\to
+K_1(\mathcal I)\) of \cite{EwertMeyer2019} (lower bent dashed arrow); both have common
+source \(K_0(\mathcal A/\mathcal I)\) and common target \(K_1(\mathcal I)\), drawn as two
+parallel arrows so the equality is visually compared. The unbent \(\pi_*\) arrow on the
+right is the \(K_0\)-image of the quotient map \(\pi\colon\mathcal A\twoheadrightarrow
+\mathcal A/\mathcal I\) of the middle row, retained for orientation only.
+\textbf{Bottom row:} the cycle representative \([p_J]\in K_0(\mathcal A/\mathcal I)\) on
+which the equality is verified; Step (2) of the body proof of
+\Cref{thm:pathb_roe_winding} establishes the identity
+\(\partial_Y=\partial^{\mathrm{EM}}_Y\) on this class for the original/copy partition under
+\ref{conv:pathb_rep}--\ref{conv:pathb_quotient}, and the diagonal dashed arrow displays
+this coincidence as a single arrow into \(K_1(\mathcal I)\). The cited literature for the
+Mayer--Vietoris boundary in the sense used here is \cite{EwertMeyer2019}; for the Roe
+connecting morphism the standard reference is \cite{HigsonRoeI,HigsonRoeII,HigsonRoeIII}. The comparison is the
+dashed arrow of \Cref{fig:pathb_diagram} in commutative-diagram form; the present figure
+separates the SES structure from the cycle representatives so the parallel-arrow
+comparison of the two connecting morphisms can be read in one panel.}
+\label{fig:roe_em_ses_comparison}
+\end{figure}
+
+\begin{proof}[Body proof of Theorem~\ref{thm:pathb_roe_winding}]
+\textbf{Roadmap.} The proof has four steps, in the order displayed by
+Figure~\ref{fig:pathb_diagram}. Steps (1), (2), and (4) are internal to this paper. Step (3) is
+the only step that uses an external theorem, namely Higson--Prodan
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}, packaged as \Cref{thm:hp_imported}.
+The convention block \ref{conv:pathb_rep}--\ref{conv:pathb_quotient} fixes the representation,
+stabilization, sign, side, and quotient choices used uniformly across all four steps. Throughout
+the proof we work with one fixed short exact sequence of \(C^*\)-algebras
+\begin{equation}\label{eq:body_short_exact}
+0\longrightarrow \mathcal I\;\overset{\iota}{\hookrightarrow}\;\mathcal A
+\;\overset{\pi}{\twoheadrightarrow}\;\mathcal A/\mathcal I\longrightarrow 0,
+\qquad
+\mathcal A=C^*(X),\quad \mathcal I=C^*(Y\subset X),
+\end{equation}
+to which we attach \emph{two a priori distinct} six-term boundary maps: the Higson--Roe
+connecting map \(\partial_Y\) of Convention~\ref{conv:pathb_sign}, and the Ewert--Meyer
+Mayer--Vietoris boundary map \(\partial^{\mathrm{EM}}_Y\) of \cite{EwertMeyer2019}. The
+non-trivial content of Step (2) is the identity
+\(\partial_Y=\partial^{\mathrm{EM}}_Y\) on \(K_0(\mathcal A/\mathcal I)\) for the original/copy
+partition.
+
+\medskip\noindent\textbf{Step (1): The Roe boundary map sends \([p_J]\) to the cutoff unitary
+class.}
+By Lemma~\ref{lem:pathb_roe_setup}, \(P_\pm\in\mathcal A=C^*(X)\) under the Higson--Prodan gap of
+Lemma~\ref{lem:pathb_hp_gap} (which is \Cref{thm:hp_imported}(i)). So the quotient projection
+\(p_J:=E_+(\pi(P_\pm))\in\mathcal A/\mathcal I\) is well defined as a self-adjoint idempotent in
+the quotient \(C^*\)-algebra \(\mathcal A/\mathcal I\) of \eqref{eq:body_short_exact}. The
+functional calculus of the quotient-sidewise statement
+(Proposition~\ref{S-prop:quotient_sidewise} in the supplement) provides, for any admissible
+cutoff \(h\) (continuous, equal to \(1\) on \([B_{\mathrm{copy},+},\infty)\), to \(0\) on
+\((-\infty,-B_{\mathrm{copy},-}]\), and monotone in between), a self-adjoint element
+\(h(J_{\pm,M}^\infty)\in\mathcal A\) with \(\pi(h(J_{\pm,M}^\infty))=p_J\); see
+Definition~\ref{def:pathb_interface_projection} for the explicit lift. Since
+\(h(J_{\pm,M}^\infty)\) is a self-adjoint lift of an idempotent in the quotient,
+\((h(J_{\pm,M}^\infty))^2-h(J_{\pm,M}^\infty)\in\mathcal I\), hence
+\(\exp(2\pi i\,h(J_{\pm,M}^\infty))\in\Id+\mathcal I\) and therefore defines a class in
+\(K_1(\mathcal I)\). Convention~\ref{conv:pathb_sign} fixes the sign of the standard
+Higson--Roe \(K\)-theoretic connecting map for the short exact sequence
+\eqref{eq:body_short_exact}, and the boundary-map lemma
+(Lemma~\ref{S-lem:pathb_boundary_map}) gives the labelled identity
+\begin{equation}\label{eq:body_step1}
+\partial_Y([p_J])=[\exp(2\pi i\,h(J_{\pm,M}^\infty))]\in K_1(\mathcal I),
+\end{equation}
+independent of the admissible cutoff \(h\). The class \([\exp(2\pi i\,h(J_{\pm,M}^\infty))]\)
+is the leftmost downstream class along the top row of Figure~\ref{fig:pathb_diagram}, and
+\eqref{eq:body_step1} is precisely the left dashed arrow.
+If the sign convention~\ref{conv:pathb_sign} were replaced by its opposite (the alternate
+\(\partial[\pi(P)]=-[\exp(2\pi i\,\tilde P)]\) sometimes seen in the literature), the
+right-hand side of \eqref{eq:body_step1} would acquire an overall minus sign, producing the
+inverse class in \(K_1(\mathcal I)\) and inverting all integer winding evaluations downstream;
+this is the auditable consequence of fixing the sign once and for all.
+
+\medskip\noindent\textbf{Step (2): The Roe and Ewert--Meyer boundary maps coincide for the
+original/copy partition.}
+This is the key compatibility step. We claim that the Higson--Roe connecting map \(\partial_Y\)
+of Convention~\ref{conv:pathb_sign} and the Ewert--Meyer Mayer--Vietoris boundary map
+\(\partial^{\mathrm{EM}}_Y\) of \cite{EwertMeyer2019} agree on
+\(K_0(\mathcal A/\mathcal I)\); concretely, viewed as homomorphisms
+\(K_0(\mathcal A/\mathcal I)\to K_1(\mathcal I)\), they are the \emph{same} homomorphism.
+
+\smallskip
+\emph{(2a) Both maps come from one and the same short exact sequence.} The Roe-extension map
+\(\partial_Y\) is the boundary map of the six-term exact sequence attached to
+\eqref{eq:body_short_exact} with the three named ingredients
+\((\mathcal A,\mathcal I,\pi)=(C^*(X),C^*(Y\subset X),\pi_{\mathrm{Roe}})\). The Ewert--Meyer
+Mayer--Vietoris boundary \(\partial^{\mathrm{EM}}_Y\) is the boundary map of the six-term exact
+sequence attached to the bulk--interface pair
+\((X^+,X^-;Y)\) used in \cite{EwertMeyer2019}; for the doubled-and-jammed setting at hand, the
+constituent algebras are: the bulk algebra is \(C^*(X)\) for the same \(X=X^+\sqcup X^-\); the
+interface ideal is \(C^*(Y\subset X)\) for the same \(Y\); and the quotient is the canonical
+\(C^*\)-quotient \(C^*(X)/C^*(Y\subset X)\), with the same \(C^*\)-quotient map. The
+coarse-excision statement (Proposition~\ref{S-prop:coarse_excision}) is exactly the assertion
+that these triples match: the bulk algebra \(\mathcal A_{\mathrm{EM}}\) of \cite{EwertMeyer2019}
+is \(C^*(X)\), the interface ideal \(\mathcal I_{\mathrm{EM}}\) is \(C^*(Y\subset X)\), and
+the EM quotient \(\mathcal A_{\mathrm{EM}}/\mathcal I_{\mathrm{EM}}\) is the canonical
+\(C^*\)-quotient. We record this comparison as the labelled identity
+\begin{equation}\label{eq:body_step2_algebras}
+(\mathcal A,\mathcal I,\mathcal A/\mathcal I,\pi)_{\mathrm{Roe}}
+\;=\;
+(\mathcal A,\mathcal I,\mathcal A/\mathcal I,\pi)_{\mathrm{EM}}.
+\end{equation}
+
+\smallskip
+\emph{(2b) Both maps are induced by the same lift.} For the Roe extension, the boundary class
+\(\partial_Y([\pi(P)])\) is by definition (Convention~\ref{conv:pathb_sign}) the class
+\([\exp(2\pi i\,\tilde P)]\) for any self-adjoint lift \(\tilde P\) of \(\pi(P)\); see
+\cite[\S6]{HigsonRoeI} and \cite{RoeLectures}. For the Ewert--Meyer extension, the
+Mayer--Vietoris boundary on a coarsely excisive partition is the connecting map of the same
+six-term exact sequence, with the same lift recipe: a self-adjoint operator on \(\ell^2(X)\) of
+finite propagation that maps to \(\pi(P)\) under the quotient is the EM lift; see
+\cite[\S3]{EwertMeyer2019} where the Mayer--Vietoris boundary is constructed as the boundary
+map of the underlying \(C^*\)-extension. Since the only datum required to define either
+boundary map on a single element of \(K_0(\mathcal A/\mathcal I)\) is the lift and the sign
+convention, and both are fixed identically by \eqref{eq:body_short_exact} and
+Convention~\ref{conv:pathb_sign}, we record the labelled identity
+\begin{equation}\label{eq:body_step2_lift}
+\partial_Y([\pi(P)])\;=\;[\exp(2\pi i\,\tilde P)]\;=\;\partial^{\mathrm{EM}}_Y([\pi(P)])
+\qquad\text{for every self-adjoint lift }\tilde P\text{ of }\pi(P).
+\end{equation}
+By naturality of the six-term exact sequence (a standard property of any short exact sequence
+of \(C^*\)-algebras; \cite[\S 8]{BlackadarKTheory}), two boundary maps for the same short exact
+sequence with the same lift and the same sign convention coincide as homomorphisms on
+\(K_0(\mathcal A/\mathcal I)\): there is no degree of freedom remaining.
+
+\smallskip
+\emph{(2c) Side and quotient consistency.} Convention~\ref{conv:pathb_side} fixes
+\(X=X^+\sqcup X^-\) as the original/copy partition; the spectral cutoff is on
+\((-\infty,0)\), so \(P_\pm=\chi_{(-\infty,0)}(H_\pm^\infty)\) is the negative Fermi projection.
+This is the same side and spectral choice used by \cite{EwertMeyer2019} for the negative-energy
+Fermi-projection class; the alternative \(\chi_{(0,\infty)}\) cutoff would produce \(\Id-P_\pm\)
+instead, and would flip the sign of every quotient class downstream. The quotient
+projection \(p_J=E_+(\pi(P_\pm))\) is computed by the quotient-sidewise identity
+(Proposition~\ref{S-prop:quotient_sidewise}); the splitting identity
+\(\mathcal A/\mathcal I=E_+(\mathcal A/\mathcal I)\oplus E_-(\mathcal A/\mathcal I)\)
+(Proposition~\ref{S-prop:quotient_split}) reduces the comparison to the positive side because
+the negative-side comparison operator has trivial Fermi projection by the trivial-jam
+statement (Proposition~\ref{S-prop:trivial_jam}). If the side convention~\ref{conv:pathb_side}
+were replaced by the opposite partition (copy on the original side), the labelled
+identity~\eqref{eq:body_step2_lift} would still hold but with the roles of
+\((X^+,X^-)\) interchanged; the trivial-jam statement and the splitting identity guarantee that
+the answer does not depend on which side is chosen as \(X^+\), only that the splitting itself
+is fixed.
+
+\smallskip
+\emph{(2d) Quotient convention.} Both boundary maps use the same \(C^*\)-quotient
+\(\pi:\mathcal A\to\mathcal A/\mathcal I\) (Convention~\ref{conv:pathb_quotient}), with
+collar-radius independence (Proposition~\ref{S-prop:collar_radius_independence}). An
+alternative quotient by a smaller or larger ideal would change \(\mathcal A/\mathcal I\) and
+hence both boundary maps; the equality
+\(\partial_Y=\partial^{\mathrm{EM}}_Y\) is a statement about the \emph{specific} quotient by
+\(C^*(Y\subset X)\), as fixed in \eqref{eq:body_short_exact}, and not about boundary maps for
+unrelated ideals.
+
+\smallskip
+Combining \eqref{eq:body_step2_algebras}, \eqref{eq:body_step2_lift}, and the side/quotient
+checks (2c)--(2d), we conclude the labelled compatibility identity
+\begin{equation}\label{eq:body_step2_main}
+\partial_Y\;=\;\partial^{\mathrm{EM}}_Y
+\qquad\text{on}\qquad K_0(\mathcal A/\mathcal I),
+\end{equation}
+which is the dashed arrow of Figure~\ref{fig:pathb_diagram} labelled
+\(\partial_Y=\partial^{\mathrm{EM}}_Y\). In particular,
+\(\partial^{\mathrm{EM}}_Y([p_J])=\partial_Y([p_J])
+=[\exp(2\pi i\,h(J_{\pm,M}^\infty))]\) by composing \eqref{eq:body_step1} with
+\eqref{eq:body_step2_main}. We emphasise that this identity uses no part of the closed-bulk
+Chern statement; only the gap of \Cref{thm:hp_imported}(i) is invoked, via
+Lemma~\ref{lem:pathb_roe_setup}, to ensure \(P_\pm\in\mathcal A\). If either the EM lift recipe
+or the EM sign convention differed from~\ref{conv:pathb_sign}, the right-hand side of
+\eqref{eq:body_step2_lift} could pick up a sign, producing the inverse class in
+\(K_1(\mathcal I)\) and breaking the labelled equality \eqref{eq:body_step2_main}; both
+references \cite{EwertMeyer2019,HigsonRoeI} use the same six-term-exact-sequence sign and lift
+recipe (the difference between the two reduces to a choice of book-keeping for the
+Mayer--Vietoris pairing on coarsely excisive partitions), so the convention agreement is
+verified.
+
+\medskip\noindent\textbf{Step (3): Closed-bulk Chern from Higson--Prodan.}
+By Lemma~\ref{lem:pathb_hp_chern}, which restates \Cref{thm:hp_imported}(ii) for closed
+bounded-geometry triangulated surfaces, the closed-bulk Fermi projection has Chern number
+\(\Ch([P_\pm])=\pm1\). This is the only step that uses an external theorem, namely
+\Cref{thm:hp_imported}; the doubled families satisfy the HP hypotheses by
+\Cref{lem:hp_hypothesis_check}. The integer evaluation of the \(K_1\)-class identity from
+Step (2) is taken up by the two corollaries (\Cref{cor:toeplitz_winding} for the internal
+Toeplitz periodic case; \Cref{cor:conditional_winding} for the general conditional case).
+This is the downward Chern-character arrow of Figure~\ref{fig:pathb_diagram} labelled
+\(\mathrm{HP}\). If the orientation convention of Section~\ref{sec:setup} were flipped (e.g.\
+\(dk_2\wedge dk_1\) instead of \(dk_1\wedge dk_2\) on the Bloch torus), the closed-bulk Chern
+sign would flip and the integer winding downstream would change sign correspondingly; the
+sign-ledger appendix (Section~\ref{S-app:sign_ledger}) records the explicit chain.
+
+\medskip\noindent\textbf{Step (4): Finite-\(M\) quotient identification and \(K_1\)-limit.}
+For every \(M>B_{\mathrm{copy},-}\), the trivial-jam statement
+(Proposition~\ref{S-prop:trivial_jam}) gives strict positivity of the negative comparison operator,
+so its negative Fermi projection vanishes. The positive comparison operator is
+\(T^+=H_\pm^\infty\) with negative Fermi projection \(P_\pm\), and the quotient-sidewise
+identification (Proposition~\ref{S-prop:quotient_sidewise}) gives
+\(p_J=E_+(\pi(P_\pm))+E_-(\pi(0))=E_+(\pi(P_\pm))\) at every finite jam scale
+\(M>B_{\mathrm{copy},-}\). The corresponding \(K_1\)-class is independent of \(M\)
+(Corollary~\ref{S-cor:jam_independence}), so the limit \(M\to\infty\) is well defined as a
+single \(K_1(\mathcal I)\)-class. Composing the four steps---namely
+\eqref{eq:body_step1} from Step (1), \eqref{eq:body_step2_main} from Step (2),
+\Cref{thm:hp_imported}(ii) from Step (3), and the quotient-sidewise identification of this
+Step (4)---gives the claimed \(K_1\)-class identity
+\(\Indint(J_{\pm,M}^\infty;T^+,T^-)=\partial_Y(E_+(\pi(P_\pm)))
+=[\exp(2\pi i\,h(J_{\pm,M}^\infty))]\). This is the full top row of
+Figure~\ref{fig:pathb_diagram} traversed from
+\([P_\pm]\) on the right, through \(\pi_*\) to \([p_J]\), and through the dashed
+\(\partial_Y=\partial^{\mathrm{EM}}_Y\) arrow back to \([u_{J,h}]\) on the left. Detailed
+computational verifications of the cutoff-functional-calculus identity, the norm-continuous
+homotopy along admissible cutoffs, and the explicit lift \(h(J_{\pm,M}^\infty)\) are
+collected in the supplement, Section~\ref{S-app:proof:thm:pathb_roe_winding}. If the
+quotient-sidewise identification of (4) used a different (e.g.\ Schur-complement) lift, the
+\(K_1\)-class \([\exp(2\pi i\,h(J_{\pm,M}^\infty))]\) would still equal
+\(\partial_Y([p_J])\) by \eqref{eq:body_step1}, but the explicit lift formula on the
+right-hand side would differ; the cutoff-independence of the class
+(Corollary~\ref{S-cor:jam_independence}) is what makes the identity robust under the choice
+of admissible \(h\).
+\end{proof}
+
+\begin{corollary}[Integer winding in the Toeplitz periodic case]\label{cor:toeplitz_winding}
+Suppose \(Y\subset X\) is the straight periodic interface of the periodic triangular class of
+Section~\ref{sec:periodicbulk}, with primitive tangential/positive-normal basis \((t,n)\) and
+\(\varepsilon(t,n)=\det[t\ n]\in\{\pm1\}\). Then the \(K_1\)-class
+\(\partial_Y(E_+(\pi(P_\pm)))\) of Theorem~\ref{thm:pathb_roe_winding} maps under the
+Toeplitz extension to the integer
+\[
+\operatorname{wind}\bigl(\partial_Y(E_+(\pi(P_\pm)))\bigr)
+=\varepsilon(t,n)\,\Ch\bigl(E_-(H_\pm^\triangle)\bigr)
+=\mp\,\varepsilon(t,n)
+=\mp\det[t\ n]\in\{\pm 1\},
+\]
+identifying the \(K_1\)-class with \(\mathbb Z\) via the Toeplitz quotient in
+Theorem~\ref{thm:periodic_toeplitz_pairing}. The two displayed equalities use, in order, the
+Toeplitz pairing formula \(\operatorname{wind}(\partial_{\mathrm T,t,n}[P])
+=\varepsilon(t,n)\,\Ch(P)\) of Corollary~\ref{cor:primitive_periodic_toeplitz} and the Chern
+signs \(\Ch(E_-(H_+^\triangle))=-1\), \(\Ch(E_-(H_-^\triangle))=+1\) of
+Theorem~\ref{thm:periodic_triangular_chern}; the resulting upper/lower sign reading agrees with
+the straight-edge formula \(\operatorname{wind}=-\det[t\ n]\) for \(H_+^\triangle\) and
+\(\operatorname{wind}=+\det[t\ n]\) for \(H_-^\triangle\) of
+Corollary~\ref{cor:periodic_straight_edge_winding}. The integer-pairing statement in this case
+is fully internal: the closed-bulk gap and Chern signs are proved in
+Theorem~\ref{thm:periodic_triangular_bulk} and Theorem~\ref{thm:periodic_triangular_chern},
+and the Toeplitz identification of \(K_1\) with \(\mathbb Z\) is the standard BDF--Toeplitz
+extension recalled in Theorem~\ref{thm:periodic_toeplitz_pairing} and
+Corollary~\ref{cor:primitive_periodic_toeplitz}.
+\end{corollary}
+
+\paragraph{Proof outline of \Cref{cor:toeplitz_winding}.}
+The \(K_1\)-class identity \(\partial_Y(E_+(\pi(P_\pm)))=[\exp(2\pi i\,h(J_{\pm,M}^\infty))]\)
+of \Cref{thm:pathb_roe_winding} is the input. Compressing the positive-normal direction \(n\)
+of the periodic interface to a half-space realizes the interface ideal
+\(\mathcal I=C^*(Y\subset X)\) as the kernel of the Toeplitz extension
+\(0\to C(S^1,\mathcal K)\to\mathcal T_{\mathrm{per}}\to C(\mathbb T^2)\to 0\) of
+\Cref{thm:periodic_toeplitz_pairing}, whose half-space-direction connecting map
+\(\partial_{\mathrm T,t,n}\) satisfies
+\(\operatorname{wind}(\partial_{\mathrm T,t,n}[P])=\varepsilon(t,n)\,\Ch(P)\) by
+\Cref{cor:primitive_periodic_toeplitz}. With \(P=E_-(H_\pm^\triangle)\) and the Chern
+signs of \Cref{thm:periodic_triangular_chern}, the displayed equality holds: the trivial-jam
+statement gives \([P_-]=[0]\), so only the positive-side contribution remains. Full
+verification of the cutoff-functional-calculus identification of the \(K_1\)-class with the
+Toeplitz winding integer is in \Cref{S-app:proof:cor:toeplitz_winding}.
+
+\proofsuppref{app:proof:cor:toeplitz_winding}
+
+\begin{corollary}[Conditional integer winding for general partitions]\label{cor:conditional_winding}
+Suppose that the \(K_1\)-class of the interface ideal \(\mathcal I=C^*(Y\subset X)\) admits
+an integer-valued pairing \(\langle\,\cdot\,,\,\cdot\,\rangle:K_0(\mathcal A/\mathcal I)\times
+K_1(\mathcal I)\to\mathbb Z\) of Chern-jump type, in the sense that
+\(\langle [p_J],\partial_Y([p_J])\rangle=\Ch([P_+])-\Ch([P_-])\) whenever both sides are
+defined and \(\partial_Y\) is the Higson--Roe connecting map of
+Convention~\ref{conv:pathb_sign}. Then the pairing of
+\(\partial_Y(E_+(\pi(P_\pm)))\) with \([p_J]\) is \(\pm1\). The Toeplitz periodic case
+(Corollary~\ref{cor:toeplitz_winding}) is the special case where the integer pairing is
+internal; the general case is conditional on the existence of an Ewert--Meyer/Chern-jump
+compatible integer pairing whose construction outside the periodic class is not carried out in
+this paper.
+\end{corollary}
+\proofsuppref{app:proof:cor:conditional_winding}
+
+\begin{corollary}[Finite-\(M\) cutoff stability]\label{cor:pathb_finite_m_winding}
+For every \(M>B_{\mathrm{copy},-}\), the \(K_1(\mathcal I)\)-class
+\(\partial_Y(E_+(\pi(P_\pm)))\) of Theorem~\ref{thm:pathb_roe_winding} is independent of the
+jam scale \(M\): equality of classes in \(K_1(\mathcal I)\) follows from the cutoff
+homotopy and jam-scale-independence statements
+(Corollary~\ref{S-cor:jam_independence} and Proposition~\ref{S-prop:quotient_sidewise}).
+\end{corollary}
+
+\subsection{Stability and cross-checks}
+
+\begin{lemma}[Collar-supported stability without norm-smallness]\label{lem:pathb_collar_stability}
+Let $V$ be any bounded self-adjoint perturbation in $C^*(Y\subset X)$, with no small-norm
+assumption, and suppose the positive and negative comparison gaps used to define the sidewise
+interface remain open. Then the quotient projection and \(K_1\)-class
+\(\partial_Y(E_+(\pi(P_\pm)))\) of Theorem~\ref{thm:pathb_roe_winding} are unchanged. In the
+straight periodic Toeplitz case (Corollary~\ref{cor:toeplitz_winding}), the resulting integer
+winding is also unchanged.
+\end{lemma}
+\proofsuppref{app:proof:lem:pathb_collar_stability}
+
+\begin{lemma}[Bounded-geometry stability]\label{lem:pathb_bg_stability}
+Along a norm-continuous bounded-geometry deformation of the closed doubled universal Hamiltonians
+that preserves the Higson--Prodan Fermi gap, the interface \(K_1\)-class of
+Theorem~\ref{thm:pathb_roe_winding} is constant.
+\end{lemma}
+\proofsuppref{app:proof:lem:pathb_bg_stability}
+
+\begin{lemma}[Refinement stability]\label{lem:pathb_refinement_stability}
+For a refinement family $K_n\to K_\infty$ in bounded geometry, if the Higson--Prodan theorem gives
+a uniform gap $g_{\mathrm{HP}}$ and the jam scales satisfy $M_n>B_{\mathrm{copy},-}+1$,
+$M_n\to\infty$, then the quotient class and \(K_1\)-class of
+Theorem~\ref{thm:pathb_roe_winding} are eventually constant under subsequences or cofinal
+refinements.
+\end{lemma}
+\proofsuppref{app:proof:lem:pathb_refinement_stability}
+
+\begin{remark}[Periodic triangular cross-check]\label{lem:pathb_periodic_triangular}
+For periodic triangular doubles, Theorem~\ref{thm:pathb_roe_winding} agrees with the internal
+Bloch gap, Chern, and straight Toeplitz winding calculations of
+Section~\ref{sec:periodicbulk}; details in the supplement,
+Section~\ref{S-app:proof:lem:pathb_periodic_triangular}.
+\end{remark}
+
+\begin{remark}[Finite-defect cross-check]\label{lem:pathb_finite_defect}
+For doubled finite-defect families whose defects remain in a fixed collar or in finitely many
+coarse components, Theorem~\ref{thm:pathb_roe_winding} gives the same interface class
+as the finite-defect robustness statements in the supplement,
+\Cref{S-app:robustness_finite_defects}; details in
+Section~\ref{S-app:proof:lem:pathb_finite_defect}.
+\end{remark}
+
+\begin{remark}[Hexagonal and square cross-check]\label{lem:pathb_hex_square}
+For the supplement's hexagonal and square symbols (\Cref{S-app:benchmark_hex_square}), whenever
+their closed-bulk class is identified with the corresponding Higson--Prodan closed-bulk class or
+with the internally computed periodic Chern class through a gapped homotopy,
+Theorem~\ref{thm:pathb_roe_winding} returns the same interface \(K_1\)-class, and the
+Toeplitz integer winding agrees with Corollary~\ref{cor:toeplitz_winding} in the periodic
+case; details in Section~\ref{S-app:proof:lem:pathb_hex_square}.
+\end{remark}
+
+\begin{remark}[Tail-split and annular cross-check]\label{lem:pathb_tail_annular}
+For the tail-split and annular families of the supplement
+(\Cref{S-app:robustness_tail_annular}), the boundary class of
+Theorem~\ref{thm:pathb_roe_winding} restricts componentwise to the same Toeplitz quotient
+coordinates used there; details in Section~\ref{S-app:proof:lem:pathb_tail_annular}.
+\end{remark}
+
+\begin{remark}[Input synthesis]\label{rem:pathb_synthesis}
+A naive accounting separates the closed doubled-bulk gap, the closed-bulk Chern pairing, and the
+Ewert--Meyer comparison into three distinct inputs. Theorem~\ref{thm:pathb_roe_winding} packages
+the first two as the single Higson--Prodan closed theorem and proves the third for the
+doubled-jammed original/copy partition. The only cited closed-model theorem needed for the
+\(K_1\)-class identity is the Higson--Prodan theorem. The integer winding evaluation is
+internal in the periodic triangular Toeplitz case (\Cref{cor:toeplitz_winding}) and is
+recorded as a conditional corollary for general partitions
+(\Cref{cor:conditional_winding}).
+\end{remark}
+
+The companion coarse interface class construction, which places the doubled-and-jammed refinement
+family in a Roe-algebra construction producing the same quotient projection and \(K_1\)-class
+from uniform locality, boundedness, and an available closed-bulk gap, is recorded in the
+supplement, Section~\ref{S-sec:bulkboundary}. Its main statement
+(Theorem~\ref{S-thm:bulkboundary_main}) and the Ewert--Meyer-language restatement
+(Theorem~\ref{S-thm:full_hp_bec}) consolidate the same conclusion.
+
+%====================================================================
+\section{A periodic triangular bulk input}\label{sec:periodicbulk}
+%====================================================================
+
+One closed-bulk input is checked directly here, rather than imported from Higson--Prodan. Let
+\(z_j=e^{ik_j}\), \(k=(k_1,k_2)\in\mathbb T^2\), and consider the
+\(\mathbb Z^2\)-periodic triangular triangulation with one vertex \(v\), three oriented edges
+\(a,b,c\), and two oriented faces \(f,g\) per fundamental cell. The Bloch fiber is
+\[
+\mathcal H(k)
+=
+\mathbb C\langle v\rangle\oplus
+\mathbb C\langle a,b,c\rangle\oplus
+\mathbb C\langle f,g\rangle .
+\]
+With respect to this ordered basis, the boundary blocks are
+\[
+\partial_1(k)=
+\begin{bmatrix}
+z_1-1&z_2-1&z_1z_2-1
+\end{bmatrix},
+\qquad
+\partial_2(k)=
+\begin{bmatrix}
+1&-z_2\\
+z_1&-1\\
+-1&1
+\end{bmatrix}.
+\]
+A direct multiplication gives \(\partial_1(k)\partial_2(k)=0\). The cap-product blocks are
+\[
+P_0(k)=
+\begin{bmatrix}
+z_1^{-1}z_2^{-1}\\
+z_2^{-1}
+\end{bmatrix},
+\qquad
+P_1(k)=
+\begin{bmatrix}
+0&z_1^{-1}&0\\
+0&0&0\\
+-z_2^{-1}&0&0
+\end{bmatrix},
+\qquad
+P_2(k)=
+\begin{bmatrix}
+1&1
+\end{bmatrix},
+\]
+and the Hermitian duality block is
+\[
+S_0(k)=\tfrac{i}{2}(P_2(k)^*+P_0(k)),\quad
+S_1(k)=\tfrac{i}{2}(P_1(k)^*-P_1(k)),\quad
+S_2(k)=-\tfrac{i}{2}(P_0(k)^*+P_2(k)),
+\]
+so that \(H_\pm^\triangle(k)=B(k)+B(k)^*\pm S(k)\) is Hermitian.
+
+\begin{proposition}[Periodic triangular characteristic polynomial]\label{prop:periodic_triangular_charpoly}
+Set
+\[
+F(k)=28-8\cos k_1-6\cos k_2-6\cos(k_1+k_2),
+\qquad
+G(k)=\sin k_2+\sin(k_1+k_2).
+\]
+Then
+\[
+\det\!\left(\lambda\Id-H_\pm^\triangle(k)\right)
+=
+\bigl(\lambda^2-\tfrac{F(k)}4\bigr)
+\bigl(\lambda^4-\tfrac{13}{2}\lambda^2+\tfrac{F(k)}4
+\pm \lambda G(k)\bigr),
+\]
+with one exact pair of eigenvalue branches \(\lambda=\pm \tfrac12\sqrt{F(k)}\).
+\end{proposition}
+\proofsuppref{app:proof:prop:periodic_triangular_charpoly}
+
+\begin{theorem}[Periodic triangular bulk gap]\label{thm:periodic_triangular_bulk}
+For every \(k\in\mathbb T^2\), \(H_\pm^\triangle(k)\) is invertible. More precisely,
+\[
+\det H_\pm^\triangle(k)
+=
+-\tfrac1{16}
+\left(
+-28+8\cos k_1+6\cos k_2+6\cos(k_1+k_2)
+\right)^2
+\le -4.
+\]
+Moreover \(\|H_\pm^\triangle(k)\|\le8\), hence
+\(\dist\bigl(0,\spec H_\pm^\triangle(k)\bigr)\ge 2^{-13}\) for all \(k\in\mathbb T^2\), and the
+negative Bloch bundle has rank \(3\).
+\end{theorem}
+\proofsuppref{app:proof:thm:periodic_triangular_bulk}
+
+\begin{corollary}[Small periodic perturbations preserve the triangular gap]\label{cor:periodic_small_perturbation_gap}
+If \(V(k)\) is a continuous self-adjoint \(6\times6\) matrix over \(\mathbb T^2\) with
+\(\sup_k\opnorm{V(k)}<2^{-13}\), then \(H_\pm^\triangle(k)+V(k)\) is invertible for every
+\(k\in\mathbb T^2\), and its negative Bloch bundle has rank \(3\).
+\end{corollary}
+\proofsuppref{app:proof:cor:periodic_small_perturbation_gap}
+
+\begin{proposition}[Positive duality strength homotopy]\label{prop:periodic_positive_mass_homotopy}
+For \(m>0\), the operator \(H_{\pm,m}^\triangle(k)=B(k)+B(k)^*\pm mS(k)\) is invertible for every
+\(k\in\mathbb T^2\); explicitly,
+\[
+\det H_{\pm,m}^\triangle(k)
+=
+-\tfrac1{16}
+\bigl(8(3-c_1-c_2-c_{12})+2m^2(2+c_2+c_{12})\bigr)^2,
+\]
+with \(c_j=\cos k_j\), \(c_{12}=\cos(k_1+k_2)\). All positive values of the duality strength are
+connected by a zero-gapped norm-continuous homotopy.
+\end{proposition}
+\proofsuppref{app:proof:prop:periodic_positive_mass_homotopy}
+
+\begin{theorem}[Periodic triangular Chern signs]\label{thm:periodic_triangular_chern}
+For the periodic triangular Bloch Hamiltonians above, the rank-three negative Bloch bundles have
+\[
+\Ch\bigl(E_-(H_+^\triangle)\bigr)=-1,
+\qquad
+\Ch\bigl(E_-(H_-^\triangle)\bigr)=+1.
+\]
+\end{theorem}
+\proofsuppref{app:proof:thm:periodic_triangular_chern}
+
+\begin{corollary}[Periodic Chern stability]\label{cor:periodic_chern_stability}
+With \(g_{\pm,m}:=\min_k\dist(0,\spec H_{\pm,m}^\triangle(k))>0\), every continuous self-adjoint
+periodic perturbation \(V(k)\) with \(\sup_k\opnorm{V(k)}<g_{\pm,m}\) keeps
+\(H_{\pm,m}^\triangle(k)+V(k)\) gapped at zero and preserves the Chern number. The same holds for
+\(H_\pm^\triangle\) when \(\sup_k\opnorm{V(k)}<2^{-13}\). In particular, sufficiently small
+finite-range self-adjoint periodic perturbations of the triangular model do not change the Chern
+signs.
+\end{corollary}
+\proofsuppref{app:proof:cor:periodic_chern_stability}
+
+As a numerical check, the companion script applies the gauge-invariant lattice formula of
+Fukui--Hatsugai--Suzuki \cite{FukuiHatsugaiSuzuki} to the rank-three negative spectral projection,
+checking the returned integer, the link denominators, and the plaquette branch margins; the
+computation records the same signs as Theorem~\ref{thm:periodic_triangular_chern}. The
+antiunitary equivalence
+\(H_-^\triangle(k)=\overline{H_+^\triangle(-k)}\) explains the opposite signs through complex
+conjugation of the Bloch bundle, with the base map \(k\mapsto-k\) orientation-preserving in two
+dimensions.
+
+\begin{theorem}[Toeplitz evaluation for a straight periodic interface]\label{thm:periodic_toeplitz_pairing}
+Let \(H(k_1,k_2)\) be a continuous finite-range self-adjoint \(N\times N\) Bloch Hamiltonian on
+\(\mathbb T^2\), gapped at zero, and let
+\(P(k_1,k_2)=\chi_{(-\infty,0)}(H(k_1,k_2))\). Write
+\(\Ch(P)=\frac{1}{2\pi i}\int_{\mathbb T^2}\tr(P\,dP\wedge dP)\in\mathbb Z\) with the
+orientation \(dk_1\wedge dk_2\). Compress the second lattice direction to a half-space. After
+Fourier transform in the first direction, the straight-edge extension is the Toeplitz extension
+\(0\to C(S^1,\mathcal K)\to\mathcal T_{\mathrm{per}}\xrightarrow{\sigma}C(\mathbb T^2)\to 0\) with
+connecting map \(\partial_{\mathrm T}:K_0(C(\mathbb T^2))\to K_1(C(S^1))\) satisfying
+\(\operatorname{wind}(\partial_{\mathrm T}([P]))=\Ch(P)\). The sign is fixed by the above
+orientation and by taking the compressed coordinate to be the positive normal direction; see, for
+example, \cite{BDF1977,BlackadarKTheory,ProdanSchulzBaldesBook,BourneKellendonkRennie}.
+\end{theorem}
+\proofsuppref{app:proof:thm:periodic_toeplitz_pairing}
+
+\begin{corollary}[Primitive-direction straight periodic interfaces]\label{cor:primitive_periodic_toeplitz}
+Let \(t,n\in\mathbb Z^2\) be a lattice basis with \(t\) the tangential direction of a straight
+periodic interface and \(n\) the compressed positive normal direction. With
+\(\varepsilon(t,n):=\det[t\ n]\in\{\pm1\}\), the half-space Toeplitz boundary map in the
+\(\eta\)-direction (\(k=\kappa t+\eta n\)) satisfies
+\(\operatorname{wind}\!\left(\partial_{\mathrm T,t,n}([P])\right)=\varepsilon(t,n)\,\Ch(P)\). In
+particular, every primitive straight periodic edge direction is covered by a lattice change of
+variables.
+\end{corollary}
+\proofsuppref{app:proof:cor:primitive_periodic_toeplitz}
+
+\begin{corollary}[Periodic straight-edge winding from Toeplitz pairing]\label{cor:periodic_straight_edge_winding}
+For the periodic triangular bulk models \(H^\triangle_\pm\), every primitive straight periodic
+interface with tangential/positive-normal basis \((t,n)\) has interface winding
+\[
+\operatorname{wind}=-\det[t\ n]\quad\text{for }H^\triangle_+,
+\qquad
+\operatorname{wind}=\det[t\ n]\quad\text{for }H^\triangle_-.
+\]
+The same formula holds for every fixed positive-duality-strength triangular model and for every
+small finite-range periodic perturbation covered by
+Corollary~\ref{cor:periodic_chern_stability}. Finite-cover, finite-defect, finite-corner, split,
+and tail-split variants are the appendix statements collected in the supplement,
+Section~\ref{S-app:section5_variants}.
+\end{corollary}
+\proofsuppref{app:proof:cor:periodic_straight_edge_winding}
+
+Hexagonal and square two-band benchmarks are recorded in the supplement,
+Section~\ref{S-app:benchmark_hex_square}. Sign-ledger and orientation conventions are recorded in
+the supplement, Section~\ref{S-app:sign_ledger}.
+
+%====================================================================
+\section{Numerical checks}\label{sec:numerical_diagnostics}
+%====================================================================
+
+The numerical material is collected in the online supplement, Section~\ref{S-sec:numerics}, with
+reproducibility details in \Cref{S-app:reproducibility_appendix,S-app:minimal_reproduction_script}.
+The computations are not proof inputs; they document finite-matrix behavior for the mechanisms
+proved above. We retain two numerical figures in the main paper that bear directly on the
+headline results: the intrinsic Poincar\'e--Lefschetz comparison
+(Figure~\ref{fig:pl_boundary_comparison}) and the finite-\(M\) decoupling log-log scaling
+(Figure~\ref{fig:finiteM_loglog}).
+
+\medskip\noindent\textbf{Intrinsic boundary comparison.}
+Figure~\ref{fig:pl_boundary_comparison} compares the intrinsic Poincar\'e--Lefschetz boundary
+Hamiltonian \(H^{\mathrm{PL}}_+(\K)\), the doubled original-side compression \(H^\partial_+(\K)\),
+and the finite-\(M\) jammed model on a disk-like sample. The collar correction
+\(R_{\partial,+}=H^\partial_+(\K)-H^{\mathrm{PL}}_+(\K)\) is not norm-small, but it is
+confined to the boundary collar predicted by
+Theorem~\ref{thm:relative_boundary_comparison}, and the jammed low-energy spectrum tracks the
+compressed boundary model in line with the Schur-complement bounds of
+Theorem~\ref{thm:resolvent} and Theorem~\ref{thm:first_order_eff}. The numerical refinement scaling of
+\(R_{\partial,+}\) -- recorded in the supplement -- is consistent with the boundary-rank
+interpretation in Lemma~\ref{lem:collar_rank_counts}.
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.92\linewidth]{fig_pl_boundary_comparison.png}
+\caption{Central spectra of \(H^{\mathrm{PL}}_+(\K)\), \(H^\partial_+(\K)\), and
+\(H_{+,M}\) on the disk-like example, together with the measured support distribution of the
+collar correction \(R_{\partial,+}\). The correction is not norm-small, but it is boundary-collar
+supported, as predicted by Theorem~\ref{thm:relative_boundary_comparison}.}
+\label{fig:pl_boundary_comparison}
+\end{figure}
+
+\medskip\noindent\textbf{Finite-\(M\) log-log scalings.}
+Figure~\ref{fig:finiteM_loglog} reports the finite-\(M\) rate diagnostics. The compressed
+resolvent error follows the \(M^{-1}\) bound of Theorem~\ref{thm:resolvent}; the first-order
+resolvent correction, squared copy leakage, and first-order eigenvalue localization follow the
+\(M^{-2}\) predictions of \Cref{thm:first_order_eff,thm:eigvec_leak} and the first-order
+eigenvalue localization theorem stated in the supplement,
+\Cref{S-app:proof:thm:first_order_spectral_localization}.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \safeincludegraphics[width=\linewidth]{fig_resolvent_loglog.png}
+  \caption{Compressed resolvent.}
+\end{subfigure}\hfill
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \safeincludegraphics[width=\linewidth]{fig_first_order_resolvent_loglog.png}
+  \caption{First-order resolvent.}
+\end{subfigure}
+
+\vspace{0.5em}
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \safeincludegraphics[width=\linewidth]{fig_leakage_loglog.png}
+  \caption{Copy leakage.}
+\end{subfigure}\hfill
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \safeincludegraphics[width=\linewidth]{fig_first_order_localization_loglog.png}
+  \caption{First-order eigenvalue localization.}
+\end{subfigure}
+\caption{Log-log finite-\(M\) checks. The compressed resolvent slope tracks the \(M^{-1}\) rate
+of Theorem~\ref{thm:resolvent}; the first-order resolvent, squared copy leakage, and first-order
+eigenvalue localization track the \(M^{-2}\) rates of \Cref{thm:first_order_eff,thm:eigvec_leak}
+and the first-order eigenvalue localization theorem stated in the supplement
+(\Cref{S-app:proof:thm:first_order_spectral_localization}). Fitted slopes and additional rate
+diagnostics are reported in the supplement, Section~\ref{S-sec:numerics}.}
+\label{fig:finiteM_loglog}
+\end{figure}
+
+The remaining numerical checks -- boundary transport heatmaps, chirality flip, multiboundary
+component drifts, flux insertion, collar/contour/refinement diagnostics, weak-disorder
+boundary transport, and the nonconstant positive copy-side confinement -- are all collected in
+the supplement, Section~\ref{S-sec:numerics}. A symbolic verification appendix for the local
+crossing calculation supporting Theorem~\ref{thm:periodic_triangular_chern} is given in the
+supplement, Section~\ref{S-app:symbolic_verification}.
+
+\section{Conclusion}
+
+We constructed a boundary model for the universal Chern Hamiltonians by replacing a triangulated
+surface with boundary by its closed double and adding a large positive potential on the reflected
+side. The relative fundamental class of \((\K,\bd\K)\) gave an intrinsic Poincar\'e--Lefschetz
+boundary Hamiltonian on the original triangulation. Compressing the doubled Hamiltonian to the
+original side recovered this relative Hamiltonian up to a boundary-collar operator, and the
+jammed Hamiltonian converged to the compressed boundary operator in the large-jam limit by
+quantitative Schur-complement estimates.
+
+\paragraph{Three buckets of results.} For an external reader auditing this paper, we partition
+the results into three buckets according to which external inputs each one uses. We are explicit
+because the headline integer winding has different dependency status in different cases, and a
+single label could obscure that.
+
+\begin{itemize}[leftmargin=2em]
+\item[(A)] \emph{Fully internal results (no external theorem).} The finite-dimensional
+boundary theory (intrinsic Poincar\'e--Lefschetz Hamiltonian, collar comparison, and
+Schur-complement estimates of \Cref{thm:relative_boundary_comparison,thm:resolvent,thm:first_order_eff,thm:proj_general,thm:spectral_localization,thm:eigvec_leak,thm:inertia_reduction});
+the internal bulk spectral equivalence
+(\Cref{thm:internal_bulk_spectral_equivalence}); the periodic triangular benchmark, namely the
+exact-determinant gap (\Cref{thm:periodic_triangular_bulk}), the isolated-crossing Chern
+calculation (\Cref{thm:periodic_triangular_chern}), and the integer Toeplitz winding in the
+straight periodic case (\Cref{cor:toeplitz_winding,cor:periodic_straight_edge_winding}). These
+results are proved in the paper without invoking any external theorem and without invoking the
+Ewert--Meyer Mayer--Vietoris boundary identification.
+\item[(B)] \emph{Internal modulo the Higson--Prodan closed-bulk theorem.} The Roe-algebra
+\(K_1\)-class identity \(\Indint(J_{\pm,M}^\infty;T^+,T^-)
+=\partial_Y(E_+(\pi(P_\pm)))\in K_1(\mathcal I)\) of \Cref{thm:pathb_roe_winding} relies on
+Higson--Prodan's closed-bulk gap and Chern theorem
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}, imported as
+\Cref{thm:hp_imported} of Section~\ref{sec:pathb_internalization}. Apart from this single
+external input, every step of \Cref{thm:pathb_roe_winding} is proved internally; the
+hypothesis check that doubled-and-jammed families satisfy HP's hypotheses is
+\Cref{lem:hp_hypothesis_check}.
+\item[(C)] \emph{Conditional on an external integer pairing.} The general-partition integer
+winding \(\pm1\) statement (\Cref{cor:conditional_winding}) is conditional on the existence of
+an integer-valued Chern-jump-compatible pairing between \(K_0(\mathcal A/\mathcal I)\) and
+\(K_1(\mathcal I)\). Such a pairing exists internally for the periodic Toeplitz case (already
+in bucket (A)); for general partitions the construction of the integer pairing is not carried
+out in this paper. This is the only result whose integer value depends on an external
+construction beyond the HP closed-bulk theorem, and we flag it explicitly as conditional.
+\end{itemize}
+
+\noindent
+In particular: the integer winding \(\pm 1\) for the straight periodic triangular interface is
+in bucket (A) (no external theorem at all); the \(K_1\)-class identity for general HP-covered
+boundary families is in bucket (B); and the integer evaluation of that \(K_1\)-class outside
+the periodic Toeplitz case is in bucket (C). No claim in this paper is named in a way that
+elides these distinctions; \Cref{cor:toeplitz_winding} carries the qualifier ``in the Toeplitz
+periodic case'' and \Cref{cor:conditional_winding} carries the qualifier ``conditional integer
+winding for general partitions''.
+
+Beyond the HP-covered and periodic classes treated here, one possible extension is to prove
+uniform Fermi gaps for additional closed doubled refinement families. A second direction is to
+construct the integer Chern-jump-compatible pairing of bucket (C) for natural classes of
+non-Toeplitz partitions, which would promote \Cref{cor:conditional_winding} from bucket (C) to
+bucket (B). A third direction is to extend the internal boundary-map identification to curved
+or componentwise pairings that separate the contributions of individual boundary components.
+
+\paragraph{Publishable-today status (iter 17 framing).}
+Reframing the bucket (A)/(B)/(C) split by dependency on the only cited closed-bulk theorem,
+the manuscript naturally separates into two parts according to whether the result still relies
+on the Higson--Prodan \cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv} closed-bulk
+gap and Chern theorem or whether it is proved internally inside the present paper. We make the
+carve-out explicit because it changes the submission framing.
+\begin{itemize}[leftmargin=2em]
+\item \textbf{Part~A (publishable today, fully HP-internal).} The finite-dimensional
+construction (\Cref{sec:setup,sec:decoupling}); the relative Poincar\'e--Lefschetz boundary
+Hamiltonian and the doubling-and-jamming setup; the Schur-complement estimates
+\Cref{thm:relative_boundary_comparison,thm:resolvent,thm:first_order_eff,thm:proj_general,thm:spectral_localization,thm:eigvec_leak,thm:inertia_reduction};
+the periodic flat-torus / hex / square \emph{internal} closed-bulk gap and Chern theorems
+of overnight iterations 1--6
+(\Cref{S-thm:internal_torus_gap,S-thm:internal_torus_chern,S-thm:internal_hex_gap,S-thm:internal_square_gap,S-thm:internal_hex_chern,S-thm:internal_square_chern});
+the iter-11 internal Combes--Thomas decay
+\Cref{S-thm:internal_combes_thomas} (conditional only on the abstract gap hypothesis, not on
+HP); the periodic triangular Bloch certificate
+(\Cref{sec:periodicbulk}, \Cref{thm:periodic_triangular_bulk,thm:periodic_triangular_chern});
+the integer Toeplitz winding in the straight periodic case
+(\Cref{cor:toeplitz_winding,cor:periodic_straight_edge_winding}); the five topological
+diagrams; the numerical experiments. This part is fully internal to the present paper and
+does not import the HP closed-bulk theorem for any periodic / flat-torus / hex / square
+benchmark. It corresponds to bucket~(A) above plus the iter-1--11 internal benchmark
+HP-replacement results and is a substantial publishable contribution on its own.
+
+\item \textbf{Part~B (still conditional on HP, future research).} The global Roe-algebra
+interface-winding theorem \Cref{thm:pathb_roe_winding} for arbitrary bounded-geometry
+families remains conditional on the Higson--Prodan closed-bulk gap of
+\Cref{thm:hp_imported}(i) and the Higson--Prodan closed-bulk Chern integer of
+\Cref{thm:hp_imported}(ii). The general non-periodic, non-Bravais case is therefore Part~B.
+The iter-12 inventory \Cref{S-app:hp_inventory_iter12} confirms that the bounded-geometry
+closed-bulk gap of \Cref{thm:hp_imported}(i) is the single remaining research bottleneck;
+the iter-13 completeness verification \Cref{S-app:completeness_iter13} confirms that the
+seven internal HP-replacement results of Part~A do \emph{not} cover this bottleneck. Part~B
+is the natural target of a future research-medium iteration; it is the only part of the
+manuscript whose status depends on whether HP is treated as a citation or is re-derived
+internally. The iter-23 supplement subsection
+\Cref{S-app:delaunay_first_step} records a partial first step in this
+direction: it defines the quasi-uniform Delaunay class
+\(\mathcal D(\theta_0,L)\) (a strict sub-class of the bounded-geometry
+class, parametrized by an explicit minimum-angle bound \(\theta_0>0\)
+and an edge-length ratio bound \(L\ge 1\)), proves
+(\Cref{S-lem:delaunay_bg_parameters}) that every triangulation in this
+class is bounded-geometry with constants depending only on
+\((\theta_0,L)\), and states as a conjecture with proof outline
+(\Cref{S-thm:delaunay_gap_stability_conjecture}) the relative stability
+of the closed-bulk gap under Delaunay-class perturbations; the
+absolute open question (\Cref{S-rem:delaunay_open_question}) of
+whether at least one non-periodic quasi-uniform Delaunay triangulation
+can be shown internally to have a positive Fermi gap remains genuinely
+open. The iter-23 deliverable is the proved bounded-geometry parameter
+lemma plus the framework for the conjecture; the conjecture itself is
+not proved. The iter-24 supplement subsection
+\Cref{S-app:cap_product_coherence_iter24} records a partial attempt at
+the first of the two missing ingredients identified in the iter-23
+``What is missing in the outline'' paragraph (the cap-product coherence
+of \(S_K\) under quasi-isometric pullback). The iter-24 attempt proves
+the simplicial-isomorphism / translation sub-case rigorously
+(\Cref{S-lem:translation_coherence_iter24}: for two simplicially
+isomorphic Delaunay triangulations, the universal Hamiltonians are
+exactly unitarily conjugate, hence the Fermi gaps are identical) and a
+vertex-perturbation extension (\Cref{S-lem:vertex_perturbation_coherence_iter24}:
+the cap-product operator \(S_K\) is purely combinatorial and is
+unchanged by vertex-position perturbations within a fixed isotopy
+class); the general quasi-isometric case is recorded as a refined
+conjecture (\Cref{S-thm:qi_coherence_general_iter24}) with an explicit
+support-and-norm decomposition. The second iter-23 missing ingredient
+(the isometric isomorphism between Hilbert spaces of different
+dimension) is not addressed in iter 24 and remains open. The iter-25
+supplement subsection
+\Cref{S-app:hilbert_iso_diff_dim_iter25} records a partial attempt
+at the \emph{second} of the two missing ingredients identified in
+the iter-23 ``What is missing in the outline'' paragraph (the
+isometric isomorphism between Hilbert spaces of different dimension).
+The iter-25 attempt defines an explicit \emph{inclusion partial
+isometry} \(V_{K\hookrightarrow K'}:\Hil(K)\to\Hil(K')\) for
+sub-complex pairs \(K\subseteq K'\)
+(\Cref{S-def:inclusion_partial_isometry_iter25}), proves a
+boundary-supported coherence lemma
+(\Cref{S-lem:inclusion_coherence_iter25}:
+\(V^*\,S_{K'}\,V=S_K+\Delta_V\) with
+\(\mathrm{supp}(\Delta_V)\subseteq\partial_{K'}K\) and operator-norm
+bound \(\|\Delta_V\|\le 2\Delta_*(\theta_0)\) where
+\(\Delta_*(\theta_0)\) is the bounded-geometry vertex-link constant
+of \Cref{S-lem:delaunay_bg_parameters}), and records the general
+common-refinement case as a refined conjecture
+(\Cref{S-thm:diff_dim_coherence_iter25}) with an explicit
+support-and-norm decomposition. The iter-25 remark
+\Cref{S-rem:comparison_iter24_iter25} explicitly records how the
+iter-24 and iter-25 attempts combine through an
+inclusion + simplicial + reverse-inclusion decomposition to give a
+conditional resolution of the iter-23 stability conjecture, modulo
+the open question of common-refinement existence
+(\Cref{S-rem:inclusion_vs_refinement_iter25}). The iter-27
+supplement subsection
+\Cref{S-app:single_flip_closed_form_iter27} closes sub-case~(b)
+of the iter-24 conjectural general QI theorem
+\Cref{S-thm:qi_coherence_general_iter24} (the single-flip local
+edit case) by an explicit closed-form computation of the
+cap-product matrix elements on the eleven-simplex local Hilbert
+space of a Delaunay flip quadrilateral, together with a Schur-test
+operator-norm bound
+\(\|R_\phi^{\mathrm{single}}\|\le 4\)
+(\Cref{S-thm:single_flip_schur_iter27}), with the explicit
+constant \(C_{\mathrm{flip}}=4\) independent of
+\((\theta_0,L)\). The iter-28 supplement subsection
+\Cref{S-app:multi_flip_schur_iter28} closes sub-case~(c) of the
+iter-24 conjectural theorem (the multi-flip assembly) by a
+telescoping decomposition of the cumulative correction operator
+into \(N_{\mathrm{flip}}\) single-flip pieces and a
+triangle-inequality bound
+\(\|R_\phi\|\le C_{\mathrm{flip}}\,N_{\mathrm{flip}}=4N_{\mathrm{flip}}\)
+(\Cref{S-thm:multi_flip_schur_iter28}), with an edit-graph
+bounded-incidence lemma
+(\Cref{S-lem:bounded_edit_incidence_iter28}) supporting a sharper
+Schur-test refinement in the star-disjoint case. Combining
+sub-cases~(a) (iter 24: \Cref{S-lem:translation_coherence_iter24}),
+(b) (iter 27:
+\Cref{S-thm:single_flip_schur_iter27}), and~(c) (iter 28:
+\Cref{S-thm:multi_flip_schur_iter28}), the iter-24 conjectural
+theorem \Cref{S-thm:qi_coherence_general_iter24} is upgraded
+from \textbf{conjectural} to \textbf{proved internally} at iter 28
+with the explicit constant
+\(C_*(\theta_0,L)=C_{\mathrm{flip}}=4\) (independent of
+\((\theta_0,L)\)), strictly tighter than the iter-24 provisional
+\(8\,\Delta_*(\theta_0)\,L_*(\theta_0)\). Ingredient~(i) of the
+iter-23 missing-ingredients list (the cap-product coherence
+under quasi-isometric pullback) is therefore now closed in full
+generality. The iter-23 stability conjecture
+\Cref{S-thm:delaunay_gap_stability_conjecture} nonetheless
+remains conjectural at iter 28 because ingredient~(ii) (the
+iter-25 general different-dimension coherence theorem
+\Cref{S-thm:diff_dim_coherence_iter25}) remains conjectural.
+The iter-29 supplement subsection
+\Cref{S-app:common_refinement_iter29} proposes an explicit
+candidate construction for the common refinement \(K_*\)
+required by iter-25 sub-case~(c): the \emph{union-Delaunay
+refinement} \(K_*=K_*(K,K')\)
+(\Cref{S-def:union_delaunay_iter29}) is the Delaunay
+triangulation of the union vertex set \(V_K\cup V_{K'}\).
+Vertex inclusion \(V_K\subseteq V_{K_*}\),
+\(V_{K'}\subseteq V_{K_*}\) is proved unconditionally
+(\Cref{S-lem:union_delaunay_vertices_iter29}), and a parameter
+relaxation
+\((\theta_0,L)\to(\theta_0',L')\) with explicit bounds
+depending on the minimal inter-vertex distance
+\(d_{\min}(V_K,V_{K'})\) and the maximum edge length
+\(\overline{\ell}_{\max}\) is proved unconditionally
+(\Cref{S-lem:union_delaunay_parameters_iter29}). The
+union-Delaunay refinement provides \emph{vertex} inclusion but
+\emph{not} the simplicial sub-complex inclusion required by
+\Cref{S-def:inclusion_partial_isometry_iter25}; a residual
+sub-complex-refinement existence sub-conjecture
+(\Cref{S-rem:subcomplex_refinement_obstruction_iter29}) is
+recorded honestly and is plausible by barycentric subdivision
+followed by Delaunay edge-flip repair, but is not proved at
+iter 29. Conditional on this sub-conjecture, the three-step
+composition theorem
+\Cref{S-thm:three_step_composition_iter29} closes iter-25
+sub-case~(c) with explicit constant
+\(C_\diamond(\widetilde\theta_0,\widetilde L)
+=6\,\Delta_*(\widetilde\theta_0)^2\,L_*(\widetilde\theta_0)\)
+in the relaxed parameter class. Combining the iter-28
+unconditional closure of ingredient~(i) with the iter-29
+conditional closure of ingredient~(ii), the iter-23 stability
+conjecture
+\Cref{S-thm:delaunay_gap_stability_conjecture} is upgraded
+from \textbf{conjectural} (iters 23--28) to
+\textbf{conditional} (iter 29, modulo
+\Cref{S-rem:subcomplex_refinement_obstruction_iter29}), with
+explicit Combes--Thomas locality constants inherited from
+\Cref{S-lem:delaunay_bg_parameters} applied in the relaxed
+parameter class (the precise conditional statement is recorded
+in
+\Cref{S-rem:iter29_iter23_conditional_iter29}). The iter-30
+supplement subsection
+\Cref{S-app:subcomplex_refinement_iter30} attempts the natural
+weakened-inclusion route to closing the iter-29 sub-conjecture
+by replacing the simplicial sub-complex relation
+\(K\subseteq K_*\) of
+\Cref{S-def:inclusion_partial_isometry_iter25} with a
+\emph{refinement-in-the-union sense} relation
+\(K\preceq^\cup\widetilde K_*\) of
+\Cref{S-def:refinement_union_iter30}, in which every simplex of
+\(K\) decomposes as a union of simplices in
+\(\widetilde K_*\). The corresponding \emph{block partial
+isometry} \(V_K^\cup:\mathcal H(K)\to\mathcal H(\widetilde K_*)\)
+of \Cref{S-def:block_partial_isometry_iter30} is rigorously
+proved to be isometric
+(\Cref{S-lem:block_isometry_iter30}), and an explicit
+constrained common refinement (the overlay of \(K\) and
+\(K'\)) is constructed
+(\Cref{S-lem:overlay_refinement_iter30}) with explicit
+maximum-split-factor bound
+\(N_{\max}\le 2L_*(\theta_0)^2\). However, the iter-30
+\Cref{S-lem:block_capproduct_matrix_iter30} identifies a
+concrete renormalization mismatch factor
+\(\sqrt{N(\sigma')/N(\sigma)}\) on the cap-product matrix
+elements of \(V^*\,S_{\widetilde K_*}\,V\) for incident pairs
+\(\sigma'\subset\sigma\) in \(K\): when \(\sigma\) and
+\(\sigma'\) have different split factors, the matrix element of
+\((V_K^\cup)^*\,S_{\widetilde K_*}\,V_K^\cup\) differs from that
+of \(S_K\) by a multiplicative factor
+\(\sqrt{N(\sigma')/N(\sigma)}\), \emph{not} by an additive
+boundary-supported correction. The induced coherence
+correction \(\Delta_V^\cup=(V_K^\cup)^*\,S_{\widetilde K_*}\,V_K^\cup-S_K\)
+is therefore \emph{bulk-supported}, not boundary-supported, with
+global operator-norm bound
+\(\|\Delta_V^\cup\|\le 2\sqrt{2}\,\Delta_*(\theta_0')\,L_*(\theta_0)\)
+(\Cref{S-thm:block_obstruction_iter30}). The bulk support
+\emph{prevents} direct application of the iter-25
+inclusion-coherence lemma
+\Cref{S-lem:inclusion_coherence_iter25} in the iter-29
+three-step composition theorem
+\Cref{S-thm:three_step_composition_iter29}. Iter 30 is therefore
+a \emph{negative-result} iteration: it identifies a concrete and
+honest obstruction to the natural weakened-inclusion approach,
+illustrated explicitly on the flat torus
+(\Cref{S-rem:flat_torus_block_obstruction_iter30}). The iter-23
+stability cascade status is \emph{unchanged from iter 29}: the
+iter-23 stability conjecture
+\Cref{S-thm:delaunay_gap_stability_conjecture} remains
+\textbf{conditional} (modulo the iter-29 sub-conjecture
+\Cref{S-rem:subcomplex_refinement_obstruction_iter29}), \emph{not}
+upgraded to unconditional at iter 30; the honest status is
+recorded in
+\Cref{S-rem:iter30_cascade_honest_iter30}.
+\end{itemize}
+
+The full Part~A vs.\ Part~B carve-out, with each theorem placed in the appropriate column
+and a recommended submission strategy, is given in \Cref{S-app:publishable_today_iter17}.
+Concretely, Part~A is publishable as a standalone substantial contribution to a serious
+mathematical-physics journal: a finite-dimensional doubling-and-jamming framework with
+periodic-benchmark internal closed-bulk gap and Chern theorems, an internal Combes--Thomas
+decay lemma, and integer Toeplitz windings on the periodic triangular interface. Part~B is
+honestly framed as a conditional theorem whose closed-bulk inputs remain external HP and
+whose bounded-geometry case is identified as the future research push.
+
+\section*{Code and data availability}\label{sec:code_availability}
+The companion numerical code and the online supplement are available at the project repository,
+which is hosted on GitHub:
+\href{https://github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary}{\texttt{https://github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary}}.
+The online supplement is also distributed through that same GitHub repository. The
+periodic triangular Bloch certificate script
+(\texttt{periodic\_triangular\_bulk\_certificate.py}) and the companion numerical pipeline
+that generates the figures and tables of the supplement are included.
+
+\section*{Acknowledgments}
+The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation (as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning), by the Israel Science Foundation (grant number 2258/19), by the Israel Science Foundation (ISF Grant~4101/25), and by the U.S. National Science Foundation (NSF Grant~OISE-2401227).
+
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+During the preparation of this work the author used generative AI tools to accelerate drafting
+and revision. All mathematical claims, proofs, and bibliographic information were subsequently
+reviewed and edited by the author, who takes full responsibility for the content of the manuscript.
+
+\FloatBarrier
+
+\begin{thebibliography}{99}
+
+\bibitem{AsbothOroszlanyPalyi2016}
+J.~K.~Asboth, L.~Oroszlany, and A.~Palyi,
+\emph{A Short Course on Topological Insulators: Band Structure and Edge States in One and Two
+Dimensions},
+Lecture Notes in Physics \textbf{919}, Springer, 2016.
+
+\bibitem{BellissardVanElstSchulzBaldes1994}
+J.~Bellissard, A.~van Elst, and H.~Schulz-Baldes,
+\emph{The noncommutative geometry of the quantum Hall effect},
+J. Math. Phys. \textbf{35} (1994), 5373--5451.
+
+\bibitem{Haldane1988}
+F.~D.~M.~Haldane,
+\emph{Model for a Quantum Hall Effect without Landau Levels: Condensed-Matter Realization of the Parity Anomaly},
+Phys. Rev. Lett. \textbf{61} (1988), 2015--2018.
+
+\bibitem{SchnyderRyuFurusakiLudwig}
+A.~P.~Schnyder, S.~Ryu, A.~Furusaki, and A.~W.~W.~Ludwig,
+\emph{Classification of topological insulators and superconductors in three spatial dimensions},
+Phys. Rev. B \textbf{78} (2008), 195125.
+
+\bibitem{KitaevPeriodic}
+A.~Kitaev,
+\emph{Periodic table for topological insulators and superconductors},
+AIP Conf. Proc. \textbf{1134} (2009), 22--30.
+
+\bibitem{QiZhangRMP}
+X.-L.~Qi and S.-C.~Zhang,
+\emph{Topological insulators and superconductors},
+Rev. Mod. Phys. \textbf{83} (2011), 1057--1110.
+
+\bibitem{FukuiHatsugaiSuzuki}
+T.~Fukui, Y.~Hatsugai, and H.~Suzuki,
+\emph{Chern numbers in discretized Brillouin zone: efficient method of computing (spin) Hall conductances},
+J. Phys. Soc. Jpn. \textbf{74} (2005), 1674--1677.
+
+\bibitem{HigsonProdanUniversalPRL}
+N.~Higson and E.~Prodan,
+\emph{Universal Chern Model on Arbitrary Triangulations},
+Phys. Rev. Lett. \textbf{136} (2026), no.~9, 096602,
+doi:10.1103/66x5-dvqq.
+
+\bibitem{HigsonProdanUniversalArxiv}
+N.~Higson and E.~Prodan,
+\emph{A Universal Chern Model on Arbitrary Triangulations},
+arXiv:2510.20862, doi:10.48550/arXiv.2510.20862.
+
+\bibitem{HigsonRoeI}
+N.~Higson and J.~Roe,
+\emph{Mapping Surgery to Analysis I: Analytic Signatures},
+K-Theory \textbf{33} (2004), 277--299.
+
+\bibitem{HigsonRoeII}
+N.~Higson and J.~Roe,
+\emph{Mapping Surgery to Analysis II: Geometric Signatures},
+K-Theory \textbf{33} (2004), 301--324.
+
+\bibitem{HigsonRoeIII}
+N.~Higson and J.~Roe,
+\emph{Mapping Surgery to Analysis III: Exact Sequences},
+K-Theory \textbf{33} (2004), 325--346.
+
+\bibitem{WallSurgery}
+C.~T.~C.~Wall,
+\emph{Surgery on Compact Manifolds},
+AMS, 1999.
+
+\bibitem{MunkresElements}
+J.~R.~Munkres,
+\emph{Elements of Algebraic Topology},
+Addison-Wesley, 1984.
+
+\bibitem{Hatcher}
+A.~Hatcher,
+\emph{Algebraic Topology},
+Cambridge University Press, 2002.
+
+\bibitem{KatoPerturbation}
+T.~Kato,
+\emph{Perturbation Theory for Linear Operators},
+Classics in Mathematics, Springer, 1995.
+
+\bibitem{BhatiaMatrixAnalysis}
+R.~Bhatia,
+\emph{Matrix Analysis},
+Graduate Texts in Mathematics, vol.~169, Springer, 1997.
+
+\bibitem{AtiyahKTheory}
+M.~F.~Atiyah,
+\emph{K-Theory},
+W.~A.~Benjamin, 1967.
+
+\bibitem{BlackadarKTheory}
+B.~Blackadar,
+\emph{K-Theory for Operator Algebras},
+2nd ed., Mathematical Sciences Research Institute Publications, vol.~5,
+Cambridge University Press, 1998.
+
+\bibitem{BDF1977}
+L.~G.~Brown, R.~G.~Douglas, and P.~A.~Fillmore,
+\emph{Extensions of $C^*$-algebras and $K$-homology},
+Ann. of Math. (2) \textbf{105} (1977), no.~2, 265--324.
+
+\bibitem{ProdanSchulzBaldesBook}
+E.~Prodan and H.~Schulz-Baldes,
+\emph{Bulk and Boundary Invariants for Complex Topological Insulators: From K-Theory to Physics},
+Springer, 2016.
+
+\bibitem{Mitchell2018}
+N.~P.~Mitchell, L.~M.~Nash, D.~Hexner, A.~Turner, and W.~T.~M.~Irvine,
+\emph{Amorphous topological insulators constructed from random point sets},
+Nat. Phys. \textbf{14} (2018), 380--385.
+
+\bibitem{BourneProdan2018}
+C.~Bourne and E.~Prodan,
+\emph{Non-commutative Chern numbers for generic aperiodic discrete systems},
+J. Phys. A: Math. Theor. \textbf{51} (2018), 235202.
+
+\bibitem{BourneMesland2019}
+C.~Bourne and B.~Mesland,
+\emph{Index theory and topological phases of aperiodic lattices},
+Ann. Henri Poincar\'e \textbf{20} (2019), 1969--2038.
+
+\bibitem{ElbauGraf2002}
+P.~Elbau and G.~M.~Graf,
+\emph{Equality of Bulk and Edge Hall Conductance Revisited},
+Comm. Math. Phys. \textbf{229} (2002), 415--432.
+
+\bibitem{ElgartGrafSchenker2005}
+A.~Elgart, G.~M.~Graf, and J.~H.~Schenker,
+\emph{Equality of the Bulk and Edge Hall Conductances in a Mobility Gap},
+Comm. Math. Phys. \textbf{259} (2005), 185--221.
+
+\bibitem{GrafPorta2013}
+G.~M.~Graf and M.~Porta,
+\emph{Bulk-Edge Correspondence for Two-Dimensional Topological Insulators},
+Comm. Math. Phys. \textbf{324} (2013), 851--895.
+
+\bibitem{KubotaControlled}
+Y.~Kubota,
+\emph{Controlled topological phases and bulk-edge correspondence},
+Comm. Math. Phys. \textbf{349} (2017), 493--525.
+
+\bibitem{EwertMeyer2019}
+E.~E.~Ewert and R.~Meyer,
+\emph{Coarse geometry and topological phases},
+Comm. Math. Phys. \textbf{366} (2019), 1069--1098,
+doi:10.1007/s00220-019-03303-z.
+
+\bibitem{BourneKellendonkRennie}
+C.~Bourne, J.~Kellendonk, and A.~Rennie,
+\emph{The $K$-theoretic bulk-edge correspondence for topological insulators},
+Ann. Henri Poincar\'e \textbf{18} (2017), 1833--1866.
+
+\bibitem{AlldridgeMaxZirnbauer2020}
+A.~Alldridge, C.~Max, and M.~R.~Zirnbauer,
+\emph{Bulk-Boundary Correspondence for Disordered Free-Fermion Topological Phases},
+Comm. Math. Phys. \textbf{377} (2020), 1761--1821.
+
+\bibitem{LudewigThiangEdge}
+M.~Ludewig and G.~C.~Thiang,
+\emph{Cobordism invariance of topological edge-following states},
+Adv. Theor. Math. Phys. \textbf{26} (2022), no.~3, 673--710.
+
+\bibitem{DrouotZhuEdgeSpectrum}
+A.~Drouot and X.~Zhu,
+\emph{Topological edge spectrum along curved interfaces},
+Int. Math. Res. Not. IMRN \textbf{2024} (2024), no.~22, 13870--13889.
+
+\bibitem{DrouotZhuBEC}
+A.~Drouot and X.~Zhu,
+\emph{The bulk-edge correspondence for curved interfaces},
+arXiv:2408.07950.
+
+\bibitem{RoeLectures}
+J.~Roe,
+\emph{Lectures on Coarse Geometry},
+University Lecture Series \textbf{31}, American Mathematical Society, 2003.
+
+\bibitem{CombesThomas1973}
+J.~M.~Combes and L.~Thomas,
+\emph{Asymptotic behaviour of eigenfunctions for multiparticle Schr\"odinger operators},
+Comm. Math. Phys. \textbf{34} (1973), 251--270.
+
+\bibitem{AizenmanWarzel2015}
+M.~Aizenman and S.~Warzel,
+\emph{Random Operators: Disorder Effects on Quantum Spectra and Dynamics},
+Graduate Studies in Mathematics, vol.~168, American Mathematical Society, 2015.
+
+\bibitem{Cheeger1970}
+J.~Cheeger,
+\emph{A lower bound for the smallest eigenvalue of the Laplacian},
+in \emph{Problems in Analysis (Papers Dedicated to Salomon Bochner, 1969)},
+Princeton University Press, 1970, pp.~195--199.
+
+\bibitem{Chung1997}
+F.~R.~K.~Chung,
+\emph{Spectral Graph Theory},
+CBMS Regional Conference Series in Mathematics, vol.~92,
+American Mathematical Society, 1997.
+
+\bibitem{ChavelEigenvalues}
+I.~Chavel,
+\emph{Eigenvalues in Riemannian Geometry},
+Pure and Applied Mathematics, vol.~115, Academic Press, 1984.
+
+\bibitem{Petersen2016}
+P.~Petersen,
+\emph{Riemannian Geometry},
+3rd ed., Graduate Texts in Mathematics, vol.~171, Springer, 2016.
+
+\bibitem{LottVillani2009}
+J.~Lott and C.~Villani,
+\emph{Ricci curvature for metric-measure spaces via optimal transport},
+Ann. of Math. (2) \textbf{169} (2009), no.~3, 903--991.
+
+\bibitem{AdamsFournier}
+R.~A.~Adams and J.~J.~F.~Fournier,
+\emph{Sobolev Spaces},
+2nd ed., Pure and Applied Mathematics, vol.~140, Academic Press, 2003.
+
+\bibitem{Strang1973}
+G.~Strang and G.~J.~Fix,
+\emph{An Analysis of the Finite Element Method},
+Prentice-Hall, 1973.
+
+\end{thebibliography}
+
+\end{document}

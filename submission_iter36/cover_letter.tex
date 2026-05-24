@@ -1,0 +1,210 @@
+% Submission cover letter, updated iter 34 of the overnight loop (2026-05-24).
+% Iter-19 drafted the original cover letter; iter 34 adds a paragraph on the
+% iter-23--31 Delaunay-extension cluster (honest, partial, conditional) and
+% updates the page-count and reader-navigation paragraphs to reflect the
+% iter-33 paper-shortening pass and the post-iter-33 raw vs.~effective page
+% counts. Stand-alone document, not part of the manuscript proper. Accompanies
+% the submission package together with paper_main.pdf and paper_supplement.pdf.
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% Allow URLs to break in long bibliographic-style links.
+\hypersetup{breaklinks=true}
+
+\begin{document}
+
+\noindent
+Yitzchak Shmalo \\
+Einstein Institute of Mathematics \\
+Hebrew University of Jerusalem \\
+Edmond J.~Safra Campus, Givat Ram, Jerusalem 9190401, Israel \\
+\texttt{yitzchak.shmalo@gmail.com}
+
+\vspace{0.6em}
+\hfill 2026-05-24
+
+\vspace{1.2em}
+\noindent
+To the Editors, \\
+\emph{[Journal name]}
+
+\vspace{0.8em}
+\noindent
+Dear Editors,
+
+Please find attached our manuscript ``Boundary and Interface Classes for
+Universal Chern Hamiltonians via Doubling and Jamming'' submitted for
+consideration. The submission package consists of the main paper
+(\texttt{paper\_main.pdf}, 33 pages), an online supplement
+(\texttt{paper\_supplement.pdf}, 251 pages raw, of which approximately 160
+pages are load-bearing mathematics; the remaining material is internal-%
+development audit, framing, navigation, and inventory content that a
+math-content reader can skip on first reading and that is explicitly
+flagged as such), and a companion code repository linked from the
+abstract. A short summary of what the paper does, and a short explanation
+of how we are framing it, follows.
+
+\paragraph{Contribution.}
+The paper develops a finite-dimensional doubling-and-jamming construction
+for boundary and interface classes of Higson--Prodan universal Chern
+Hamiltonians on triangulated surfaces with boundary. Given a finite
+triangulated oriented surface with boundary, we double it along the boundary,
+suppress the reflected copy by a large on-site potential, and study the
+resulting jammed Hamiltonian by Schur-complement analysis. The principal
+ingredients are: (i) the intrinsic Poincar\'e--Lefschetz boundary
+Hamiltonian and its comparison with the original-side compression of the
+doubled closed Hamiltonian; (ii) seven Schur-complement estimates for
+finite-$M$ jamming (compressed resolvent, first-order effective resolvent,
+copy leakage, eigenvalue localization, contour margin, window separation,
+and the original--copy coupling support); (iii) a periodic triangular Bloch
+certificate, with closed-bulk gap, Chern signs, and integer Toeplitz
+interface winding all proved internally on the straight periodic interface;
+(iv) internal closed-bulk gap and Chern theorems for the three flat-torus
+benchmark scopes (triangular, hexagonal, square), unified by a general
+operator-algebraic Chern convergence lemma; (v) an internal Combes--Thomas
+exponential decay lemma; and (vi) a complete companion numerical pipeline
+that records finite-matrix behavior of all the mechanisms above. These
+ingredients are unconditional inside the manuscript: their proofs do not
+invoke any external closed-bulk theorem.
+
+\paragraph{Delaunay-extension partial progress.}
+Beyond the periodic flat-torus benchmark scopes of ingredient~(iv), the
+supplement contains a dedicated Delaunay-extension chapter that develops
+quantitative tools for extending the internal closed-bulk analysis from
+periodic flat-torus triangulations to the broader quasi-uniform Delaunay
+class (every triangle of bounded minimum interior angle and bounded
+edge-length ratio, plus the Euclidean Delaunay circumdisk property). The
+chapter contains eighteen rigorously proved results, organized into three
+explicit tiers: \emph{fourteen unconditional results} (bounded-geometry
+parameter lemmas, translation and vertex-perturbation coherence lemmas,
+inclusion-coherence and cap-product flip lemmas, single-flip and multi-flip
+Schur-complement bounds, common-refinement existence in the union sense,
+block-isometry and block-cap-product matrix-element identities, and a
+quasi-isometric coherence theorem assembled by cascade); \emph{three
+conditional theorems} (a Delaunay-gap stability statement, a
+different-dimension coherence theorem, and a three-step composition
+theorem) each conditional on a single shared sub-conjecture
+(sub-complex refinement existence in the strict inclusion sense); and
+\emph{one proved negative result} (an obstruction theorem ruling out the
+natural ``refinement-in-the-union-sense'' approach to that sub-conjecture
+via an explicit renormalization-mismatch computation, illustrated in the
+cleanest possible flat-torus setting). This is partial progress, not a
+closure: the Delaunay-extension cluster does \emph{not} eliminate the
+bounded-geometry case as an external dependency, and the conditional
+theorems remain conditional. What the chapter adds is a quantitatively
+explicit framework, with sharp constants and a documented obstruction,
+within which a future closure of the sub-conjecture could upgrade three
+conditional theorems to unconditional ones. We are presenting this
+chapter as honest, mathematically-careful research-medium content
+beyond the periodic flat-torus / hexagonal / square benchmark cases of
+ingredient~(iv), not as a replacement for the external
+bounded-geometry input.
+
+\paragraph{What still depends on Higson--Prodan.}
+We are honest about the scope of the unconditional part. For the general
+bounded-geometry case, the headline Roe-algebra theorem identifying the
+doubled-and-jammed interface class
+$\partial_Y\!\bigl(E_+(\pi(P_\pm))\bigr) \in K_1\!\bigl(C^*(Y\subset X)\bigr)$
+still uses the Higson--Prodan closed-bulk gap and Chern theorem as an
+external input. The bounded-geometry closed-bulk gap and the
+bounded-geometry closed-bulk Chern integer are imported as a single named
+external hypothesis (the published Higson--Prodan PRL and arXiv articles,
+cited in the manuscript), and the manuscript marks every place where this
+hypothesis is used. The internal Combes--Thomas decay we prove gives the
+locality toolkit that a bounded-geometry gap proof would need, but it does
+not by itself supply the gap; the Delaunay-extension chapter described
+above gives quantitatively explicit relative-stability tools in the
+quasi-uniform Delaunay class but, by the documented obstruction theorem
+and the unresolved sub-conjecture, does not by itself close the
+bounded-geometry case either. Closing this last step is identified in the
+paper as the single research-hard external dependency and as a natural
+follow-up project rather than a result of the present work.
+
+\paragraph{Editorial framing of the submission.}
+The submitted manuscript is organized along this split. Part~A collects the
+unconditional results: the finite-dimensional construction, the seven
+Schur-complement estimates, the periodic triangular Bloch certificate and
+its Toeplitz winding, the three internal flat-torus benchmark gap and Chern
+theorems with the unifying lemma, the internal Combes--Thomas decay, and
+the companion numerics. Part~B states the global Roe-algebra interface
+theorem in its full bounded-geometry generality and the conditional integer
+winding for general partitions; both are conditional on the published
+Higson--Prodan PRL result, and we present them as a conditional framework
+rather than as unconditional theorems. The supplement contains an explicit
+Part~A--Part~B inventory (the iter-17 carve-out table) and a per-figure /
+per-table audit confirming that no numerical figure is used as a proof
+input and that the Part placement is consistent at the caption level. The
+Delaunay-extension chapter sits inside Part~A as additional internal
+infrastructure of the unconditional kind (fourteen unconditional results)
+together with three conditional theorems that are flagged as conditional
+inside the chapter. We chose this two-part presentation deliberately: it
+makes the conditional dependency on the published Higson--Prodan PRL result
+fully visible and confines it to Part~B, so the unconditional Part~A
+material---including the Delaunay-extension unconditional content---can be
+evaluated on its own terms.
+
+\paragraph{Why this might be of interest.}
+The doubling-and-jamming construction itself is the main technical
+ingredient: it converts a closed-bulk universal Chern theorem into
+finite-matrix boundary and interface statements via the simplicial double,
+with quantitative Schur-complement control of the jamming error. The
+three flat-torus benchmark cases give worked closed-form examples in which
+the closed-bulk inputs that Higson--Prodan import from the universal model
+are proved internally, removing the conditional dependency entirely on
+those benchmark families. The periodic triangular case in particular
+admits an integer Toeplitz winding on the straight periodic interface, also
+proved internally. The Delaunay-extension chapter develops quantitative
+quasi-isometric relative-stability tools for the broader bounded-geometry
+context, with eighteen rigorously proved results across the three tiers
+described above and a single sharply identified remaining research
+obstruction. This combination---a quantitative finite-dimensional
+boundary framework, plus benchmark cases in which the conditional input is
+eliminated, plus a Delaunay-extension cluster of relative-stability tools
+with an honest obstruction analysis, plus an explicit cataloguing of what
+remains conditional---should be of interest to readers in mathematical
+physics and operator algebras working on bulk--interface correspondences
+for topological insulators.
+
+\paragraph{Supplement and code.}
+The online supplement (251 pages raw) contains the full appendix proofs for
+the Schur-complement estimates and the boundary comparison, the eight
+internal HP-replacement results (six benchmark closed-bulk gap and Chern
+theorems plus the operator-algebraic unification and the Combes--Thomas
+decay), the consolidated internal chapter, the HP-dependency inventory,
+the Delaunay-extension chapter with its eighteen results across the three
+tiers, the topological diagrams, and the numerical record (twenty-five
+figures and tables). The supplement also contains internal-development
+audit, framing, navigation, and inventory subsections that document the
+manuscript's editorial history; these are marked with
+``skip-on-first-reading'' notices at their headings, and condensed into a
+single ten-row master table at the start of the supplement's reader-%
+navigation section. A math-content reader who skips these flagged
+subsections encounters an effective supplement of approximately 160 pages
+of load-bearing mathematics; a verification-focused or editorial reader
+retains full access to the underlying audit trail by consulting the
+flagged subsections individually. The companion code repository (URL in
+the abstract) contains the data-generation scripts for every numerical
+figure and table.
+
+\paragraph{Statements.}
+The manuscript has not been published elsewhere and is not under
+consideration at another journal. We have no conflicts of interest to
+declare.
+
+We hope the editors will find the work suitable for the journal, and we
+look forward to the referees' assessment.
+
+\vspace{1.5em}
+\noindent Sincerely, \\[1.0em]
+Yitzchak Shmalo \\
+Einstein Institute of Mathematics \\
+Hebrew University of Jerusalem
+
+\end{document}
