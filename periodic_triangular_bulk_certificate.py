@@ -6,10 +6,9 @@ import numpy as np
 
 GRIDS = [11, 21, 31, 51]
 EXPECTED_CHERN = {"H_+": -1, "H_-": 1}
-TABLE_PATH = Path(__file__).with_name("periodic_triangular_certificate_table.tex")
-EXTENSION_TABLE_PATH = Path(__file__).with_name(
-    "periodic_triangular_extension_certificate_table.tex"
-)
+OUTPUT_DIR = Path(__file__).with_name("paper_outputs")
+TABLE_PATH = OUTPUT_DIR / "periodic_triangular_certificate_table.tex"
+EXTENSION_TABLE_PATH = OUTPUT_DIR / "periodic_triangular_extension_certificate_table.tex"
 
 
 def triangular_parts(k1, k2):
@@ -268,6 +267,7 @@ def validate_extension_rows(
 
 
 def write_table(rows):
+    TABLE_PATH.parent.mkdir(parents=True, exist_ok=True)
     with TABLE_PATH.open("w", encoding="utf-8") as fh:
         fh.write("\\begin{tabular}{llrrrr}\\toprule\n")
         fh.write(
@@ -283,6 +283,7 @@ def write_table(rows):
 
 
 def write_extension_table(rows):
+    EXTENSION_TABLE_PATH.parent.mkdir(parents=True, exist_ok=True)
     with EXTENSION_TABLE_PATH.open("w", encoding="utf-8") as fh:
         fh.write("\\begin{tabular}{llrrrrr}\\toprule\n")
         fh.write(
@@ -309,7 +310,7 @@ def main():
     parser.add_argument(
         "--write-table",
         action="store_true",
-        help="write periodic_triangular_certificate_table.tex and extension diagnostics",
+        help="write certificate tables under paper_outputs/",
     )
     args = parser.parse_args()
 

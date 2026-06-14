@@ -74,9 +74,9 @@
 % Figure safety helper
 %---------------------------
 \newcommand{\safeincludegraphics}[2][]{%
-  \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+  \IfFileExists{paper_outputs/#2}{\includegraphics[#1]{paper_outputs/#2}}{%
     \fbox{\begin{minipage}[c][0.18\textheight][c]{0.92\linewidth}
-      \centering Missing figure file\\[0.3em]\texttt{\detokenize{#2}}
+      \centering Missing figure file\\[0.3em]\texttt{\detokenize{paper_outputs/#2}}
     \end{minipage}}%
   }%
 }
@@ -270,8 +270,8 @@ are produced by the companion script and appear in this supplement as
 \centering\small
 \caption{Periodic triangular Bloch certificate (FHS check; reproduced from the companion script).}
 \label{tab:periodic_triangular_certificate}
-\IfFileExists{periodic_triangular_certificate_table.tex}{\input{periodic_triangular_certificate_table.tex}}{%
-\emph{(File \texttt{periodic\_triangular\_certificate\_table.tex} not found. Run
+\IfFileExists{paper_outputs/periodic_triangular_certificate_table.tex}{\input{paper_outputs/periodic_triangular_certificate_table.tex}}{%
+\emph{(File \texttt{paper\_outputs/periodic\_triangular\_certificate\_table.tex} not found. Run
 \texttt{python periodic\_triangular\_bulk\_certificate.py --write-table}.)}}
 \end{table}
 
@@ -279,9 +279,9 @@ are produced by the companion script and appear in this supplement as
 \centering\small
 \caption{Periodic triangular extension checks (FHS).}
 \label{tab:periodic_triangular_extension_certificate}
-\IfFileExists{periodic_triangular_extension_certificate_table.tex}{%
-\resizebox{\linewidth}{!}{\input{periodic_triangular_extension_certificate_table.tex}}}{%
-\emph{(File \texttt{periodic\_triangular\_extension\_certificate\_table.tex} not found. Run
+\IfFileExists{paper_outputs/periodic_triangular_extension_certificate_table.tex}{%
+\resizebox{\linewidth}{!}{\input{paper_outputs/periodic_triangular_extension_certificate_table.tex}}}{%
+\emph{(File \texttt{paper\_outputs/periodic\_triangular\_extension\_certificate\_table.tex} not found. Run
 \texttt{python periodic\_triangular\_bulk\_certificate.py --write-table}.)}}
 \end{table}
 
@@ -5218,8 +5218,8 @@ the linked repository snapshot
 \caption{Mesh sizes for the three boundary triangulations \(\K\) and their doubles \(D(\K)\).
 The counts agree with the identities in Theorem~\ref{M-thm:counts}.}
 \label{tab:meshstats}
-\IfFileExists{mesh_stats_table.tex}{\input{mesh_stats_table.tex}}{%
-\emph{(File \texttt{mesh\_stats\_table.tex} not found. Run the companion code to generate it.)}}
+\IfFileExists{paper_outputs/mesh_stats_table.tex}{\input{paper_outputs/mesh_stats_table.tex}}{%
+\emph{(File \texttt{paper\_outputs/mesh\_stats\_table.tex} not found. Run the companion code to generate it.)}}
 \end{table}
 
 \begin{table}[H]
@@ -5229,8 +5229,8 @@ The counts agree with the identities in Theorem~\ref{M-thm:counts}.}
 \(H_+(D(\K))\), the number of jammed eigenvalues selected by \(|E|<g\) at \(M=50\), and fitted
 drift slopes when reported.}
 \label{tab:numsummary}
-\IfFileExists{numerics_summary.tex}{\input{numerics_summary.tex}}{%
-\emph{(File \texttt{numerics\_summary.tex} not found. Run the companion code to generate it.)}}
+\IfFileExists{paper_outputs/numerics_summary.tex}{\input{paper_outputs/numerics_summary.tex}}{%
+\emph{(File \texttt{paper\_outputs/numerics\_summary.tex} not found. Run the companion code to generate it.)}}
 \end{table}
 
 \begin{table}[H]
@@ -5375,8 +5375,8 @@ collar, and the jammed low-energy spectrum tracks the compressed boundary model.
 \caption{Example 1: numerical size and support of
 \(R_{\partial,+}=H^\partial_+(\K)-H^{\mathrm{PL}}_+(\K)\).}
 \label{tab:pl_boundary_comparison}
-\IfFileExists{pl_boundary_comparison_table.tex}{\input{pl_boundary_comparison_table.tex}}{%
-\emph{(File \texttt{pl\_boundary\_comparison\_table.tex} not found. Run the companion code to generate it.)}}
+\IfFileExists{paper_outputs/pl_boundary_comparison_table.tex}{\input{paper_outputs/pl_boundary_comparison_table.tex}}{%
+\emph{(File \texttt{paper\_outputs/pl\_boundary\_comparison\_table.tex} not found. Run the companion code to generate it.)}}
 \end{table}
 
 \medskip\noindent\textbf{Boundary transport and chirality.}
@@ -5446,8 +5446,8 @@ computed near-zero eigenvalues as the twist angle runs from \(0\) to \(2\pi\).}
 \caption{Example 2: flux-insertion check. Sign changes count crossings between consecutive
 sampled flux values among the near-zero eigenvalues computed by sparse shift-invert solves.}
 \label{tab:flux_spectral_flow}
-\IfFileExists{flux_spectral_flow_table.tex}{\input{flux_spectral_flow_table.tex}}{%
-\emph{(File \texttt{flux\_spectral\_flow\_table.tex} not found. Run the companion code to generate it.)}}
+\IfFileExists{paper_outputs/flux_spectral_flow_table.tex}{\input{paper_outputs/flux_spectral_flow_table.tex}}{%
+\emph{(File \texttt{paper\_outputs/flux\_spectral\_flow\_table.tex} not found. Run the companion code to generate it.)}}
 \end{table}
 
 \medskip\noindent\textbf{Finite-\(M\) decoupling checks.}
@@ -5514,8 +5514,8 @@ follow the predicted \(M^{-2}\) behavior from Theorems~\ref{M-thm:first_order_ef
 \small
 \caption{Example 1: numerical eigenvalue-localization summary for several \(M\) values.}
 \label{tab:eigloc}
-\IfFileExists{eig_localization_summary.tex}{\input{eig_localization_summary.tex}}{%
-\emph{(File \texttt{eig\_localization\_summary.tex} not found. Run the companion code to generate it.)}}
+\IfFileExists{paper_outputs/eig_localization_summary.tex}{\input{paper_outputs/eig_localization_summary.tex}}{%
+\emph{(File \texttt{paper\_outputs/eig\_localization\_summary.tex} not found. Run the companion code to generate it.)}}
 \end{table}
 
 \medskip\noindent\textbf{Collar support, contour separation, refinement, and robustness.}
@@ -5575,8 +5575,8 @@ with the boundary-rank interpretation in Lemma~\ref{M-lem:collar_rank_counts}.}
 \caption{Example 1: subdivision scaling of the support of
 \(R_{\partial,+}=H^\partial_+(\K)-H^{\mathrm{PL}}_+(\K)\).}
 \label{tab:pl_collar_scaling}
-\IfFileExists{pl_collar_scaling_table.tex}{\input{pl_collar_scaling_table.tex}}{%
-\emph{(File \texttt{pl\_collar\_scaling\_table.tex} not found. Run the companion code to generate it.)}}
+\IfFileExists{paper_outputs/pl_collar_scaling_table.tex}{\input{paper_outputs/pl_collar_scaling_table.tex}}{%
+\emph{(File \texttt{paper\_outputs/pl\_collar\_scaling\_table.tex} not found. Run the companion code to generate it.)}}
 \end{table}
 
 \begin{figure}[H]
@@ -5602,8 +5602,8 @@ while the copy weight remains small.}
 \caption{Example 1: robustness under nonconstant positive copy-side confinement. The
 nonconstant potential has entries in the displayed range on the copy sector.}
 \label{tab:copy_confinement}
-\IfFileExists{copy_confinement_robustness_table.tex}{\input{copy_confinement_robustness_table.tex}}{%
-\emph{(File \texttt{copy\_confinement\_robustness\_table.tex} not found. Run the companion code to generate it.)}}
+\IfFileExists{paper_outputs/copy_confinement_robustness_table.tex}{\input{paper_outputs/copy_confinement_robustness_table.tex}}{%
+\emph{(File \texttt{paper\_outputs/copy\_confinement\_robustness\_table.tex} not found. Run the companion code to generate it.)}}
 \end{table}
 
 \subsection{Reproducibility appendix}\label{app:reproducibility_appendix}
@@ -5637,49 +5637,49 @@ The static theorem-map and notation tables are generated by this \LaTeX{} source
 The local source tree expected in the GitHub repository contains the following numerical artifacts:
 \begin{verbatim}
 periodic_triangular_bulk_certificate.py
-periodic_triangular_certificate_table.tex
-periodic_triangular_extension_certificate_table.tex
+paper_outputs/periodic_triangular_certificate_table.tex
+paper_outputs/periodic_triangular_extension_certificate_table.tex
 run_companion_numerics_with_robustness.py
 requirements.txt
-mesh_stats_table.tex
-numerics_summary.tex
-pl_boundary_comparison_table.tex
-pl_collar_scaling_table.tex
-flux_spectral_flow_table.tex
-eig_localization_summary.tex
-copy_confinement_robustness_table.tex
-fig_ex1_mesh.png
-fig_ex2_mesh.png
-fig_ex3_mesh.png
-fig_ex1_bulk_spectrum.png
-fig_ex2_bulk_spectrum.png
-fig_ex3_bulk_spectrum.png
-fig_ex1_jammed_spectrum.png
-fig_ex2_jammed_spectrum.png
-fig_ex3_jammed_spectrum.png
-fig_ex1_boundary_localization.png
-fig_component_localization_ex23.png
-fig_pl_boundary_comparison.png
-fig_ex1_edge_propagation.png
-fig_ex2_edge_propagation.png
-fig_ex3_edge_propagation.png
-fig_ex1_chirality_flip.png
-fig_multiboundary_component_drifts.png
-fig_flux_spectral_flow_ex2.png
-fig_resolvent_loglog.png
-fig_first_order_resolvent_loglog.png
-fig_leakage_loglog.png
-fig_first_order_localization_loglog.png
-fig_resolvent_convergence.png
-fig_ex1_leakage_vs_M.png
-fig_ex1_eig_localization_vs_M.png
-fig_collar_support_histogram.png
-fig_contour_margin_lower_bound.png
-fig_window_separation_thresholds.png
-fig_refinement_scaling.png
-fig_pl_collar_scaling.png
-fig_ex1_edge_propagation_disorder.png
-fig_copy_confinement_robustness.png
+paper_outputs/mesh_stats_table.tex
+paper_outputs/numerics_summary.tex
+paper_outputs/pl_boundary_comparison_table.tex
+paper_outputs/pl_collar_scaling_table.tex
+paper_outputs/flux_spectral_flow_table.tex
+paper_outputs/eig_localization_summary.tex
+paper_outputs/copy_confinement_robustness_table.tex
+paper_outputs/fig_ex1_mesh.png
+paper_outputs/fig_ex2_mesh.png
+paper_outputs/fig_ex3_mesh.png
+paper_outputs/fig_ex1_bulk_spectrum.png
+paper_outputs/fig_ex2_bulk_spectrum.png
+paper_outputs/fig_ex3_bulk_spectrum.png
+paper_outputs/fig_ex1_jammed_spectrum.png
+paper_outputs/fig_ex2_jammed_spectrum.png
+paper_outputs/fig_ex3_jammed_spectrum.png
+paper_outputs/fig_ex1_boundary_localization.png
+paper_outputs/fig_component_localization_ex23.png
+paper_outputs/fig_pl_boundary_comparison.png
+paper_outputs/fig_ex1_edge_propagation.png
+paper_outputs/fig_ex2_edge_propagation.png
+paper_outputs/fig_ex3_edge_propagation.png
+paper_outputs/fig_ex1_chirality_flip.png
+paper_outputs/fig_multiboundary_component_drifts.png
+paper_outputs/fig_flux_spectral_flow_ex2.png
+paper_outputs/fig_resolvent_loglog.png
+paper_outputs/fig_first_order_resolvent_loglog.png
+paper_outputs/fig_leakage_loglog.png
+paper_outputs/fig_first_order_localization_loglog.png
+paper_outputs/fig_resolvent_convergence.png
+paper_outputs/fig_ex1_leakage_vs_M.png
+paper_outputs/fig_ex1_eig_localization_vs_M.png
+paper_outputs/fig_collar_support_histogram.png
+paper_outputs/fig_contour_margin_lower_bound.png
+paper_outputs/fig_window_separation_thresholds.png
+paper_outputs/fig_refinement_scaling.png
+paper_outputs/fig_pl_collar_scaling.png
+paper_outputs/fig_ex1_edge_propagation_disorder.png
+paper_outputs/fig_copy_confinement_robustness.png
 \end{verbatim}
 
 

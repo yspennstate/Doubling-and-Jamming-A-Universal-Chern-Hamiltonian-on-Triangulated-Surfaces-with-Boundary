@@ -80,9 +80,9 @@
 % Figure safety helper
 %---------------------------
 \newcommand{\safeincludegraphics}[2][]{%
-  \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+  \IfFileExists{paper_outputs/#2}{\includegraphics[#1]{paper_outputs/#2}}{%
     \fbox{\begin{minipage}[c][0.18\textheight][c]{0.92\linewidth}
-      \centering Missing figure file\\[0.3em]\texttt{\detokenize{#2}}
+      \centering Missing figure file\\[0.3em]\texttt{\detokenize{paper_outputs/#2}}
     \end{minipage}}%
   }%
 }
