@@ -2636,16 +2636,53 @@ which proves the first estimate. The interval estimate follows by subtracting th
 functions at \(a\) and \(b\). The final statement is Theorem~\ref{M-thm:relative_boundary_comparison}.
 \end{proof}
 
+\subsection{Proof of Result~\ref{M-prop:fixed_collar_negligible}}\label{app:proof:prop:fixed_collar_negligible}
+\begin{proof}[Proof of \Cref{M-prop:fixed_collar_negligible}]
+Let \(h_n\to0\) be the quasi-uniform mesh size. Uniform regularity gives, for each fixed
+\(R\), a constant \(C_R\) such that every radius-\(R\) ball in the barycentric graph contains at
+most \(C_R\) simplices. Hence the \(R\)-collar of the boundary is covered by radius-\(R\) balls
+centered at boundary vertices and boundary edges, so
+\[
+r_n(R)
+\le C_R\bigl(|(\bd\K_n)_0|+|(\bd\K_n)_1|\bigr).
+\]
+Since \(\bd\K_n\) is a disjoint union of cycles, \(|(\bd\K_n)_0|=|(\bd\K_n)_1|\). Boundary edge
+lengths are comparable to \(h_n\), while the total boundary length of the fixed PL surface is
+finite and independent of \(n\). Therefore
+\[
+|(\bd\K_n)_1|=O(h_n^{-1}),
+\qquad
+r_n(R)=O(h_n^{-1}).
+\]
+On the other hand, shape regularity gives face areas comparable to \(h_n^2\), while the total
+surface area is fixed and positive on every nondegenerate component. Thus
+\[
+|(\K_n)_2|=\Theta(h_n^{-2}).
+\]
+Uniform incidence bounds give \(|(\K_n)_0|+|(\K_n)_1|+|(\K_n)_2|=\Theta(|(\K_n)_2|)\), and hence
+\[
+d_n=\dim\Hil(\K_n)=|(\K_n)_0|+|(\K_n)_1|+|(\K_n)_2|
+=\Theta(h_n^{-2}).
+\]
+It follows that
+\[
+\frac{r_n(R)}{d_n}=O(h_n)\longrightarrow0 .
+\]
+Taking \(R=R_{\mathrm{PL}}\) is legitimate because
+\Cref{M-thm:relative_boundary_comparison} supplies a single fixed collar radius over uniformly
+regular refinement families.
+\end{proof}
+
 \subsection{Proof of Result~\ref{cor:pl_bulk_spectral_equivalence}}\label{app:proof:cor:pl_bulk_spectral_equivalence}
 \begin{proof}[Proof of \Cref{cor:pl_bulk_spectral_equivalence}]
 Apply Lemma~\ref{M-lem:collar_rank_counts} with
 \(W=\ell^2(N_{R_{\mathrm{PL}}}(\bd\K_n))\), divide by \(d_n\), and take the supremum in \(t\).
-The final assertion is the usual boundary-versus-area scaling for quasi-uniform fixed-surface
-two-dimensional refinements; outside such geometric refinement regimes it should be checked as the
-explicit condition \(r_n/d_n\to0\). The statement about continuous test functions follows because the
-operators have uniformly bounded norm under uniform regularity, so the empirical spectral measures
-are supported in a common compact interval and the distribution-function estimate forces the same
-weak subsequential limits.
+For quasi-uniform fixed-surface two-dimensional refinements,
+\Cref{M-prop:fixed_collar_negligible} gives \(r_n/d_n\to0\); outside such geometric refinement
+regimes it should be checked as an explicit hypothesis. The statement about continuous test
+functions follows because the operators have uniformly bounded norm under uniform regularity, so
+the empirical spectral measures are supported in a common compact interval and the
+distribution-function estimate forces the same weak subsequential limits.
 \end{proof}
 
 \subsection{Proof of Result~\ref{M-lem:schur}}\label{app:proof:lem:schur}

@@ -508,6 +508,29 @@ the same subsequential limits.
 \end{lemma}
 \proofsuppref{app:proof:lem:collar_rank_counts}
 
+\begin{proposition}[Fixed collars are negligible under quasi-uniform refinement]\label{prop:fixed_collar_negligible}
+Let \((\K_n)_n\) be a uniformly regular refinement sequence of a fixed compact oriented PL
+surface, and suppose each \(\K_n\) has full boundary subcomplex in the sense of
+Definition~\ref{def:surfwithbdry}. Suppose moreover that \((\K_n)_n\) is a quasi-uniform
+shape-regular two-dimensional refinement with respect to a fixed PL metric: there is a mesh size
+\(h_n\to0\) such that boundary edge lengths are comparable to \(h_n\), face areas are comparable
+to \(h_n^2\), and the local incidence constants are uniformly bounded. For every fixed
+\(R<\infty\), set
+\[
+d_n:=\dim\Hil(\K_n),
+\qquad
+r_n(R):=\dim \ell^2\!\left(N_R(\bd\K_n)\right).
+\]
+Then
+\[
+\frac{r_n(R)}{d_n}\longrightarrow0 .
+\]
+In particular, for the fixed radius \(R_{\mathrm{PL}}\) from
+Theorem~\ref{thm:relative_boundary_comparison}, the boundary-collar dimension hypothesis in
+Theorem~\ref{thm:internal_bulk_spectral_equivalence} holds for such refinement families.
+\end{proposition}
+\proofsuppref{app:proof:prop:fixed_collar_negligible}
+
 %====================================================================
 \section{Finite-dimensional decoupling theory}\label{sec:decoupling}
 %====================================================================
