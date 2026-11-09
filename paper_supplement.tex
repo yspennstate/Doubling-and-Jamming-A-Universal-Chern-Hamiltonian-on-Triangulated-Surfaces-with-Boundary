@@ -116,7 +116,7 @@ variants (\Cref{sec:bulkboundary,app:roe_interface_variants}); the symbolic veri
 (\Cref{sec:numerics}); and the reproducibility appendix
 (\Cref{app:reproducibility_appendix,app:minimal_reproduction_script}). This supplement and the
 companion code are distributed through the project GitHub repository
-(\href{https://github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary}{\texttt{github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary}}).
+(\url{https://github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary}).
 \end{abstract}
 
 
@@ -1488,8 +1488,8 @@ With \(b_1(k)=\sin k_1\), \(b_2(k)=\sin k_2\), \(b_3^{\square}(k)=1+\cos k_1+\co
 
 \begin{definition}[Square two-band Bloch representative]\label{def:square_bloch_symbol}
 For \(m\in\mathbb R\),
-\(H_{\square}(k;m)=
-\begin{pmatrix} m\,b_3^{\square}(k) & b_1(k)-i b_2(k)\\ b_1(k)+i b_2(k) & -m\,b_3^{\square}(k)\end{pmatrix}\).
+\[H_{\square}(k;m)=
+\begin{pmatrix} m\,b_3^{\square}(k) & b_1(k)-i b_2(k)\\ b_1(k)+i b_2(k) & -m\,b_3^{\square}(k)\end{pmatrix}.\]
 \end{definition}
 
 \begin{remark}[Massless square closure]\label{lem:square_massless_closure}
@@ -2398,8 +2398,8 @@ integer winding is also unchanged.
 
 
 \subsection{Symbolic verification appendix}\label{app:symbolic_verification}
-The certificate is implemented in the companion script
-\texttt{periodic\_triangular\_bulk\_certificate.py} in the project repository
+The companion script
+\texttt{periodic\_triangular\_bulk\_certificate.py} in the project repository implements the certificate
 (\href{https://github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary}{GitHub project repository}).
 The script numerically evaluates the closed-bulk Chern number on the triangular fundamental
 cell at four grid sizes and writes the certificate table
@@ -5686,13 +5686,16 @@ paper_outputs/fig_copy_confinement_robustness.png
 
 
 
-\section*{Acknowledgments}
-The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation (as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning), by the Israel Science Foundation (grant number 2258/19), by the Israel Science Foundation (ISF Grant~4101/25), and by the U.S. National Science Foundation (NSF Grant~OISE-2401227).
+\section*{Acknowledgments and funding}
+The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant 4101/25). Computational resources were provided in part by Google Cloud through its education credits program (credit 530550103).
 
 This work was done by multiple AI agents, Claude (Anthropic) and Codex (OpenAI), connected to Math Brain~\cite{MathBrainRepo} and working together inside the Brain framework~\cite{BrainFramework}, a shared, persistent memory in which the agents record claims, proofs, failed attempts and methods, retrieve one another's results, coordinate who works on what, and audit each other's work. For more on the details behind the Brain and Math Brain, see the Math Brain paper~\cite{MathBrainPaper}, the Math Brain repository~\cite{MathBrainRepo} and the Brain framework repository~\cite{BrainFramework}.
 
 \section*{Code and data availability}
 The code and data for this paper are at \url{https://github.com/yspennstate/Doubling-and-Jamming-A-Universal-Chern-Hamiltonian-on-Triangulated-Surfaces-with-Boundary}. The paper is part of the Math Brain project, whose public repository is \url{https://github.com/yspennstate/math-brain-public}~\cite{MathBrainRepo}.
+
+\section*{Declaration of competing interest}
+The author holds equity in Heights Labs and in Convex Nexus Capital and has a management role at Convex Nexus Capital. These entities are included in the funding declaration above.
 
 \section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
 During the preparation of this work the author used generative AI tools to accelerate drafting
