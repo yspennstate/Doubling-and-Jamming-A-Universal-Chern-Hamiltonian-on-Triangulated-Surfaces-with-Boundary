@@ -118,7 +118,7 @@ Poincar\'e--Lefschetz Hamiltonian, compare it with the original-side compression
 closed Hamiltonian, identify the discrepancy as boundary-collar supported, and prove
 Schur-complement estimates for finite-\(M\) jamming. Along families with negligible collar
 dimension these estimates identify the normalized bulk spectral limits of the intrinsic,
-compressed, and jammed models. The headline Roe-algebra theorem identifies the doubled-and-jammed
+compressed, and jammed models. The main Roe-algebra theorem identifies the doubled-and-jammed
 interface class in \(K_1(C^*(Y\subset X))\) with
 \(\partial_Y(E_+(\pi(P_\pm)))\), using the Higson--Prodan closed universal-model theorem
 \cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv} for the closed-bulk gap and Chern
@@ -263,7 +263,7 @@ The proof uses the following implications; no converse is assumed.
 \]
 From (I) and the gap part of (HP), the Roe construction supplies the global interface
 \(K_1\)-class. From the Chern part of (HP) and (EM), Theorem~\ref{thm:pathb_roe_winding}
-identifies the \(K_1\)-class as \(\partial_Y(E_+(\pi(P_\pm)))\). Thus the headline conclusion
+identifies the \(K_1\)-class as \(\partial_Y(E_+(\pi(P_\pm)))\). Thus the main conclusion
 of Theorem~\ref{thm:pathb_roe_winding} is the unconditional
 \(K_1\)-class identity
 \(\mathrm{(I)}+\mathrm{(HP)}+\mathrm{(EM)}\Longrightarrow
@@ -763,7 +763,7 @@ proved in the supplement, Section~\ref{S-sec:schur_proofs}.
 \section{Roe-algebra identification of the doubled-and-jammed interface class}\label{sec:pathb_internalization}
 %====================================================================
 
-This section establishes the boundary-map identification used by the headline Roe-winding theorem.
+This section establishes the boundary-map identification used by the main Roe-winding theorem.
 The closed-bulk gap and Chern value come from the closed universal-model theorem of Higson and
 Prodan \cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}. The Ewert--Meyer citation
 \cite{EwertMeyer2019} fixes the coarse bulk--interface language and the Mayer--Vietoris pairing
@@ -903,7 +903,7 @@ Let \(J_{\pm,M}^\infty=\bigoplus_n H_{\pm,M,n}\) be the doubled-and-jammed famil
 \end{definition}
 
 \subsection{Conventions for Theorem~\ref{thm:pathb_roe_winding}}\label{sec:pathb_conventions}
-The headline theorem fixes one set of conventions, used identically in the body proof and the
+The main theorem fixes one set of conventions, used identically in the body proof and the
 appendix-level verifications:
 \begin{enumerate}[label=(C\arabic*),leftmargin=2.4em]
 \item\label{conv:pathb_rep} \emph{Representation.} The standard left-regular
@@ -1524,7 +1524,7 @@ The numerical material is collected in the online supplement, Section~\ref{S-sec
 reproducibility details in \Cref{S-app:reproducibility_appendix,S-app:minimal_reproduction_script}.
 The computations are not proof inputs; they document finite-matrix behavior for the mechanisms
 proved above. We retain two numerical figures in the main paper that bear directly on the
-headline results: the intrinsic Poincar\'e--Lefschetz comparison
+main results: the intrinsic Poincar\'e--Lefschetz comparison
 (Figure~\ref{fig:pl_boundary_comparison}) and the finite-\(M\) decoupling log-log scaling
 (Figure~\ref{fig:finiteM_loglog}).
 
@@ -1610,7 +1610,7 @@ quantitative Schur-complement estimates.
 
 \paragraph{Three buckets of results.} For an external reader auditing this paper, we partition
 the results into three buckets according to which external inputs each one uses. We are explicit
-because the headline integer winding has different dependency status in different cases, and a
+because the integer winding of the main theorem has different dependency status in different cases, and a
 single label could obscure that.
 
 \begin{itemize}[leftmargin=2em]
@@ -1670,7 +1670,7 @@ that generates the figures and tables of the supplement are included.
 The paper is part of the Math Brain project, whose public repository is \url{https://github.com/yspennstate/math-brain-public}~\cite{MathBrainRepo}.
 
 \section*{Acknowledgments and funding}
-The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant 4101/25). Computational resources were provided in part by Google Cloud through its education credits program (credit 530550103).
+The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant 4101/25).
 
 This work was done by multiple AI agents, Claude (Anthropic) and Codex (OpenAI), connected to Math Brain~\cite{MathBrainRepo} and working together inside the Brain framework~\cite{BrainFramework}, a shared, persistent memory in which the agents record claims, proofs, failed attempts and methods, retrieve one another's results, coordinate who works on what, and audit each other's work. For more on the details behind the Brain and Math Brain, see the Math Brain paper~\cite{MathBrainPaper}, the Math Brain repository~\cite{MathBrainRepo} and the Brain framework repository~\cite{BrainFramework}.
 
@@ -1679,8 +1679,7 @@ The author holds equity in Heights Labs and in Convex Nexus Capital and has a ma
 
 \section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
 During the preparation of this work the author used generative AI tools to accelerate drafting
-and revision. All mathematical claims, proofs, and bibliographic information were subsequently
-reviewed and edited by the author, who takes full responsibility for the content of the manuscript.
+and revision. The author directed the work and is responsible for the content of the paper and for decisions concerning its dissemination.
 
 \FloatBarrier
 

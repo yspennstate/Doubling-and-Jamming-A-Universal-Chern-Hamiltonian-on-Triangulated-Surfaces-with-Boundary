@@ -109,7 +109,7 @@ Hebrew University of Jerusalem
 This document collects the secondary results, full appendix proofs, all robustness variants,
 hexagonal and square benchmark symbols, the symbolic verification appendix, and the full numerical
 record for the main paper ``Boundary and Interface Classes for Universal Chern Hamiltonians via
-Doubling and Jamming''. The main results, abstract, introduction, and headline theorems are stated
+Doubling and Jamming''. The main results, abstract, introduction, and main theorems are stated
 in the main paper; cross-references to the main paper use the \texttt{M-} prefix. The structure of
 the supplement is: full proofs of the finite-\(M\) Schur-complement estimates
 (\Cref{sec:schur_proofs}); the sign ledger (\Cref{app:sign_ledger}); two-band hexagonal and square
@@ -344,7 +344,7 @@ boundary map is represented by the same Roe extension and the same cutoff unitar
 %====================================================================
 
 We place the doubled-and-jammed refinement family in a Roe-algebra construction that produces the
-interface class. In the headline application, the required closed-bulk gap is supplied by
+interface class. In the main application, the required closed-bulk gap is supplied by
 Higson--Prodan's closed theorem. We use the
 quotient extension
 \[
@@ -364,7 +364,7 @@ uniform Roe algebra in this paper. In Theorem~\ref{M-thm:pathb_roe_winding} of
 Section~\ref{M-sec:pathb_internalization}, the Ewert--Meyer Mayer--Vietoris boundary map for the
 original/copy partition is identified internally with the Roe connecting map used below. The
 HP--Ewert--Meyer terminology below fixes the convention for that pairing; it is not an additional
-input for the original/copy headline theorem.
+input for the original/copy main theorem.
 
 Uniform locality, boundedness, and a closed-bulk gap give the quotient projection and the
 interface \(K_1\)-class. In the HP-covered case, Higson--Prodan supplies the gap and Chern value;
@@ -588,7 +588,7 @@ $(B_n+B_n^\dagger)^2$. On $\ker(S_n)^\perp$, the positive term $S_n^2$ also cont
 
 The uniform gap therefore depends on a joint spectral property of $B_n+B_n^\dagger$ and $S_n$
 together, not on $S_n$ alone. The Higson--Roe controlled-duality machinery supplies the relevant
-locality and Poincar\'e-duality input for the closed model, and the HP-covered headline application
+locality and Poincar\'e-duality input for the closed model, and the HP-covered main application
 uses Higson--Prodan's clean-gap theorem for the closed doubles. The numerics
 (Figure~\ref{fig:refine}) report the measured gap on the tested refinement levels, but they are not
 used as a proof of a refinement-uniform gap.
@@ -612,7 +612,7 @@ together with the standard cap-product locality input recorded in
 Assumption~\ref{ass:S_uniform}. Part~(c) is the spectral input not proved by the elementary locality
 argument. As explained in Remark~\ref{rem:gap_structure}, this is a joint spectral condition on
 $B_n+B_n^\dagger$ and $S_n$ that does not reduce to invertibility of $S_n$ alone. For the
-HP-covered closed doubles used in the headline theorem, Higson--Prodan supplies~(c).
+HP-covered closed doubles used in the main theorem, Higson--Prodan supplies~(c).
 \end{remark}
 
 \begin{assumption}[Higson--Prodan closed-bulk input]\label{ass:hp_admissibility}
@@ -1212,7 +1212,7 @@ In particular, the jammed side contributes no negative-energy quotient projectio
 
 
 This theorem uses the closed-bulk gap in Assumption~\ref{ass:uniform_bulk}(c), together with the
-uniform locality and boundedness hypotheses stated there. In the headline application,
+uniform locality and boundedness hypotheses stated there. In the main application,
 these hypotheses are supplied by Theorem~\ref{thm:hp_closed_input}. The finite-dimensional
 decoupling estimates of Section~\ref{M-sec:decoupling} do not use a refinement-limit bulk gap; they
 require only their stated finite-matrix separation hypotheses.
@@ -1339,7 +1339,7 @@ class is independent of the jam scale \(M\) for all \(M>B_{\mathrm{copy},-}\).
 Relabeling, orientation reversal, and robustness of the compatible winding are stated in Appendix~\ref{app:roe_interface_variants}.
 
 \begin{remark}[From bulk Chern number to numerical interface index]\label{rem:chern_to_interface}
-Theorem~\ref{M-thm:pathb_roe_winding} is the headline winding result: for the doubled-jammed
+Theorem~\ref{M-thm:pathb_roe_winding} is the main winding result: for the doubled-jammed
 original/copy partition it supplies the Ewert--Meyer identification internally and uses the
 Higson--Prodan closed-bulk theorem for the gap and Chern value. Theorem~\ref{thm:full_hp_bec}
 records the same conclusion in Ewert--Meyer language. This identification is not a boundary-gap
@@ -1378,7 +1378,7 @@ Toeplitz edge map. It is a ledger for the proof of Theorem~\ref{M-thm:periodic_t
 a separate numerical input.
 
 \paragraph{Explicit sign chain.}
-The sign convention used in the headline corollary \(\operatorname{wind}=\mp\det[t\ n]\) for the
+The sign convention used in the main corollary \(\operatorname{wind}=\mp\det[t\ n]\) for the
 periodic triangular case is fully determined by composing the following four signed steps; a
 referee can verify each step by referring to the row of the table below and the cited
 proposition.
@@ -1435,7 +1435,7 @@ The two-band hexagonal and square symbols collected in this subsection are auxil
 classes; they are not derivations of the full Higson--Prodan universal symbol for arbitrary
 hexagonal or square triangulations. They feed only the cross-check
 Remark~\ref{M-lem:pathb_hex_square}, whose role is a sanity check against the periodic triangular
-calculation in Section~\ref{M-sec:periodicbulk}. The reader interested only in the headline
+calculation in Section~\ref{M-sec:periodicbulk}. The reader interested only in the main
 Theorem~\ref{M-thm:pathb_roe_winding} may skip this subsection on first reading. The underlying
 proofs are collected in
 \Cref{app:proof:lem:hex_chern_positive,app:proof:lem:hex_chern_negative,app:proof:lem:hex_toeplitz_winding,app:proof:thm:hex_bulk_edge,app:proof:lem:square_chern_positive,app:proof:lem:square_toeplitz_winding,app:proof:thm:square_bulk_edge}.
@@ -4900,7 +4900,7 @@ Higson--Prodan gap theorem is reproved here.
 The same Higson--Prodan closed universal-model theorem identifies the Fermi projection of
 \(H_\pm=(B+B^\dagger)\pm S\) with the nontrivial closed-bulk class and computes its Chern pairing as
 \(\pm1\), with the sign fixed by the two choices \(H_+\), \(H_-\) and the orientation convention
-\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}. The headline theorem uses exactly that
+\cite{HigsonProdanUniversalPRL,HigsonProdanUniversalArxiv}. The main theorem uses exactly that
 closed-bulk class on the closed doubles. Thus \(P_\pm\) has \(\Ch([P_\pm])=\pm1\). The proof is purely by
 citation to the published closed theorem.
 \end{proof}
@@ -5694,7 +5694,7 @@ paper_outputs/fig_copy_confinement_robustness.png
 
 
 \section*{Acknowledgments and funding}
-The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant 4101/25). Computational resources were provided in part by Google Cloud through its education credits program (credit 530550103).
+The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant 4101/25).
 
 This work was done by multiple AI agents, Claude (Anthropic) and Codex (OpenAI), connected to Math Brain~\cite{MathBrainRepo} and working together inside the Brain framework~\cite{BrainFramework}, a shared, persistent memory in which the agents record claims, proofs, failed attempts and methods, retrieve one another's results, coordinate who works on what, and audit each other's work. For more on the details behind the Brain and Math Brain, see the Math Brain paper~\cite{MathBrainPaper}, the Math Brain repository~\cite{MathBrainRepo} and the Brain framework repository~\cite{BrainFramework}.
 
@@ -5706,8 +5706,7 @@ The author holds equity in Heights Labs and in Convex Nexus Capital and has a ma
 
 \section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
 During the preparation of this work the author used generative AI tools to accelerate drafting
-and revision. All mathematical claims, proofs, and bibliographic information were subsequently
-reviewed and edited by the author, who takes full responsibility for the content of the manuscript.
+and revision. The author directed the work and is responsible for the content of the paper and for decisions concerning its dissemination.
 
 \FloatBarrier
 
